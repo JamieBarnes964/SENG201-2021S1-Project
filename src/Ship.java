@@ -46,7 +46,7 @@ public class Ship {
 	 * Returns the size of the Ship.
 	 * @return the size of the Ship.
 	 */
-	public int getcrewSize() {
+	public int getCrewSize() {
 		return this.crewSize;
 	}
 	
