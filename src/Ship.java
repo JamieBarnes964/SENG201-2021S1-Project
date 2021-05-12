@@ -75,4 +75,19 @@ public class Ship {
 		return this.cargo;
 	}
 	
+	public int getCargoCost() {
+		int count = 0;
+		int total = 0;
+		for (Item item: this.cargo) {
+			total += item.getPrice();
+		}
+		return total;
+	}
+	
+	public void emptyCargo() {
+		this.cargo = new ArrayList<Item>();
+		System.out.println("All of your cargo has been taken by enemy pirates");
+	}
+	
+	
 }

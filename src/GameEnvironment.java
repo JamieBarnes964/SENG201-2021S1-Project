@@ -17,16 +17,16 @@ public class GameEnvironment {
 		this.ships.add(new Ship("Artemis", 40, 70, 30));
 		
 		// Initialise Items
-		this.items.add(new Item("Cask of Rum", 8));
-		this.items.add(new Item("Barrel of Fish", 8));
-		this.items.add(new Item("Logs of Wood", 14));
-		this.items.add(new Item("Roll of Cloth", 4));
-		this.items.add(new Item("Bushels of Bananas", 2));
-		this.items.add(new Item("Iron Rods", 8));
-		this.items.add(new Item("Gold Bars", 14));
-		this.items.add(new Item("Copper Plates", 8));
-		this.items.add(new Item("Fine China", 2));
-		this.items.add(new Item("Barrels of Gunpowder", 8));
+		this.items.add(new Item("Cask of Rum", 8, 300));
+		this.items.add(new Item("Barrel of Fish", 8, 600));
+		this.items.add(new Item("Logs of Wood", 14, 450));
+		this.items.add(new Item("Roll of Cloth", 4, 1500));
+		this.items.add(new Item("Bushels of Bananas", 2, 1500));
+		this.items.add(new Item("Iron Rods", 8, 750));
+		this.items.add(new Item("Gold Bars", 14, 1200));
+		this.items.add(new Item("Copper Plates", 8, 300));
+		this.items.add(new Item("Fine China", 2, 2000));
+		this.items.add(new Item("Barrels of Gunpowder", 8, 750));
 		
 		// Initialise Islands
 		this.islands.add(new Island("Mahkarn", ));
@@ -41,6 +41,10 @@ public class GameEnvironment {
 	}
 	
 	public void initialisePlayerValues() {
+		
+	}
+	
+	public static void gameOver() {
 		
 	}
 	
