@@ -7,6 +7,9 @@ public class GameEnvironment {
 	private ArrayList<Ship> ships;
 	private ArrayList<Item> items;
 	
+	private int gameDays;
+	private String playerName;
+	
 	private Ship activeShip;
 	private Island activeIsland;
 	private int totalMoney;
@@ -111,6 +114,46 @@ public class GameEnvironment {
 		// Initialise Routes
 		Route tempRoute = new Route(3, 0.2, islands.get(1));
 		islands.get(1).addRoute(tempRoute);
+		this.islands.add(new Island("Mahkarn", ));
+		this.islands.add(new Island("Tolset Reef", ));
+		this.islands.add(new Island("Alegate", ));
+		this.islands.add(new Island("Pardea", ));
+		this.islands.add(new Island("Erbest", ));
+		
+		// Initialise Mahkarn Routes
+		Route mahkarnToPardea = new Route(2, 0.2, islands.get(3));
+		Route mahkarnToAlegate = new Route(3, 0.4, islands.get(2));
+		Route mahkarnToErberst = new Route(4, 0.3, islands.get(4));
+		islands.get(0).addRoute(mahkarnToPardea);
+		islands.get(0).addRoute(mahkarnToAlegate);
+		islands.get(0).addRoute(mahkarnToErberst);
+		
+		// Initialise Tolset Reef Routes
+		Route tolsetToPardea = new Route(8, 0.2, islands.get(3));
+		islands.get(1).addRoute(tolsetToPardea);
+		
+		// Initialise Alegate Routes
+		Route alegateToPardea = new Route(2, 0.3, islands.get(3));
+		Route alegateToMahkarn = new Route(3, 0.4, islands.get(0));
+		Route alegateToErberst = new Route(3, 0.2, islands.get(4));
+		islands.get(2).addRoute(alegateToPardea);
+		islands.get(2).addRoute(alegateToMahkarn);
+		islands.get(2).addRoute(alegateToErberst);
+		
+		// Initialise Pardea Routes
+		Route pardeaToAlegate = new Route(2, 0.3, islands.get(2));
+		Route pardeaToTolset = new Route(8, 0.2, islands.get(1));
+		Route pardeaToMahkarn = new Route(2, 0.2, islands.get(0));
+		islands.get(3).addRoute(pardeaToAlegate);
+		islands.get(3).addRoute(pardeaToTolset);
+		islands.get(3).addRoute(pardeaToMahkarn);
+		
+		// Initialise Erberst Routes
+		Route erberstToAlegate = new Route(3, 0.2, islands.get(2));
+		Route erberstToMahkarn = new Route(3, 0.3, islands.get(0));
+		islands.get(4).addRoute(erberstToAlegate);
+		islands.get(4).addRoute(erberstToMahkarn);
+		
 	}
 	
 	/**
@@ -175,7 +218,15 @@ public class GameEnvironment {
 	}
 	
 	public void initialisePlayerValues() {
-		
+//		ArrayList<String> choices = new ArrayList<String>();
+//		String query = "Choose a letter:";
+//		choices.add("a");
+//		choices.add("b");
+//		choices.add("c");
+//		choices.add("d");
+//		choices.add("e");
+//		String choice = choices.get(getPlayerDecision(query, choices));
+//		System.out.println(choice);
 	}
 	
 	public static void gameOver() {
