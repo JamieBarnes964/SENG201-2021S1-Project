@@ -25,7 +25,7 @@ public class Ship {
 		this.crewSize = crewSize;
 		this.durability = durability;
 		this.maxDurability = durability;
-		this.speed = 1 + ((crewSize - capacity) / 50);
+		this.speed = 1.0 + ((crewSize - capacity) / 50.0);
 		this.cargo = new ArrayList<Item>();
 		this.repairs = false;
 	}

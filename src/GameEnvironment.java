@@ -5,52 +5,57 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class GameEnvironment {
-	private ArrayList<Island> islands;
+	private final static int STARTINGMONEY = 100000;
+	private final static int DAILYPAYPERHEAD = 2;
+	
+	private static ArrayList<Island> islands;
 	private static ArrayList<Ship> ships;
-	private ArrayList<Item> items;
+	private static ArrayList<Item> items;
 	
 	private static int gameDays;
 	private static String playerName;
 	
-	private Ship activeShip;
-	private Island activeIsland;
-	private int totalMoney;
-	
-	private final int DAILYPAYPERHEAD = 2;
+	private static Ship activeShip;
+	private static Island activeIsland;
+	private static int totalMoney = STARTINGMONEY;
 	
 	static private Scanner consoleInput = new Scanner(System.in);
 	
-	public int getMoney() {
-		return this.totalMoney;
+	public static int getMoney() {
+		return totalMoney;
 	}
 	
-	public boolean addMoney(int change) {
-		if (this.totalMoney + change < 0) {
+	public static boolean addMoney(int change) {
+		if (totalMoney + change < 0) {
 			return false;
 		} else {
-			this.totalMoney = this.totalMoney + change;
+			totalMoney = totalMoney + change;
 			return true;
 		}
 	}
 	
-	public void initialise() {
+	public static void initialise() {
+		islands = new ArrayList<Island>();
+		ships = new ArrayList<Ship>();
+		items = new ArrayList<Item>();
+		
 		// Initialise Ships 
-		this.ships.add(new Ship("Saint Mary", 30, 40, 90));
-		this.ships.add(new Ship("Perla Betty III", 80, 60, 40));
-		this.ships.add(new Ship("The Golden Hand", 60, 55, 60));
-		this.ships.add(new Ship("Artemis", 40, 70, 30));
+		ships.add(new Ship("Saint Mary", 30, 40, 90));
+		ships.add(new Ship("Perla Betty III", 80, 60, 40));
+		ships.add(new Ship("The Golden Hand", 60, 55, 60));
+		ships.add(new Ship("Artemis", 40, 70, 30));
 		
 		// Initialise Items
-//		this.items.add(new Item("Cask of Rum", 8, 300));
-//		this.items.add(new Item("Barrel of Fish", 8, 600));
-//		this.items.add(new Item("Logs of Wood", 14, 450));
-//		this.items.add(new Item("Roll of Cloth", 4, 1500));
-//		this.items.add(new Item("Copper Plates", 8, 300));
-		this.items.add(new Item("Bushels of Bananas", 2, 1500));
-		this.items.add(new Item("Iron Rods", 8, 750));
-		this.items.add(new Item("Gold Bars", 14, 1200));
-		this.items.add(new Item("Fine China", 2, 2000));
-		this.items.add(new Item("Barrels of Gunpowder", 8, 750));
+//		items.add(new Item("Cask of Rum", 8, 300));
+//		items.add(new Item("Barrel of Fish", 8, 600));
+//		items.add(new Item("Logs of Wood", 14, 450));
+//		items.add(new Item("Roll of Cloth", 4, 1500));
+//		items.add(new Item("Copper Plates", 8, 300));
+		items.add(new Item("Bushels of Bananas", 2, 1500));
+		items.add(new Item("Iron Rods", 8, 750));
+		items.add(new Item("Gold Bars", 14, 1200));
+		items.add(new Item("Fine China", 2, 2000));
+		items.add(new Item("Barrels of Gunpowder", 8, 750));
 		
 		// Initialise Islands
 		HashMap<Item, Double> tempTrades = new HashMap<Item, Double>();
@@ -63,7 +68,7 @@ public class GameEnvironment {
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
-		this.islands.add(new Island("Mahkarn", tempTrades));
+		islands.add(new Island("Mahkarn", tempTrades));
 		
 		tempTrades = new HashMap<Item, Double>();
 		tempTradeMultiplier.clear();
@@ -75,7 +80,7 @@ public class GameEnvironment {
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
-		this.islands.add(new Island("Tolset Reef", tempTrades));
+		islands.add(new Island("Tolset Reef", tempTrades));
 		
 		tempTrades = new HashMap<Item, Double>();
 		tempTradeMultiplier.clear();
@@ -87,7 +92,7 @@ public class GameEnvironment {
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
-		this.islands.add(new Island("Alegate", tempTrades));
+		islands.add(new Island("Alegate", tempTrades));
 		
 		tempTrades = new HashMap<Item, Double>();
 		tempTradeMultiplier.clear();
@@ -99,7 +104,7 @@ public class GameEnvironment {
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
-		this.islands.add(new Island("Pardea", tempTrades));
+		islands.add(new Island("Pardea", tempTrades));
 		
 		tempTrades = new HashMap<Item, Double>();
 		tempTradeMultiplier.clear();
@@ -111,7 +116,7 @@ public class GameEnvironment {
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
-		this.islands.add(new Island("Erbest", tempTrades));
+		islands.add(new Island("Erbest", tempTrades));
 		
 		// Initialise Mahkarn Routes
 		Route mahkarnToPardea = new Route(2, 0.2, islands.get(3));
@@ -147,6 +152,7 @@ public class GameEnvironment {
 		islands.get(4).addRoute(erberstToAlegate);
 		islands.get(4).addRoute(erberstToMahkarn);
 		
+		activeIsland = islands.get(0);
 	}
 	
 	/**
@@ -188,32 +194,57 @@ public class GameEnvironment {
 		return userChoice - 1;
 	}
 	
-	public void consoleSail() {
+	
+	/**
+	 * 
+	 */
+	public static void consoleSail() {
 		ArrayList<String> routeChoices = new ArrayList<String>();
 		for (Route route: activeIsland.getRoutes()) {
-			routeChoices.add(""); // not finished
+			routeChoices.add(route.getDestinationIsland().getName() + " in " + route.getDays() + " days (" + route.getEventChance() + " Risk)");
+		}
+		String query = "Select the route you would like to take:";
+		Route chosenRoute = activeIsland.getRoutes().get(getPlayerDecision(query, routeChoices));
+		System.out.println("You have selected the route to " + chosenRoute.getDestinationIsland().getName() + "!");
+		try {
+			sail(chosenRoute);
+			System.out.println("You have made it to " + activeIsland.getName() + "!");
+		} catch (IllegalArgumentException e) {
+			System.out.println("You cannot pay your crew for the journey. Choose another route, or sell some cargo to afford the journey.");
 		}
 	}
 	
-	public boolean sail(Route route) {
+	
+	/**
+	 * 
+	 * @param route
+	 * @throws IllegalArgumentException
+	 */
+	public static void sail(Route route) throws IllegalArgumentException {
 		if (RandomEvent.tryEvent(activeShip, route.getEventChance())) {
 			
-			 if (addMoney(DAILYPAYPERHEAD * activeShip.getCrewSize())) {
+			 if (addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize())) {
 				 activeIsland = route.getDestinationIsland();
-				 return true;
 			 } else {
-				 return false;
+				 throw new IllegalArgumentException("Not enough money to pay crew for the trip!");
 			 }
 		} else {
 			gameOver();
-			return false;
 		}
 	}
 	
+	
+	/**
+	 * 
+	 */
 	public void trade() {
 		
 	}
 	
+	
+	/**
+	 * 
+	 */
 	public static void initialisePlayerValues() {
 		boolean nameDecided = false;
 		boolean daysDecided = false;
@@ -268,19 +299,31 @@ public class GameEnvironment {
 		ArrayList<String> choices = new ArrayList<String>();
 		String query = "Choose a Ship:";
 		for (Ship ship: ships) {
-			choices.add(("Ship Name: " + ship.getName() + "\nDurability: " + ship.getDurability() + "\nCargo Capacity" + ship.getCapacity() + "\nCrew Size" + ship.getCrewSize() + "\nSpeed" + ship.getSpeed()));
+			choices.add("Ship Name: " + ship.getName() + 
+					"\n   Durability: " + ship.getDurability() + 
+					"\n   Cargo Capacity: " + ship.getCapacity() + 
+					"\n   Crew Size: " + ship.getCrewSize() + 
+					"\n   Speed: " + ship.getSpeed() + "\n");
 		}
-		String choice = choices.get(getPlayerDecision(query, choices));
-		System.out.println(choice);
+		activeShip = ships.get(getPlayerDecision(query, choices));
+		System.out.println("You have selected " + activeShip.getName() + "!");
 	}
 	
 	public static void gameOver() {
 		
 	}
 	
-	public static void main(String[] args) {
+	
+	public static void mainConsoleGameplayLoop() {
 		
+	}
+	
+	
+	public static void main(String[] args) {
+		initialise();
 		initialisePlayerValues();
+		consoleSail();
+		System.out.println(totalMoney);
 		
 		// Example of getPlayerDecision
 //		ArrayList<String> choices = new ArrayList<String>();
