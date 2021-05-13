@@ -1,14 +1,14 @@
 import java.util.Random;
 
 public class RandomEvent {
-	private int valueNeeded = 1000;
+	private final static int VALUENEEDED = 1000;
 	
-	private int escapeChance(Ship ship) {
+	private static int escapeChance(Ship ship) {
 		int chance = (int) (ship.getCrewSize() * ship.getSpeed());
 		return chance;
 	}
 	
-	private int eventChance() {
+	private static int eventChance() {
 		Random rand = new Random();
 		double randomDouble = rand.nextDouble();
 		return (int) randomDouble;
@@ -18,22 +18,21 @@ public class RandomEvent {
 		return("You manage to slip past the enemy pirates");
 	}
 	
-	public String uneventfulJourney() {
+	public static String uneventfulJourney() {
 		return("The journey between the islands was uneventful");
 	}
 	
-	public void walkPlank() {
+	public static void walkPlank() {
 		System.out.println("The pirates are unhappy with your cargo. You have been forced to walk the plank.");
 		System.out.println("Game Over");
-		GameEnvironment.gameOver();
 	}
 	
-	public boolean tryEvent(Ship ship, double eventChance) {
+	public static boolean tryEvent(Ship ship, double eventChance) {
 		int chance = eventChance();
 		
 		// Pirate Attack
 		if (chance < ((0.8 + escapeChance(ship))/ 250) && chance > (0.6 + escapeChance(ship)) / 250) {
-			if (ship.getCargoCost() < valueNeeded) {
+			if (ship.getCargoCost() < VALUENEEDED) {
 				walkPlank();
 				return false;
 			} else {
@@ -65,7 +64,7 @@ public class RandomEvent {
 		
 		// Nothing happens
 		else {
-			this.uneventfulJourney();
+			uneventfulJourney();
 			return true;
 		}
 	}

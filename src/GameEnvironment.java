@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class GameEnvironment {
 	private ArrayList<Island> islands;
@@ -111,14 +113,6 @@ public class GameEnvironment {
 		}
 		this.islands.add(new Island("Erbest", tempTrades));
 		
-		// Initialise Routes
-		Route tempRoute = new Route(3, 0.2, islands.get(1));
-		islands.get(1).addRoute(tempRoute);
-		this.islands.add(new Island("Mahkarn", ));
-		this.islands.add(new Island("Tolset Reef", ));
-		this.islands.add(new Island("Alegate", ));
-		this.islands.add(new Island("Pardea", ));
-		this.islands.add(new Island("Erbest", ));
 		
 		// Initialise Mahkarn Routes
 		Route mahkarnToPardea = new Route(2, 0.2, islands.get(3));
@@ -202,14 +196,18 @@ public class GameEnvironment {
 		}
 	}
 	
-	public void sail(Route route) {
+	public boolean sail(Route route) {
 		if (RandomEvent.tryEvent(activeShip, route.getEventChance())) {
-			activeIsland = route.getDestinationIsland();
-			 if (!addMoney(DAILYPAYPERHEAD * activeShip.getCrewSize())) {
-				 //not finished
+			
+			 if (addMoney(DAILYPAYPERHEAD * activeShip.getCrewSize())) {
+				 activeIsland = route.getDestinationIsland();
+				 return true;
+			 } else {
+				 return false;
 			 }
 		} else {
 			gameOver();
+			return false;
 		}
 	}
 	
@@ -246,6 +244,7 @@ public class GameEnvironment {
 //		String choice = choices.get(getPlayerDecision(query, choices));
 //		System.out.println(choice);
 		
+
 		
 	}
 }
