@@ -9,6 +9,7 @@ public class Item {
 	 * Constructs an Item with the given Name and Weight.
 	 * @param name the name of the Item
 	 * @param weight the weight of the Item
+	 * @param price the default price of the Item
 	 */
 	public Item(String name, int weight, int price) {
 		this.name = name;
@@ -32,6 +33,10 @@ public class Item {
 		return this.weight;
 	}
 	
+	/**
+	 * Returns the default price of the Item
+	 * @return the default price of the Item
+	 */
 	public int getPrice() {
 		return this.price;
 	}
