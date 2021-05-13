@@ -1,14 +1,14 @@
 import java.util.Random;
 
 public class RandomEvent {
-	private int valueNeeded = 1000;
+	private static final int VALUENEEDED = 1000;
 	
-	private int escapeChance(Ship ship) {
+	private static int escapeChance(Ship ship) {
 		int chance = (int) (ship.getCrewSize() * ship.getSpeed());
 		return chance;
 	}
 	
-	private int eventChance() {
+	private static int randomNumber() {
 		Random rand = new Random();
 		double randomDouble = rand.nextDouble();
 		return (int) randomDouble;
@@ -18,22 +18,20 @@ public class RandomEvent {
 		return("You manage to slip past the enemy pirates");
 	}
 	
-	public String uneventfulJourney() {
+	public static String uneventfulJourney() {
 		return("The journey between the islands was uneventful");
 	}
 	
-	public void walkPlank() {
+	public static void walkPlank() {
 		System.out.println("The pirates are unhappy with your cargo. You have been forced to walk the plank.");
-		System.out.println("Game Over");
-		GameEnvironment.gameOver();
 	}
 	
-	public boolean tryEvent(Ship ship, double eventChance) {
-		int chance = eventChance();
+	public static boolean tryEvent(Ship ship, double eventChance) {
+		double chance = randomNumber();
 		
 		// Pirate Attack
-		if (chance < ((0.8 + escapeChance(ship))/ 250) && chance > (0.6 + escapeChance(ship)) / 250) {
-			if (ship.getCargoCost() < valueNeeded) {
+		if (eventChance < ((0.8 + escapeChance(ship))/ 250) && eventChance > (0.6 + escapeChance(ship)) / 250) {
+			if (ship.getCargoCost() < VALUENEEDED) {
 				walkPlank();
 				return false;
 			} else {
@@ -43,8 +41,8 @@ public class RandomEvent {
 		}
 		
 		// Stormy Weather
-		else if(chance < ((0.9 + escapeChance(ship))/ 250) && chance > (0.8 + escapeChance(ship)) / 250) {
-			double damageTaken = (eventChance() * 0.3 * 100);
+		else if(eventChance < ((0.9 + escapeChance(ship))/ 250) && eventChance > (0.8 + escapeChance(ship)) / 250) {
+			double damageTaken = (randomNumber() * 0.3 * 100);
 			if (damageTaken >= ship.getDurability()) {
 				System.out.println("The storm has completely destroyed your ship and all of its cargo.");
 				return false;
@@ -57,7 +55,7 @@ public class RandomEvent {
 		}
 		
 		// Rescue Sailors
-		else if(chance < ((1.0 + escapeChance(ship))/ 250) && chance > (0.9 + escapeChance(ship)) / 250) {
+		else if(eventChance < ((1.0 + escapeChance(ship))/ 250) && eventChance > (0.9 + escapeChance(ship)) / 250) {
 			System.out.println("You have rescued some stranded sailors");
 			return true;
 			// Need to add gold gift thingy
@@ -65,7 +63,7 @@ public class RandomEvent {
 		
 		// Nothing happens
 		else {
-			this.uneventfulJourney();
+			uneventfulJourney();
 			return true;
 		}
 	}
