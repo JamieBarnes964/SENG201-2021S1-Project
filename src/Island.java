@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 public class Island {
 	private String name;
-	private HashMap<Item, Integer> trades;
+	private HashMap<Item, Double> trades;
 	private ArrayList<Route> routes;
 	
 	/**
@@ -11,7 +11,7 @@ public class Island {
 	 * @param name		the name of the Island
 	 * @param trades	the trades in a HashMap with the Item as the key, and Item's trade value as the HashMap value
 	 */
-	public Island(String name, HashMap<Item, Integer> trades) {
+	public Island(String name, HashMap<Item, Double> trades) {
 		this.name = name;
 		this.trades = trades;
 		this.routes = new ArrayList<Route>();
@@ -29,7 +29,7 @@ public class Island {
 	 * Returns the Island's trades.
 	 * @return the Island's trades
 	 */
-	public HashMap<Item, Integer> getTrades() {
+	public HashMap<Item, Double> getTrades() {
 		return this.trades;
 	}
 	

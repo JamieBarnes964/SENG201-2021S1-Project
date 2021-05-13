@@ -23,7 +23,7 @@ public class RandomEvent {
 	}
 	
 	public void walkPlank() {
-		System.out.println("The pirates are unhappy with your cargo. You have been forced to walk the ship.");
+		System.out.println("The pirates are unhappy with your cargo. You have been forced to walk the plank.");
 		System.out.println("Game Over");
 		GameEnvironment.gameOver();
 	}
@@ -42,7 +42,7 @@ public class RandomEvent {
 		
 		// Stormy Weather
 		else if(chance < ((0.9 + escapeChance(ship))/ 250) && chance > (0.8 + escapeChance(ship)) / 250) {
-			double damageTaken = (eventChance() * 0.3 * 10);
+			double damageTaken = (eventChance() * 0.3 * 100);
 			if (damageTaken >= ship.getDurability()) {
 				System.out.println("The storm has completely destroyed your ship and all of its cargo.");
 				GameEnvironment.gameOver();
