@@ -28,15 +28,17 @@ public class RandomEvent {
 		GameEnvironment.gameOver();
 	}
 	
-	public void tryEvent(Ship ship, double eventChance) {
+	public boolean tryEvent(Ship ship, double eventChance) {
 		int chance = eventChance();
 		
 		// Pirate Attack
 		if (chance < ((0.8 + escapeChance(ship))/ 250) && chance > (0.6 + escapeChance(ship)) / 250) {
 			if (ship.getCargoCost() < valueNeeded) {
 				walkPlank();
+				return false;
 			} else {
 				ship.emptyCargo();
+				return true;
 			}
 		}
 		
@@ -45,22 +47,26 @@ public class RandomEvent {
 			double damageTaken = (eventChance() * 0.3 * 10);
 			if (damageTaken >= ship.getDurability()) {
 				System.out.println("The storm has completely destroyed your ship and all of its cargo.");
-				GameEnvironment.gameOver();
+				return false;
 			}
 			else {
 				ship.takeDamage(damageTaken);
+				return true;
+				
 			}
 		}
 		
 		// Rescue Sailors
 		else if(chance < ((1.0 + escapeChance(ship))/ 250) && chance > (0.9 + escapeChance(ship)) / 250) {
 			System.out.println("You have rescued some stranded sailors");
+			return true;
 			// Need to add gold gift thingy
 		}
 		
 		// Nothing happens
 		else {
 			this.uneventfulJourney();
+			return true;
 		}
 	}
 }

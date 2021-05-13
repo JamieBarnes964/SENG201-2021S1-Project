@@ -6,6 +6,9 @@ public class GameEnvironment {
 	private ArrayList<Ship> ships;
 	private ArrayList<Item> items;
 	
+	private int gameDays;
+	private String playerName;
+	
 	private Ship activeShip;
 	private Island activeIsland;
 	
@@ -117,7 +120,15 @@ public class GameEnvironment {
 	}
 	
 	public void initialisePlayerValues() {
-		
+//		ArrayList<String> choices = new ArrayList<String>();
+//		String query = "Choose a letter:";
+//		choices.add("a");
+//		choices.add("b");
+//		choices.add("c");
+//		choices.add("d");
+//		choices.add("e");
+//		String choice = choices.get(getPlayerDecision(query, choices));
+//		System.out.println(choice);
 	}
 	
 	public static void gameOver() {
