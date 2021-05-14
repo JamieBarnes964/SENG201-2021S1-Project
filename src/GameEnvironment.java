@@ -16,19 +16,26 @@ public class GameEnvironment {
 	
 	private static Ship activeShip;
 	private static Island activeIsland;
-	private static int totalMoney = STARTINGMONEY;
+	private static int playerMoney = STARTINGMONEY;
+	
+	private static boolean gameOver = false;
 	
 	static private Scanner consoleInput = new Scanner(System.in);
 	
 	public static int getMoney() {
-		return totalMoney;
+		return playerMoney;
 	}
 	
+	/**
+	 * Adds the given integer to the playerMoney. Negative integers are allowed to subtract.
+	 * @param change the integer amount to change playerMoney by. Negative integers are allowed.
+	 * @return true if the combination of playerMoney and the given integer change is > 0, false otherwise
+	 */
 	public static boolean addMoney(int change) {
-		if (totalMoney + change < 0) {
+		if (playerMoney + change < 0) {
 			return false;
 		} else {
-			totalMoney = totalMoney + change;
+			playerMoney = playerMoney + change;
 			return true;
 		}
 	}
@@ -155,14 +162,42 @@ public class GameEnvironment {
 	}
 	
 	/**
+	 * 
+	 * @param prompt
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	static public int getUserIntInRange(String prompt, int min, int max) {
+		boolean acceptedInput = false;
+		int userInput = 0;
+		while (!acceptedInput) {
+			System.out.println(prompt);
+			System.out.println("Please enter a number between " + min + " and " + max);
+			try {
+				userInput = Integer.parseInt(consoleInput.nextLine());
+				if (userInput < min || userInput > max) {
+					throw new Exception("That is not a number between " + min + " and " + max);
+				}
+				acceptedInput = true;
+			} catch (IllegalArgumentException e) {
+				System.out.println("That is not a number. Please enter a NUMBER between " + min + " and " + max);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		return userInput;
+	}
+	
+	/**
 	 * A console based user decision making system.
 	 * Displays the given query and choices that the user can make.
 	 * Returns the index of the user's choice in the choices array.
-	 * @param stringQuery	the string query that will be displayed to the user
+	 * @param prompt		the string query that will be displayed to the user
 	 * @param choices		the string choices that the user can choose
 	 * @return the index of the user's choice in the choices array.
 	 */
-	static public int getPlayerDecision(String stringQuery, ArrayList<String> choices) {
+	static public int getPlayerDecision(String prompt, ArrayList<String> choices) {
 		int userChoice = 0;
 		// repeat until a recognised choice is made
 		while (userChoice < 1 || userChoice > choices.size()) {
@@ -170,11 +205,11 @@ public class GameEnvironment {
 				
 				// prints the query and possible choices to the console
 				System.out.println("\n######################################");
-				System.out.println(stringQuery);
+				System.out.println(prompt);
 				for (int i = 0; i < choices.size(); i++) {
 					System.out.println(Integer.toString(i + 1) + ". " + choices.get(i));
 				}
-				System.out.println("\nEnter a number from the range 1-" + Integer.toString(choices.size()) + " to select the corresponding option: \n");
+				System.out.println("\nEnter a number from the range 1-" + Integer.toString(choices.size()) + " to select the corresponding option: ");
 				
 				// gets the user's input
 				userChoice = Integer.parseInt(consoleInput.nextLine());
@@ -215,22 +250,24 @@ public class GameEnvironment {
 		Route chosenRoute = activeIsland.getRoutes().get(getPlayerDecision(query, routeChoices));
 		System.out.println("You have selected the route to " + chosenRoute.getDestinationIsland().getName() + "!");
 		try {
-			TimeUnit.SECONDS.sleep(1);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			sail(chosenRoute);
-			System.out.println("You have made it to " + activeIsland.getName() + "!");
-			try {
-				TimeUnit.SECONDS.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			ArrayList<String> notifyEventStrings = sail(chosenRoute);
+			System.out.println("\n######################################\n");
+			for (String notification: notifyEventStrings) {
+				System.out.println(notification);
 			}
-		} catch (IllegalArgumentException e) {
+			if (!gameOver) {
+				System.out.println("\n######################################\nYou have made it to " + activeIsland.getName() + "!\n");
+				System.out.println(activeIsland.getName() + " buys and sells: ");
+				for (Item item: items) {
+					if (activeIsland.getTrades().get(item) != 0) {
+						System.out.println("- " + item.getName() + " for " + item.getPrice() * activeIsland.getTrades().get(item) + " gold.");
+					}
+				}
+			}
+		} catch (InsufficientFundsException e) {
 			System.out.println("You cannot pay your crew for the journey. Choose another route, or sell some cargo to afford the journey.");
+		} catch (InsufficientDaysException e) {
+			System.out.println("You do not have enough days left to make that journey.");
 		}
 	}
 	
@@ -238,28 +275,85 @@ public class GameEnvironment {
 	/**
 	 * 
 	 * @param route
-	 * @throws IllegalArgumentException
+	 * @return
+	 * @throws InsufficientDaysException
+	 * @throws InsufficientFundsException
 	 */
-	public static void sail(Route route) throws IllegalArgumentException {
-		if (addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize())) {
-			if (RandomEvent.tryEvent(activeShip, route.getEventChance())) {
-				 activeIsland = route.getDestinationIsland();
-			} else {
-				gameOver();
-			}
-		 } else {
-			 throw new IllegalArgumentException("Not enough money to pay crew for the trip!");
-		 }
+	public static ArrayList<String> sail(Route route) throws InsufficientDaysException, InsufficientFundsException {
+		if (route.getDays() > gameDays) {
+			throw new InsufficientDaysException();
+		} else if (addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize())) {
+			ArrayList<String> notifyEventStrings = RandomEvent.tryEvent(activeShip, route.getEventChance());
+			gameDays -= route.getDays();
+			activeIsland = route.getDestinationIsland();
+			return notifyEventStrings;
+		} else {
+			throw new InsufficientFundsException();
+		}
 		
 	}
-	
 	
 	/**
 	 * 
 	 */
-	public void consoleTrade() {
+	public static void consoleTrade() {
+		ArrayList<String> bsOptions = new ArrayList<String>();
+		bsOptions.add("Buy");
+		bsOptions.add("Sell");
+		int bsDecision = getPlayerDecision("Select an option:", bsOptions);
 		
+		ArrayList<String> itemOptions = new ArrayList<String>();
+		ArrayList<Item> tradableItems = new ArrayList<Item>();
+		for (Item item: items) {
+			if (activeIsland.getTrades().get(item) != 0) {
+				tradableItems.add(item);
+				if (bsDecision == 0) {
+					itemOptions.add(item.getName() + 
+							"\n   Value:  " + (item.getPrice() * activeIsland.getTrades().get(item)) +
+							"\n   Weight: " + item.getWeight() + "\n");
+				} else {
+					itemOptions.add(item.getName() + 
+							"\n   Value:    " + (item.getPrice() * activeIsland.getTrades().get(item)) +
+							"\n   Quantity: " + activeShip.getCargo().get(item) + "\n");
+				}
+			}
+		}
+		itemOptions.add("Cancel");
+		int chosenItemIndex = getPlayerDecision("Select an item to " + bsOptions.get(bsDecision) + ": ", itemOptions);
+		
+		if (chosenItemIndex != tradableItems.size()) {
+			
+			Item chosenItem = tradableItems.get(chosenItemIndex);
+			int maxBuySell = 0;
+			
+			if (bsDecision == 0) {
+				maxBuySell = Math.min(Math.floorDiv(activeShip.getAvailableCargoSpace(), chosenItem.getWeight()),
+									  Math.floorDiv(playerMoney, (int) (chosenItem.getPrice() * activeIsland.getTrades().get(chosenItem))));
+			} else {
+				maxBuySell = activeShip.getCargo().get(chosenItem);
+			}
+			
+			int quantity = getUserIntInRange("Please enter the quantity you would like to " + bsOptions.get(bsDecision) + " (0 to cancel): ", 0, maxBuySell);
+			
+			if (quantity != 0) {
+				if (bsDecision == 0) {
+					addMoney((int) -(quantity * chosenItem.getPrice() * activeIsland.getTrades().get(chosenItem)));
+					activeShip.addItemCargo(chosenItem, quantity);
+					System.out.println("You have bought " + quantity + " " + chosenItem.getName() + " for " 
+										+ (int) (quantity * chosenItem.getPrice() * activeIsland.getTrades().get(chosenItem)) 
+										+ " gold.\nYou now have " + playerMoney + " gold.");
+				} else {
+					addMoney((int) (quantity * chosenItem.getPrice() * activeIsland.getTrades().get(chosenItem)));
+					activeShip.addItemCargo(chosenItem, -quantity);
+					System.out.println("You have sold " + quantity + " " + chosenItem.getName() + " for " 
+							+ (int) (quantity * chosenItem.getPrice() * activeIsland.getTrades().get(chosenItem)) 
+							+ " gold.\nYou now have " + playerMoney + " gold.");
+					
+				}
+			}
+		}
 	}
+	
 	
 	
 	/**
@@ -326,26 +420,31 @@ public class GameEnvironment {
 		}
 		activeShip = ships.get(getPlayerDecision(query, choices));
 		System.out.println("You have selected " + activeShip.getName() + "!");
+		
+		for (Item item: items) {
+			activeShip.initialiseCargo(item);
+		}
 	}
 	
 	public static void gameOver() {
-		
+		gameOver = true;
 	}
 	
 	/**
 	 * Returns true if the player can continue the game, false otherwise.
 	 * @return true if the player can continue the game, false otherwise.
 	 */
-	public static boolean canContinueGame() {
-		double minDays = Double.POSITIVE_INFINITY;
+	public static boolean canContinueGame(){
+		double minRouteDays = Double.POSITIVE_INFINITY;
 		for (Route route: activeIsland.getRoutes()) {
-			if (route.getDays() < minDays) {minDays = route.getDays();}
+			if (route.getDays() < minRouteDays) {minRouteDays = route.getDays();}
 		}
-		int totalCargoValue = 0;
-		for (Item item: activeShip.getCargo()) {
-			totalCargoValue += item.getPrice() * activeIsland.getTrades().get(item);
+		int totalCargoValueAtIsland = 0;
+		for (Item item: activeShip.getCargo().keySet()) {
+			totalCargoValueAtIsland += item.getPrice() * activeIsland.getTrades().get(item) * activeShip.getCargo().get(item);
 		}
-		if (totalMoney + totalCargoValue - (minDays * DAILYPAYPERHEAD * activeShip.getCrewSize()) >= 0) {
+		if (playerMoney + totalCargoValueAtIsland - (minRouteDays * DAILYPAYPERHEAD * activeShip.getCrewSize()) >= 0 
+				&& minRouteDays <= gameDays && !gameOver) {
 			return true;
 		} else {
 			return false;
@@ -353,16 +452,41 @@ public class GameEnvironment {
 	}
 	
 	public static void mainConsoleGameplayLoop() {
-		
+		ArrayList<String> mainGameOptionsStrings = new ArrayList<String>();
+		mainGameOptionsStrings.add("Trade");
+		mainGameOptionsStrings.add("Sail");
+		mainGameOptionsStrings.add("View Ship Stats");
+		mainGameOptionsStrings.add("View Cargo");
+		mainGameOptionsStrings.add("Exit");
+		while (canContinueGame()) {
+			int selectedGameOption = getPlayerDecision("Select an option: ", mainGameOptionsStrings);
+			if (selectedGameOption == 0) {
+				consoleTrade();
+			}
+			else if (selectedGameOption == 1) {
+				consoleSail();
+			}
+		}
 	}
 	
 	
 	public static void main(String[] args) {
 		initialise();
 		initialisePlayerValues();
-		while (true) {
-			consoleSail();
-		}
+		
+		mainConsoleGameplayLoop();
+		
+//		while (true) {
+//			consoleTrade();
+//			for (Item item: activeShip.getCargo().keySet()) {
+//				System.out.println(item.getName() + " : " + activeShip.getCargo().get(item));
+//			}
+//			System.out.println(activeShip.getAvailableCargoSpace());
+//		}
+		
+//		activeIsland = islands.get(0);
+//		activeShip = ships.get(0);
+		
 		
 //		System.out.println("you have $" + totalMoney);
 //		

@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Ship {
 	private String name;
@@ -7,9 +7,9 @@ public class Ship {
 	private int durability;
 	private int maxDurability;
 	private double speed;
-	private ArrayList<Item> cargo;
+	private HashMap<Item, Integer> cargo;
 	private int availableCargoSpace;
-	private boolean repairs;
+	private boolean needRepairs;
 	
 	/**
 	 * Creates the Ship object with the given variables.
@@ -27,9 +27,9 @@ public class Ship {
 		this.durability = durability;
 		this.maxDurability = durability;
 		this.speed = 1.0 + ((crewSize - capacity) / 50.0);
-		this.cargo = new ArrayList<Item>();
+		this.cargo = new HashMap<Item, Integer>();
 		this.availableCargoSpace = capacity;
-		this.repairs = false;
+		this.needRepairs = false;
 	}
 	
 	/**
@@ -46,6 +46,10 @@ public class Ship {
 	 */
 	public int getCapacity() {
 		return this.capacity;
+	}
+	
+	public int getAvailableCargoSpace() {
+		return this.availableCargoSpace;
 	}
 	
 	/**
@@ -72,32 +76,40 @@ public class Ship {
 		return this.speed;
 	}
 	
+	public void initialiseCargo(Item item) {
+		this.cargo.put(item, 0);
+	}
+	
 	/**
 	 * Returns a list of the items stored in the cargo.
 	 * @return a list of the items stored in the cargo.
 	 */
-	public ArrayList<Item> getCargo() {
+	public HashMap<Item, Integer> getCargo() {
 		return this.cargo;
 	}
 	
 	/**
-	 * Calculates the total cost of the items in cargo
-	 * @return total cost of items
+	 * Calculates the total value of the items in cargo.
+	 * @return total value of items
 	 */
-	public int getCargoCost() {
+	public int getCargoValue() {
 		int total = 0;
-		for (Item item: this.cargo) {
-			total += item.getPrice();
+		for (Item item: this.cargo.keySet()) {
+			total += item.getPrice() * this.cargo.get(item);
 		}
 		return total;
 	}
 	
+	/**
+	 * 
+	 * @param item
+	 * @param amount
+	 * @return
+	 */
 	public boolean addItemCargo(Item item, int amount) {
 		if (availableCargoSpace >= item.getWeight() * amount) {
-			for (int i = 0; i < amount; i++) {
-				this.cargo.add(item);
-				availableCargoSpace -= item.getWeight();
-			}
+			this.cargo.put(item, this.cargo.get(item) + amount);
+			availableCargoSpace -= item.getWeight() * amount;
 			return true;
 		} else {
 			return false;
@@ -105,45 +117,37 @@ public class Ship {
 	}
 	
 	/**
-	 * Removes all cargo from the ship
+	 * Removes all cargo from the ship.
 	 */
 	public void emptyCargo() {
-		this.cargo = new ArrayList<Item>();
+		for (Item item: this.cargo.keySet()) {
+			this.cargo.put(item, 0);
+		}
 		System.out.println("All of your cargo has been taken by enemy pirates");
+	}
+
+	/**
+	 * Returns the status of whether or not the ship needs repairs.
+	 * @return True or False depending on whether or not the ship needs repairs
+	 */
+	public boolean getNeedRepairs() {
+		return needRepairs;
 	}
 	
 	/**
 	 * Repairs the ship
 	 */
 	public void repairShip() {
-		System.out.println("The ship has been repaired");
 		this.durability = this.maxDurability;
-		this.repairs = false;
+		this.needRepairs = false;
 	}
 	
 	/**
-	 * Returns the status of whether or not the ship needs repairs
-	 * @return True or False depending on whether or not the ship needs repairs
-	 */
-	public boolean getRepairs() {
-		return repairs;
-	}
-	
-	/**
-	 * Called if the ship gets damaged
-	 */
-	public void needRepairs() {
-		System.out.println("Your ship is damaged. You will need to fix it before you leave the next port");
-		this.repairs = true;
-	}
-	
-	/**
-	 * Damages the ship based on the amount supplied by damageTaken
-	 * @param damageTaken a random double that determines how much damage the ship takes
+	 * Damages the ship based on the amount supplied by the integer damageTaken.
+	 * @param damageTaken an integer that determines how much damage the ship takes
 	 */
 	public void takeDamage(int damageTaken) {
-		System.out.println("Your ship has taken " + damageTaken + " points of damage.");
 		this.durability -= damageTaken;
-		this.needRepairs();
+		this.needRepairs = true;
 	}
 }
