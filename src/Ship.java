@@ -8,6 +8,7 @@ public class Ship {
 	private double maxDurability;
 	private double speed;
 	private ArrayList<Item> cargo;
+	private int availableCargoSpace;
 	private boolean repairs;
 	
 	/**
@@ -27,6 +28,7 @@ public class Ship {
 		this.maxDurability = durability;
 		this.speed = 1.0 + ((crewSize - capacity) / 50.0);
 		this.cargo = new ArrayList<Item>();
+		this.availableCargoSpace = capacity;
 		this.repairs = false;
 	}
 	
@@ -88,6 +90,18 @@ public class Ship {
 			total += item.getPrice();
 		}
 		return total;
+	}
+	
+	public boolean addItemCargo(Item item, int amount) {
+		if (availableCargoSpace >= item.getWeight() * amount) {
+			for (int i = 0; i < amount; i++) {
+				this.cargo.add(item);
+				availableCargoSpace -= item.getWeight();
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**

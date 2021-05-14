@@ -237,7 +237,7 @@ public class GameEnvironment {
 	/**
 	 * 
 	 */
-	public void trade() {
+	public void consoleTrade() {
 		
 	}
 	
@@ -313,6 +313,26 @@ public class GameEnvironment {
 		
 	}
 	
+	/**
+	 * Returns true if the player can continue the game, false otherwise.
+	 * @return true if the player can continue the game, false otherwise.
+	 */
+	public static boolean canContinueGame() {
+		double minDays = Double.POSITIVE_INFINITY;
+		for (Route route: activeIsland.getRoutes()) {
+			if (route.getDays() < minDays) {minDays = route.getDays();}
+		}
+		int totalCargoValue = 0;
+		for (Item item: activeShip.getCargo()) {
+			totalCargoValue += item.getPrice() * activeIsland.getTrades().get(item);
+		}
+		System.out.println(totalMoney + totalCargoValue - (minDays * DAILYPAYPERHEAD * activeShip.getCrewSize()));
+		if (totalMoney + totalCargoValue - (minDays * DAILYPAYPERHEAD * activeShip.getCrewSize()) >= 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	public static void mainConsoleGameplayLoop() {
 		
@@ -322,8 +342,16 @@ public class GameEnvironment {
 	public static void main(String[] args) {
 		initialise();
 		initialisePlayerValues();
-		consoleSail();
-		System.out.println(totalMoney);
+//		consoleSail();
+		totalMoney = 160;
+		
+		System.out.println("you have $" + totalMoney);
+		
+		if (!activeShip.addItemCargo(items.get(0), 15)) {
+			System.out.println("You do not have enough space to load this item");
+		}
+		System.out.println(canContinueGame());
+		
 		
 		// Example of getPlayerDecision
 //		ArrayList<String> choices = new ArrayList<String>();

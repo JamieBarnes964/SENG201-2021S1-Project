@@ -3,6 +3,9 @@ public class Item {
 	private String name;
 	private int weight;
 	private int price;
+	private int id;
+	
+	private static int nextID = 0;
 	
 	
 	/**
@@ -15,6 +18,16 @@ public class Item {
 		this.name = name;
 		this.weight = weight;
 		this.price = price;
+		this.id = nextID;
+		nextID += 1;
+	}
+	
+	/**
+	 * Returns the id of the Item
+	 * @return the id of the Item
+	 */
+	public int getID() {
+		return this.id;
 	}
 	
 	/**
