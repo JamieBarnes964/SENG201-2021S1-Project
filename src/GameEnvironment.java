@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 public class GameEnvironment {
 	private final static int STARTINGMONEY = 100000;
@@ -221,16 +219,16 @@ public class GameEnvironment {
 	 * @throws IllegalArgumentException
 	 */
 	public static void sail(Route route) throws IllegalArgumentException {
-		if (RandomEvent.tryEvent(activeShip, route.getEventChance())) {
-			
-			 if (addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize())) {
+		if (addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize())) {
+			if (RandomEvent.tryEvent(activeShip, route.getEventChance())) {
 				 activeIsland = route.getDestinationIsland();
-			 } else {
-				 throw new IllegalArgumentException("Not enough money to pay crew for the trip!");
-			 }
-		} else {
-			gameOver();
-		}
+			} else {
+				gameOver();
+			}
+		 } else {
+			 throw new IllegalArgumentException("Not enough money to pay crew for the trip!");
+		 }
+		
 	}
 	
 	
@@ -248,7 +246,6 @@ public class GameEnvironment {
 	public static void initialisePlayerValues() {
 		boolean nameDecided = false;
 		boolean daysDecided = false;
-		boolean shipDecided = false;
 		
 		while (nameDecided == false) {
 			try {
