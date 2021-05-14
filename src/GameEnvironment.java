@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import java.util.concurrent.TimeUnit;
 
 public class GameEnvironment {
 	private final static int STARTINGMONEY = 100000;
@@ -170,7 +169,7 @@ public class GameEnvironment {
 			try {
 				
 				// prints the query and possible choices to the console
-				System.out.println("######################################");
+				System.out.println("\n######################################");
 				System.out.println(stringQuery);
 				for (int i = 0; i < choices.size(); i++) {
 					System.out.println(Integer.toString(i + 1) + ". " + choices.get(i));
@@ -196,7 +195,16 @@ public class GameEnvironment {
 	
 	
 	/**
+	 * Sails to the island the main purpose of the game
+	 * What did you expect to be here?
+	 * An essay on what sailing is?
+	 * Read this if you want to know what sailing is:
+	 * https://en.wikipedia.org/wiki/Sailing (Press CTRL when hovering over the link)
 	 * 
+	 * Remember to remove the sarcasm!
+	 * 
+	 * Need to remove days after making a trip and to then end the game when the amount of days
+	 * 		is less than the amount of days to make any trip
 	 */
 	public static void consoleSail() {
 		ArrayList<String> routeChoices = new ArrayList<String>();
@@ -207,8 +215,20 @@ public class GameEnvironment {
 		Route chosenRoute = activeIsland.getRoutes().get(getPlayerDecision(query, routeChoices));
 		System.out.println("You have selected the route to " + chosenRoute.getDestinationIsland().getName() + "!");
 		try {
+			TimeUnit.SECONDS.sleep(1);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
 			sail(chosenRoute);
 			System.out.println("You have made it to " + activeIsland.getName() + "!");
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (IllegalArgumentException e) {
 			System.out.println("You cannot pay your crew for the journey. Choose another route, or sell some cargo to afford the journey.");
 		}
@@ -243,12 +263,11 @@ public class GameEnvironment {
 	
 	
 	/**
-	 * 
+	 * Initialises the player name, the game days they wish to play for and which ship they would like to use
 	 */
 	public static void initialisePlayerValues() {
 		boolean nameDecided = false;
 		boolean daysDecided = false;
-		boolean shipDecided = false;
 		
 		while (nameDecided == false) {
 			try {
@@ -326,7 +345,6 @@ public class GameEnvironment {
 		for (Item item: activeShip.getCargo()) {
 			totalCargoValue += item.getPrice() * activeIsland.getTrades().get(item);
 		}
-		System.out.println(totalMoney + totalCargoValue - (minDays * DAILYPAYPERHEAD * activeShip.getCrewSize()));
 		if (totalMoney + totalCargoValue - (minDays * DAILYPAYPERHEAD * activeShip.getCrewSize()) >= 0) {
 			return true;
 		} else {
@@ -342,15 +360,16 @@ public class GameEnvironment {
 	public static void main(String[] args) {
 		initialise();
 		initialisePlayerValues();
-//		consoleSail();
-		totalMoney = 160;
-		
-		System.out.println("you have $" + totalMoney);
-		
-		if (!activeShip.addItemCargo(items.get(0), 15)) {
-			System.out.println("You do not have enough space to load this item");
+		while (true) {
+			consoleSail();
 		}
-		System.out.println(canContinueGame());
+		
+//		System.out.println("you have $" + totalMoney);
+//		
+//		if (!activeShip.addItemCargo(items.get(0), 15)) {
+//			System.out.println("You do not have enough space to load this item");
+//		}
+//		System.out.println(canContinueGame());
 		
 		
 		// Example of getPlayerDecision

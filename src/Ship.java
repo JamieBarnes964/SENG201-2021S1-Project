@@ -4,8 +4,8 @@ public class Ship {
 	private String name;
 	private int capacity;
 	private int crewSize;
-	private double durability;
-	private double maxDurability;
+	private int durability;
+	private int maxDurability;
 	private double speed;
 	private ArrayList<Item> cargo;
 	private int availableCargoSpace;
@@ -141,7 +141,7 @@ public class Ship {
 	 * Damages the ship based on the amount supplied by damageTaken
 	 * @param damageTaken a random double that determines how much damage the ship takes
 	 */
-	public void takeDamage(double damageTaken) {
+	public void takeDamage(int damageTaken) {
 		System.out.println("Your ship has taken " + damageTaken + " points of damage.");
 		this.durability -= damageTaken;
 		this.needRepairs();
