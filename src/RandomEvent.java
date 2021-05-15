@@ -27,13 +27,14 @@ public class RandomEvent {
 					e.printStackTrace();
 				}
 				if (0.4 + ((ship.getCapacity() * ship.getSpeed())/ 250) < randomNumber()){
+					notifyEventList.add("You haven't managed to excape!");
 					if (ship.getCargoValue() < VALUENEEDED) {
 						notifyEventList.add("The pirates are unhappy with your cargo. You have been made to walk the plank.");
 						GameEnvironment.gameOver();
 						return notifyEventList;
 					} else {
 						ship.emptyCargo();
-						// TODO add thingy
+						notifyEventList.add("The pirates have taken all of your cargo and mercifilly let you and your crew live.");
 						return notifyEventList;
 					}
 				} else {
