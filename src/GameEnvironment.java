@@ -45,6 +45,10 @@ public class GameEnvironment {
 		}
 	}
 	
+	
+	/**
+	 * Need to implement variable prices
+	 */
 	public static void initialise() {
 		islands = new ArrayList<Island>();
 		ships = new ArrayList<Ship>();
@@ -248,7 +252,7 @@ public class GameEnvironment {
 		
 		int chosenRouteIndex = getPlayerDecision("Select the route you would like to take:", routeChoices); // Get the user to choose the route index
 		
-		if (chosenRouteIndex != activeIsland.getRoutes().size()) { // if not canceled
+		if (chosenRouteIndex != activeIsland.getRoutes().size()) { // if not cancelled
 			Route chosenRoute = activeIsland.getRoutes().get(chosenRouteIndex); // Get the chosen route as a Route
 			
 			System.out.println("You have selected the route to " + chosenRoute.getDestinationIsland().getName() + "!");
@@ -467,6 +471,29 @@ public class GameEnvironment {
 			}
 			else if (selectedGameOption == 1) {
 				consoleSail();
+			}
+			else if (selectedGameOption == 2) {
+				System.out.println("Ship Name: " + activeShip.getName() + 
+						"\n   Durability: " + activeShip.getDurability() + 
+						"\n   Cargo Capacity: " + activeShip.getCapacity() + 
+						"\n   Crew Size: " + activeShip.getCrewSize() + 
+						"\n   Speed: " + activeShip.getSpeed() + "\n");
+			}
+			else if (selectedGameOption == 3) {
+				int total = 0;
+				for (Item item: activeShip.getCargo().keySet()) {
+					
+					if (activeShip.getCargo().get(item) != 0) {
+						System.out.println((total + 1) + ". " + item.getName() + ": " + activeShip.getCargo().get(item));
+						total += 1;
+					}
+				}
+				if (total == 0) {
+					System.out.println("\nYou have no items in your hold!\n");
+				}
+			}
+			else if (selectedGameOption == 4) {
+				gameOver();
 			}
 		}
 		
