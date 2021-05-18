@@ -25,7 +25,7 @@ public class GameEnvironment {
 	private static int statSailed = 0;	// Stores the number of times the player sailed between islands
 	private static int statTraded = 0;	// Stores the number of items the player traded
 	
-	static private Scanner consoleInput = new Scanner(System.in);
+	private static  Scanner consoleInput = new Scanner(System.in);
 	
 	public static int getMoney() {
 		return playerMoney;
