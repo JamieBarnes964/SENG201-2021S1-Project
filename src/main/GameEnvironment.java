@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameEnvironment {
-	public final static int STARTINGMONEY = 100000;
+	public final static int STARTINGMONEY = 1000;
 	public final static int DAILYPAYPERHEAD = 2;
 	
 	

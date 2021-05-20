@@ -132,6 +132,12 @@ public class Ship {
 	 * @return True or False depending on whether or not the ship needs repairs
 	 */
 	public boolean getNeedRepairs() {
+		if (durability < maxDurability) {
+			needRepairs = true;
+		}
+		else {
+			needRepairs = false;
+		}
 		return needRepairs;
 	}
 	
