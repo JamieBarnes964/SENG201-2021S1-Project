@@ -1,3 +1,4 @@
+package main;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -24,47 +25,41 @@ import java.awt.Insets;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 
-public class GUIAppMain {
+public class GUIMainScreen {
 
-	private JFrame frame;
+	private JFrame window;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUIAppMain window = new GUIAppMain();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
 	/**
 	 * Create the application.
 	 */
-	public GUIAppMain() {
+	public GUIMainScreen() {
 		initialize();
+		this.window.setVisible(true);
 	}
-
+	
+	public void closeWindow() {
+		window.dispose();
+	}
+	
+	public void finishedWindow() {
+		GameEnvironment.closeGUIMainScreen(this);
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setResizable(false);
-		frame.setTitle("Starmans Cool App");
-		frame.setBounds(100, 100, 600, 470);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		window = new JFrame();
+		window.setResizable(false);
+		window.setTitle("Starmans Cool App");
+		window.setBounds(100, 100, 600, 470);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.getContentPane().setLayout(null);
 		
 		JPanel interactionPanel = new JPanel();
 		interactionPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		interactionPanel.setBounds(333, 11, 241, 409);
-		frame.getContentPane().add(interactionPanel);
+		window.getContentPane().add(interactionPanel);
 		interactionPanel.setLayout(new CardLayout(0, 0));
 		
 		JLayeredPane tradingPane = new JLayeredPane();
@@ -102,7 +97,6 @@ public class GUIAppMain {
 				slider.setBounds(10, 45, 200, 20);
 				singleItemPane.add(slider);
 				slider.addChangeListener(new ChangeListener() {
-					
 			        public void stateChanged(ChangeEvent ce) {
 			        	if (!slider.getValueIsAdjusting()) {
 			        		System.out.println(((JSlider) ce.getSource()).getValue());
@@ -158,16 +152,19 @@ public class GUIAppMain {
 		JSeparator separator_1 = new JSeparator();
 		mainOptionsPane.add(separator_1);
 		
+		JLayeredPane sailingPane = new JLayeredPane();
+		interactionPanel.add(sailingPane, "name_454086212272400");
+		
 		JPanel mapPanel = new JPanel();
 		mapPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		mapPanel.setBounds(10, 11, 313, 249);
-		frame.getContentPane().add(mapPanel);
+		window.getContentPane().add(mapPanel);
 		mapPanel.setLayout(null);
 		
 		JPanel statsPanel = new JPanel();
 		statsPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		statsPanel.setBounds(10, 271, 313, 149);
-		frame.getContentPane().add(statsPanel);
+		window.getContentPane().add(statsPanel);
 		statsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JLabel lblNewLabel = new JLabel("New label");
@@ -175,7 +172,5 @@ public class GUIAppMain {
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
 		statsPanel.add(lblNewLabel_1);
-		
-		this.frame.setVisible(true);
 	}
 }

@@ -1,3 +1,4 @@
+package main;
 
 public class Route {
 	private int days;

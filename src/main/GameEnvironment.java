@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -284,14 +285,30 @@ public class GameEnvironment {
 		}
 	}
 	
-
+	
+	public static void launchGUIMainScreen() {
+		GUIMainScreen mainWindow = new GUIMainScreen();
+	}
+	
+	public static void closeGUIMainScreen(GUIMainScreen mainWindow) {
+		mainWindow.closeWindow();
+	}
+	
+	public static void launchGUISetupScreen() {
+		GUISetupScreen setupWindow = new GUISetupScreen();
+	}
+	
+	public static void closeGUISetupScreen(GUISetupScreen setupWindow) {
+		setupWindow.closeWindow();
+		launchGUIMainScreen();
+	}
 	
 	
 	public static void main(String[] args) {
 		initialise();
 		
 //		new CommandLineUI();
-		new GUIAppOpen();
+		launchGUISetupScreen();
 		
 //		GUIAppMain guiApp = new GUIAppMain();
 	}
