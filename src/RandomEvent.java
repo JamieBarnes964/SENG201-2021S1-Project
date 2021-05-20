@@ -38,7 +38,7 @@ public class RandomEvent {
 						return notifyEventList;
 					}
 				} else {
-					notifyEventList.add("You escaped the enemy pirates.");
+					notifyEventList.add("You escaped the enemy pirates!");
 					return notifyEventList;
 				}
 			}
@@ -64,7 +64,7 @@ public class RandomEvent {
 				int goldAmount = (int) (200 * (randomNumber() + 0.5));
 				notifyEventList.add("You spot some drowning sailors and decide to rescue them.\nThey give you some gold as thanks.");
 				GameEnvironment.addMoney(goldAmount);
-				notifyEventList.add("You recieve " + goldAmount + " gold.\nYou now have " + GameEnvironment.getMoney() + " gold.");
+				notifyEventList.add("You recieve " + goldAmount + " gold.\nYou now have " + GameEnvironment.getPlayerMoney() + " gold.");
 				return notifyEventList;
 			}
 		}
