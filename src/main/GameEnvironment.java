@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class GameEnvironment {
 	public final static int STARTINGMONEY = 100000;
 	public final static int DAILYPAYPERHEAD = 2;
+	public final static int REPAIRCOSTPERUNIT = 2;
 	
 	
 	private static ArrayList<Island> islands;
@@ -88,7 +89,9 @@ public class GameEnvironment {
 		GameEnvironment.statTraded += statTraded;
 	}
 
-	
+	public static int getRepairCost() {
+		return (activeShip.getMaxDurability() - activeShip.getDurability()) * REPAIRCOSTPERUNIT;
+	}
 	
 	
 	/**
@@ -248,14 +251,17 @@ public class GameEnvironment {
 	public static ArrayList<String> sail(Route route) throws InsufficientDaysException, InsufficientFundsException {
 		if (route.getDays() > gameDays) {
 			throw new InsufficientDaysException();
-		} else if (addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize())) {
+		} else if (getPlayerMoney() <= DAILYPAYPERHEAD * activeShip.getCrewSize()) {
+			throw new InsufficientFundsException();
+		} else if (activeShip.getNeedRepairs()) {
+			throw new InsufficientRepairsException();
+		} else {
+			addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize());
 			ArrayList<String> notifyEventStrings = RandomEvent.tryEvent(activeShip, route.getEventChance());
 			statSailed += 1;
 			gameDays -= route.getDays();
 			activeIsland = route.getDestinationIsland();
 			return notifyEventStrings;
-		} else {
-			throw new InsufficientFundsException();
 		}
 		
 	}

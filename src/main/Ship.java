@@ -10,7 +10,6 @@ public class Ship {
 	private double speed;
 	private HashMap<Item, Integer> cargo;
 	private int availableCargoSpace;
-	private boolean needRepairs;
 	
 	/**
 	 * Creates the Ship object with the given variables.
@@ -30,7 +29,6 @@ public class Ship {
 		this.speed = 1.0 + ((crewSize - capacity) / 50.0);
 		this.cargo = new HashMap<Item, Integer>();
 		this.availableCargoSpace = capacity;
-		this.needRepairs = false;
 	}
 	
 	/**
@@ -65,10 +63,14 @@ public class Ship {
 	 * Returns the current durability of the Ship.
 	 * @return the current durability of the Ship.
 	 */
-	public double getDurability() {
+	public int getDurability() {
 		return this.durability;
 	}
 	
+	public int getMaxDurability() {
+		return maxDurability;
+	}
+
 	/**
 	 * Returns the speed of the Ship.
 	 * @return the current speed of the Ship.
@@ -132,7 +134,7 @@ public class Ship {
 	 * @return True or False depending on whether or not the ship needs repairs
 	 */
 	public boolean getNeedRepairs() {
-		return needRepairs;
+		return maxDurability > durability;
 	}
 	
 	/**
@@ -140,7 +142,6 @@ public class Ship {
 	 */
 	public void repairShip() {
 		this.durability = this.maxDurability;
-		this.needRepairs = false;
 	}
 	
 	/**
@@ -149,6 +150,5 @@ public class Ship {
 	 */
 	public void takeDamage(int damageTaken) {
 		this.durability -= damageTaken;
-		this.needRepairs = true;
 	}
 }

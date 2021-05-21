@@ -225,6 +225,11 @@ public class GUISetupScreen {
 					GameEnvironment.setGameDays(daysSlider.getValue());
 					GameEnvironment.setActiveShip(GameEnvironment.getShips().get(chosenShipIndex));
 					
+					// Initialises the chosen ship's cargo
+					for (Item item: GameEnvironment.getItems()) {
+						GameEnvironment.getActiveShip().initialiseCargo(item);
+					}
+					
 					finishedWindow();
 					
 				} catch (Exception excptn) {
