@@ -3,13 +3,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CommandLineUI {
+
+	private static Scanner consoleInput = new Scanner(System.in);
 	
 	public CommandLineUI() {
 		initialisePlayerValues();
 		mainGameplayLoop();
 	}
-	
-	private static Scanner consoleInput = new Scanner(System.in);
 	
 	/**
 	 * A console based user number input system.

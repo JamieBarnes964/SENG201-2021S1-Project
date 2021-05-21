@@ -1,9 +1,10 @@
 package main;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class GameEnvironment {
-	public final static int STARTINGMONEY = 100000;
+	public final static int STARTINGMONEY = 1000;
 	public final static int DAILYPAYPERHEAD = 2;
 	public final static int REPAIRCOSTPERUNIT = 2;
 	
@@ -91,6 +92,12 @@ public class GameEnvironment {
 
 	public static int getRepairCost() {
 		return (activeShip.getMaxDurability() - activeShip.getDurability()) * REPAIRCOSTPERUNIT;
+	}
+	
+	public static double randomNumber() {
+		Random rand = new Random();
+		double randomDouble = rand.nextDouble();
+		return randomDouble;
 	}
 	
 	
@@ -257,7 +264,7 @@ public class GameEnvironment {
 			throw new InsufficientRepairsException();
 		} else {
 			addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize());
-			ArrayList<String> notifyEventStrings = RandomEvent.tryEvent(activeShip, route.getEventChance());
+			ArrayList<String> notifyEventStrings = RandomEvent.tryEvent(activeShip, route.getEventChance(), randomNumber(), randomNumber());
 			statSailed += 1;
 			gameDays -= route.getDays();
 			activeIsland = route.getDestinationIsland();
