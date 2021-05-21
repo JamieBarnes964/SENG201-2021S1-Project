@@ -1,6 +1,7 @@
 package main;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class GameEnvironment {
 	public final static int STARTINGMONEY = 1000;
@@ -88,7 +89,11 @@ public class GameEnvironment {
 		GameEnvironment.statTraded += statTraded;
 	}
 
-	
+	public static double randomNumber() {
+		Random rand = new Random();
+		double randomDouble = rand.nextDouble();
+		return randomDouble;
+	}
 	
 	
 	/**
@@ -249,7 +254,7 @@ public class GameEnvironment {
 		if (route.getDays() > gameDays) {
 			throw new InsufficientDaysException();
 		} else if (addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize())) {
-			ArrayList<String> notifyEventStrings = RandomEvent.tryEvent(activeShip, route.getEventChance());
+			ArrayList<String> notifyEventStrings = RandomEvent.tryEvent(activeShip, route.getEventChance(), randomNumber(), randomNumber());
 			statSailed += 1;
 			gameDays -= route.getDays();
 			activeIsland = route.getDestinationIsland();
