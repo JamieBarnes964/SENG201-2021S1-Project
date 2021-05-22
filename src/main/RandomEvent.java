@@ -1,6 +1,5 @@
 package main;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 import java.util.Random;
 
 public class RandomEvent {
@@ -15,12 +14,6 @@ public class RandomEvent {
 			// Pirate Attack
 			if (randomChance <= 0.33){
 				notifyEventList.add("You have encountered pirates!");
-				try {
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				if (0.4 + ((ship.getCapacity() * ship.getSpeed())/ 250) < randomDouble){
 					notifyEventList.add("You haven't managed to excape!");
 					if (ship.getCargoValue() < VALUENEEDED) {
@@ -42,13 +35,16 @@ public class RandomEvent {
 			else if(randomChance <= 0.66) {
 				int damageTaken = (int) (10 + (randomDouble * 0.3 * 100));
 				notifyEventList.add("Your ship has been caught in stormy weather.\nWatch out for your cargo!");
-				if (damageTaken >= ship.getDurability()) {
+				if (damageTaken >= ship.getDurability()) { // If the damage taken is too much for the ship
 					notifyEventList.add("The storm has completely destroyed your ship and all of its cargo.");
 					GameEnvironment.gameOver();
 					return notifyEventList;
-				}
-				else {
+				} else {
 					ship.takeDamage(damageTaken);
+					if (ship.getCargo().get(GameEnvironment.getItems().get(3)) > 0) { // if there is fine china: break it
+						notifyEventList.add("In the rough seas all of you fine china has broken!");
+						ship.addItemCargo(GameEnvironment.getItems().get(3), - ship.getCargo().get(GameEnvironment.getItems().get(3)));
+					}
 					notifyEventList.add("Your ship has taken " + damageTaken + " points of damage!");
 					return notifyEventList;
 				}

@@ -126,7 +126,7 @@ public class Ship {
 		for (Item item: this.cargo.keySet()) {
 			this.cargo.put(item, 0);
 		}
-		System.out.println("All of your cargo has been taken by enemy pirates");
+		this.availableCargoSpace = 0;
 	}
 
 	/**

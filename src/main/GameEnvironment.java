@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class GameEnvironment {
-	public final static int STARTINGMONEY = 1000;
+	public final static int STARTINGMONEY = 2000;
 	public final static int DAILYPAYPERHEAD = 2;
 	public final static int REPAIRCOSTPERUNIT = 2;
 	
@@ -32,6 +32,10 @@ public class GameEnvironment {
 
 	public static int getStartingmoney() {
 		return STARTINGMONEY;
+	}
+	
+	public static ArrayList<Island> getIslands() {
+		return islands;
 	}
 	
 	public static ArrayList<Ship> getShips() {
@@ -131,25 +135,20 @@ public class GameEnvironment {
 		ships.add(new Ship("Artemis", 40, 70, 30));
 		
 		// Initialise Items
-//		items.add(new Item("Cask of Rum", 8, 300));
-//		items.add(new Item("Barrel of Fish", 8, 600));
-//		items.add(new Item("Logs of Wood", 14, 450));
-//		items.add(new Item("Roll of Cloth", 4, 1500));
-//		items.add(new Item("Copper Plates", 8, 300));
-		items.add(new Item("Bushels of Bananas", 2, 1500));
-		items.add(new Item("Iron Rods", 8, 750));
-		items.add(new Item("Gold Bars", 14, 1200));
-		items.add(new Item("Fine China", 2, 2000));
-		items.add(new Item("Barrels of Gunpowder", 8, 750));
+		items.add(new Item("Bushels of Bananas", 2, 75));
+		items.add(new Item("Iron Rods", 6, 300));
+		items.add(new Item("Gold Bars", 8, 500));
+		items.add(new Item("Fine China", 2, 450));
+		items.add(new Item("Barrels of Gunpowder", 4, 175));
 		
 		// Initialise Islands
 		HashMap<Item, Double> tempTrades = new HashMap<Item, Double>();
 		ArrayList<Double> tempTradeMultiplier = new ArrayList<Double>();
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(1.0);
+		tempTradeMultiplier.add(1.1); //Bushels of Bananas
+		tempTradeMultiplier.add(0.0); //Iron Rods
+		tempTradeMultiplier.add(1.1); //Gold Bars
+		tempTradeMultiplier.add(0.0); //Fine China
+		tempTradeMultiplier.add(1.1); //Barrels of Gunpowder
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
@@ -157,11 +156,11 @@ public class GameEnvironment {
 		
 		tempTrades = new HashMap<Item, Double>();
 		tempTradeMultiplier.clear();
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(1.0);
+		tempTradeMultiplier.add(0.7); //Bushels of Bananas
+		tempTradeMultiplier.add(1.2); //Iron Rods
+		tempTradeMultiplier.add(0.0); //Gold Bars
+		tempTradeMultiplier.add(0.6); //Fine China
+		tempTradeMultiplier.add(0.0); //Barrels of Gunpowder
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
@@ -169,11 +168,11 @@ public class GameEnvironment {
 		
 		tempTrades = new HashMap<Item, Double>();
 		tempTradeMultiplier.clear();
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(1.0);
+		tempTradeMultiplier.add(1.4); //Bushels of Bananas
+		tempTradeMultiplier.add(0.0); //Iron Rods
+		tempTradeMultiplier.add(0.8); //Gold Bars
+		tempTradeMultiplier.add(1.3); //Fine China
+		tempTradeMultiplier.add(0.0); //Barrels of Gunpowder
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
@@ -181,11 +180,11 @@ public class GameEnvironment {
 		
 		tempTrades = new HashMap<Item, Double>();
 		tempTradeMultiplier.clear();
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(1.0);
+		tempTradeMultiplier.add(0.0); //Bushels of Bananas
+		tempTradeMultiplier.add(1.1); //Iron Rods
+		tempTradeMultiplier.add(1.0); //Gold Bars
+		tempTradeMultiplier.add(0.0); //Fine China
+		tempTradeMultiplier.add(1.2); //Barrels of Gunpowder
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
@@ -193,11 +192,11 @@ public class GameEnvironment {
 		
 		tempTrades = new HashMap<Item, Double>();
 		tempTradeMultiplier.clear();
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(0.0);
-		tempTradeMultiplier.add(1.0);
-		tempTradeMultiplier.add(1.0);
+		tempTradeMultiplier.add(0.0); //Bushels of Bananas
+		tempTradeMultiplier.add(0.7); //Iron Rods
+		tempTradeMultiplier.add(0.0); //Gold Bars
+		tempTradeMultiplier.add(1.6); //Fine China
+		tempTradeMultiplier.add(0.9); //Barrels of Gunpowder
 		for (int i = 0; i < items.size(); i++) {
 			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));
 		}
@@ -237,7 +236,7 @@ public class GameEnvironment {
 		islands.get(4).addRoute(erberstToAlegate);
 		islands.get(4).addRoute(erberstToMahkarn);
 		
-		activeIsland = islands.get(0);
+		activeIsland = islands.get(3);
 	}
 	
 
@@ -290,7 +289,7 @@ public class GameEnvironment {
 		for (Item item: activeShip.getCargo().keySet()) {
 			totalCargoValueAtIsland += item.getPrice() * activeIsland.getTrades().get(item) * activeShip.getCargo().get(item);
 		}
-		if (playerMoney + totalCargoValueAtIsland - (minRouteDays * DAILYPAYPERHEAD * activeShip.getCrewSize()) >= 0 
+		if (playerMoney + totalCargoValueAtIsland - (minRouteDays * DAILYPAYPERHEAD * activeShip.getCrewSize() + getRepairCost()) >= 0 
 				&& minRouteDays <= gameDays && !gameOver) {
 			return true;
 		} else {
@@ -305,6 +304,7 @@ public class GameEnvironment {
 	
 	public static void closeGUIMainScreen(GUIMainScreen mainWindow) {
 		mainWindow.closeWindow();
+		lauchGUIEndGameScreen();
 	}
 	
 	public static void launchGUISetupScreen() {
@@ -316,6 +316,13 @@ public class GameEnvironment {
 		launchGUIMainScreen();
 	}
 	
+	public static void lauchGUIEndGameScreen() {
+		GUIGameOverScreen endGameWindow = new GUIGameOverScreen();
+	}
+	
+	public static void closeGUIEndGameScreen(GUIGameOverScreen endGameWindow) {
+		endGameWindow.closeWindow();
+	}
 	
 	public static void main(String[] args) {
 		initialise();
