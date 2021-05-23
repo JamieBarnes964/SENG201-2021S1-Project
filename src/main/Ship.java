@@ -126,7 +126,7 @@ public class Ship {
 		for (Item item: this.cargo.keySet()) {
 			this.cargo.put(item, 0);
 		}
-		this.availableCargoSpace = 0;
+		this.availableCargoSpace = this.capacity;
 	}
 
 	/**

@@ -162,9 +162,6 @@ public class GUIMainScreen {
 				        }
 					});
 					sliderList.add(slider);
-//					for (JSlider tempSlider: sliderList) {
-//						buySlidersMax(tempSlider, sliderList, tradableItems);
-//					}
 					buySlidersMax(sliderList, tradableItems);
 				} else { // else Selling
 					JSlider slider = new JSlider(0, GameEnvironment.getActiveShip().getCargo().get(item), 0); // set slider max to the number of items 

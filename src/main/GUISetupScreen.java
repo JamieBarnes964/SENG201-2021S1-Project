@@ -132,34 +132,6 @@ public class GUISetupScreen {
 			shipSelectionButtons.add(rdbtnNewRadioButton);
 		}
 		
-//		JPanel panel = new JPanel();
-//		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-//		shipsArrayPanel.add(panel);
-//		panel.setLayout(new GridLayout(0, 1, 0, 0));
-//		
-//		JLabel shipNameLabel = new JLabel("Name");
-//		panel.add(shipNameLabel);
-//		
-//		JLabel shipCargoLabel = new JLabel("Cargo Size:");
-//		shipCargoLabel.setHorizontalAlignment(SwingConstants.TRAILING);
-//		panel.add(shipCargoLabel);
-//		
-//		JLabel shipCrewLabel = new JLabel("Crew Size:");
-//		shipCrewLabel.setHorizontalAlignment(SwingConstants.TRAILING);
-//		panel.add(shipCrewLabel);
-//		
-//		JLabel shipDurabilityLabel = new JLabel("Durability");
-//		shipDurabilityLabel.setHorizontalAlignment(SwingConstants.TRAILING);
-//		panel.add(shipDurabilityLabel);
-//		
-//		JLabel shipSpeedLabel = new JLabel("Speed:");
-//		shipSpeedLabel.setHorizontalAlignment(SwingConstants.TRAILING);
-//		panel.add(shipSpeedLabel);
-//		
-//		JRadioButton rdbtnNewRadioButton = new JRadioButton("");
-//		rdbtnNewRadioButton.setHorizontalAlignment(SwingConstants.CENTER);
-//		panel.add(rdbtnNewRadioButton);
-		
 		
 		// Ship Label Panel #################################################
 		JPanel shipLabelPanel = new JPanel();
