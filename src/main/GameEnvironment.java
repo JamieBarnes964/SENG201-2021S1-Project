@@ -18,7 +18,7 @@ public class GameEnvironment {
 	
 	private static Ship activeShip;
 	private static Island activeIsland;
-	private static int playerMoney = STARTINGMONEY;
+	private static int playerMoney;
 	
 	private static boolean gameOver = false;
 	
@@ -240,6 +240,7 @@ public class GameEnvironment {
 		islands.get(4).addRoute(erberstToAlegate);
 		islands.get(4).addRoute(erberstToMahkarn);
 		
+		playerMoney = STARTINGMONEY;
 		setActiveIsland(islands.get(3));
 	}
 	

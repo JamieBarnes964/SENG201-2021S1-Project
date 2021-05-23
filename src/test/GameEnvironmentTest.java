@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import main.*;
 
@@ -11,12 +12,14 @@ class GameEnvironmentTest {
 	
 	@Test
 	void addMoneyTest() {
+		GameEnvironment.initialise();
 		GameEnvironment.addMoney(600);
 		assertEquals(2600, GameEnvironment.getPlayerMoney());
 	}
 	
 	@Test
 	void sailTest() {
+		GameEnvironment.initialise();
 		Ship testShip = new Ship("Test Ship", 30, 40, 50);
 		for (int i=0; i < 5; i++) {
 			testShip.initialiseCargo(new Item("", 0, 0));
@@ -53,13 +56,13 @@ class GameEnvironmentTest {
 		GameEnvironment.setActiveIsland(testIsland);
 		GameEnvironment.setActiveShip(testShip);
 		
-		assertEquals(false, GameEnvironment.canContinueGame());
-		GameEnvironment.setGameDays(0);
-		
-		assertEquals(false, GameEnvironment.canContinueGame());
-		
-		assertEquals(false, GameEnvironment.canContinueGame());
-		
+		assertEquals(false, GameEnvironment.canContinueGame()); // Test not enough Days
+		GameEnvironment.setGameDays(1);
+		GameEnvironment.addMoney(-GameEnvironment.getPlayerMoney());
+		assertEquals(false, GameEnvironment.canContinueGame()); // Test not enough Money
+		GameEnvironment.addMoney(2000);
 		assertEquals(true, GameEnvironment.canContinueGame());
+		GameEnvironment.gameOver();
+		assertEquals(false, GameEnvironment.canContinueGame());
 	}
 }
