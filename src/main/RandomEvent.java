@@ -22,7 +22,7 @@ public class RandomEvent {
 						return notifyEventList;
 					} else {
 						ship.emptyCargo();
-						notifyEventList.add("The pirates have taken all of your cargo and mercifilly let you and your crew live.");
+						notifyEventList.add("The pirates have taken all of your cargo and mercifully let you and your crew live.");
 						return notifyEventList;
 					}
 				} else {
