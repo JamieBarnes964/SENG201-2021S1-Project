@@ -6,8 +6,6 @@ import main.*;
 
 class ShipTest {
 	
-	//Need to implement cargo tests but idk how
-	
 	Ship testShip = new Ship("Test Ship", 30, 40, 50);
 	@Test
 	void takeDamageTest() {
@@ -30,7 +28,10 @@ class ShipTest {
 	
 	@Test
 	void getCargoValueTest() {
-		
+		Item testItem = new Item("", 0, 2);
+		testShip.initialiseCargo(testItem);
+		testShip.addItemCargo(testItem, 5);
+		assertEquals(10, testShip.getCargoValue());
 	}
 	
 	@Test
@@ -43,11 +44,21 @@ class ShipTest {
 		assertEquals(30, testShip.getCargo().get(testItem));
 		assertEquals(false, testShip.addItemCargo(testItem, 1));
 		assertEquals(30, testShip.getCargo().get(testItem));
+		
 	}
 	
 	@Test
 	void emptyCargoTest() {
 		
-	}
 
+		Item testItem = new Item("", 1, 2);
+		testShip.initialiseCargo(testItem);
+		testShip.addItemCargo(testItem, 5);
+		assertEquals(10, testShip.getCargoValue());
+		assertEquals(25, testShip.getAvailableCargoSpace());
+		testShip.emptyCargo();
+		assertEquals(0, testShip.getCargoValue());
+		assertEquals(30, testShip.getAvailableCargoSpace());
+		
+	}
 }

@@ -27,6 +27,13 @@ class RandomEventTest {
 	}
 	
 	@Test
+	void shipDeathTest() {
+		Ship testShip = new Ship("Test Ship", 80, 60, 30);
+		assertEquals("The storm has completely destroyed your ship and all of its cargo.", testEvent.tryEvent(testShip, 0.4, 1, 0.5).get(1));
+
+	}
+	
+	@Test
 	void rescueTest() {
 		assertEquals("You spot some drowning sailors and decide to rescue them.\nThey give you some gold as thanks.", RandomEvent.tryEvent(testShip, 1.0, 0, 1).get(0));
 	}
