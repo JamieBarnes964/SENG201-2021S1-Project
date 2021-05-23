@@ -46,6 +46,10 @@ public class GameEnvironment {
 		return items;
 	}
 	
+	public static void setActiveIsland(Island activeIsland) {
+		GameEnvironment.activeIsland = activeIsland;
+	}
+	
 	public static Island getActiveIsland() {
 		return activeIsland;
 	}
@@ -236,7 +240,7 @@ public class GameEnvironment {
 		islands.get(4).addRoute(erberstToAlegate);
 		islands.get(4).addRoute(erberstToMahkarn);
 		
-		activeIsland = islands.get(3);
+		setActiveIsland(islands.get(3));
 	}
 	
 
@@ -266,7 +270,7 @@ public class GameEnvironment {
 			ArrayList<String> notifyEventStrings = RandomEvent.tryEvent(activeShip, route.getEventChance(), randomNumber(), randomNumber());
 			statSailed += 1;
 			gameDays -= route.getDays();
-			activeIsland = route.getDestinationIsland();
+			setActiveIsland(route.getDestinationIsland());
 			return notifyEventStrings;
 		}
 		
