@@ -27,5 +27,27 @@ class ShipTest {
 		testShip.repairShip();
 		assertEquals(false, testShip.getNeedRepairs());
 	}
+	
+	@Test
+	void getCargoValueTest() {
+		
+	}
+	
+	@Test
+	void addItemCargoTest() {
+		Item testItem = new Item("", 1, 1);
+		testShip.initialiseCargo(testItem);
+		assertEquals(true, testShip.addItemCargo(testItem, 1));
+		assertEquals(1, testShip.getCargo().get(testItem));
+		assertEquals(true, testShip.addItemCargo(testItem, 29));
+		assertEquals(30, testShip.getCargo().get(testItem));
+		assertEquals(false, testShip.addItemCargo(testItem, 1));
+		assertEquals(30, testShip.getCargo().get(testItem));
+	}
+	
+	@Test
+	void emptyCargoTest() {
+		
+	}
 
 }

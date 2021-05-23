@@ -10,7 +10,7 @@ public class RandomEvent {
 		double randomDouble = rand.nextDouble();
 		
 		ArrayList<String> notifyEventList = new ArrayList<String>();
-		if (eventChance <= eventCheck) {
+		if (eventChance > eventCheck) {
 			// Pirate Attack
 			if (randomChance <= 0.33){
 				notifyEventList.add("You have encountered pirates!");
