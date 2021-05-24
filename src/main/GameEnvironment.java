@@ -259,15 +259,15 @@ public class GameEnvironment {
 	 * @throws InsufficientDaysException	throws if there are not enough days left to take the route
 	 * @throws InsufficientFundsException	throws if the player does not have enough money to pay their sailors for the route
 	 */
-	public static ArrayList<String> sail(Route route) throws InsufficientDaysException, InsufficientFundsException {
+	public static ArrayList<String> sail(Route route) throws InsufficientDaysException, InsufficientFundsException, InsufficientRepairsException {
 		if (route.getDays() > gameDays) {
 			throw new InsufficientDaysException();
-		} else if (getPlayerMoney() <= DAILYPAYPERHEAD * activeShip.getCrewSize()) {
+		} else if (getPlayerMoney() < (DAILYPAYPERHEAD * activeShip.getCrewSize() * route.getDays())) {
 			throw new InsufficientFundsException();
 		} else if (activeShip.getNeedRepairs()) {
 			throw new InsufficientRepairsException();
 		} else {
-			addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize());
+			addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize() * route.getDays());
 			ArrayList<String> notifyEventStrings = RandomEvent.tryEvent(activeShip, route.getEventChance(), randomNumber(), randomNumber());
 			statSailed += 1;
 			gameDays -= route.getDays();
