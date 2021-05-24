@@ -68,4 +68,18 @@ class RandomEventTest {
 	void nothingTest() {
 		assertEquals("The journey between the islands was uneventful", RandomEvent.tryEvent(testShip, 0, 1, 0).get(0));
 	}
+	
+	@Test
+	void brokenChinaTest() {
+		GameEnvironment.initialise();
+		testShip = new Ship("Test Ship", 80, 60, 40);
+		for (Item item: GameEnvironment.getItems()) {
+			testShip.initialiseCargo(item);
+		}
+		Item fineChina = GameEnvironment.getItems().get(3);
+		testShip.addItemCargo(fineChina, 2);
+		assertEquals(2, testShip.getCargo().get(fineChina));
+		RandomEvent.tryEvent(testShip, 1.0, 0, 0.5);
+		assertEquals(0, testShip.getCargo().get(fineChina));
+	}
 }
