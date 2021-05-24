@@ -3,8 +3,18 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class RandomEvent {
-	private static final int VALUENEEDED = 1000;
+	// This is the value that your cargo must beat for the pirates to take your cargo and let you go
+	private static final int VALUENEEDED = 1000; 
 
+	/**
+	 * 
+	 * @param ship references the players current ship
+	 * @param eventChance is the chance of an event happening on the chosen route
+	 * @param eventCheck is a random number generated in GameEnvironment that determines whether or not the event happens
+	 * @param randomChance is a random number that determines what event happens
+	 * @return returns the text that lets the player know what event is happening/ what the outcome of the event is
+	 */
+	
 	public static ArrayList<String> tryEvent(Ship ship, double eventChance, double eventCheck, double randomChance) {
 		Random rand = new Random();
 		double randomDouble = rand.nextDouble();

@@ -26,14 +26,26 @@ public class GameEnvironment {
 	private static int statSailed = 0;	// Stores the number of times the player sailed between islands
 	private static int statTraded = 0;	// Stores the number of items the player traded
 	
+	/**
+	 * 
+	 * @return returns a true or false to check whether or not the game is over
+	 */
 	public static boolean isGameOver() {
 		return gameOver;
 	}
-
+	
+	/**
+	 * 
+	 * @return returns the starting money amount
+	 */
 	public static int getStartingmoney() {
 		return STARTINGMONEY;
 	}
 	
+	/**
+	 * 
+	 * @return returns an ArrayList of the islands
+	 */
 	public static ArrayList<Island> getIslands() {
 		return islands;
 	}
