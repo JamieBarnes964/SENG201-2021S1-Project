@@ -343,10 +343,6 @@ public class GameEnvironment {
 	
 	public static void main(String[] args) {
 		initialise();
-		
-//		new CommandLineUI();
 		launchGUISetupScreen();
-		
-//		GUIAppMain guiApp = new GUIAppMain();
 	}
 }

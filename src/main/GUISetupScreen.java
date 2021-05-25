@@ -85,7 +85,7 @@ public class GUISetupScreen {
 		window.getContentPane().add(daysSlider);
 		
 		JLabel shipLabel = new JLabel("Choose a Ship:");
-		shipLabel.setBounds(10, 134, 86, 14);
+		shipLabel.setBounds(10, 134, 200, 14);
 		window.getContentPane().add(shipLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();

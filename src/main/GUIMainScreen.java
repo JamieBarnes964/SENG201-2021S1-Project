@@ -330,11 +330,11 @@ public class GUIMainScreen {
 		parentPanel.add(shipNameLabel);
 		
 		JLabel crewSizeLabel = new JLabel("Crew: " + GameEnvironment.getActiveShip().getCrewSize());
-		crewSizeLabel.setBounds(10, 36, 135, 14);
+		crewSizeLabel.setBounds(10, 36, 124, 14);
 		parentPanel.add(crewSizeLabel);
 		
 		JLabel cargoCapacityLabel = new JLabel("Cargo: " + (GameEnvironment.getActiveShip().getCapacity() - GameEnvironment.getActiveShip().getAvailableCargoSpace()) + "/" + GameEnvironment.getActiveShip().getCapacity());
-		cargoCapacityLabel.setBounds(10, 61, 135, 14);
+		cargoCapacityLabel.setBounds(10, 61, 124, 14);
 		parentPanel.add(cargoCapacityLabel);
 		
 		JLabel lblDurabilitycurrentmax = new JLabel("Durability: " + (int) GameEnvironment.getActiveShip().getDurability() + "/" + GameEnvironment.getActiveShip().getMaxDurability());
@@ -342,11 +342,11 @@ public class GUIMainScreen {
 		parentPanel.add(lblDurabilitycurrentmax);
 		
 		JLabel shipSpeedLabel = new JLabel("Speed: " + GameEnvironment.getActiveShip().getSpeed());
-		shipSpeedLabel.setBounds(155, 36, 105, 14);
+		shipSpeedLabel.setBounds(144, 36, 105, 14);
 		parentPanel.add(shipSpeedLabel);
 		
 		JLabel sailingCost = new JLabel("Cost to Sail / Day: $" + GameEnvironment.getActiveShip().getCrewSize() * GameEnvironment.DAILYPAYPERHEAD);
-		sailingCost.setBounds(155, 61, 146, 14);
+		sailingCost.setBounds(144, 61, 167, 14);
 		parentPanel.add(sailingCost);
 		
 		JButton repairButton = new JButton("Repair");
