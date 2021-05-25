@@ -8,6 +8,9 @@ import main.*;
 class GameEnvironmentTest {
 	
 	@Test
+	/**
+	 * Tests the addMoney function
+	 */
 	void addMoneyTest() {
 		GameEnvironment.initialise();
 		GameEnvironment.addMoney(600);
@@ -16,6 +19,9 @@ class GameEnvironmentTest {
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the game can continue based on the number of days left
+	 */
 	void canContinueGameDaysTest() {
 		GameEnvironment.initialise();
 		
@@ -40,6 +46,9 @@ class GameEnvironmentTest {
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the game can continue based on the amount of money left
+	 */
 	void canContinueGameMoneyTest() {
 		GameEnvironment.initialise();
 		
@@ -65,6 +74,9 @@ class GameEnvironmentTest {
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the game can continue
+	 */
 	void canContinueGameTrueTest() {
 		GameEnvironment.initialise();
 		
@@ -89,9 +101,10 @@ class GameEnvironmentTest {
 		assertEquals(true, GameEnvironment.canContinueGame());
 	}
 	
-
-	
 	@Test
+	/**
+	 * Tests whether or not the gameOver function works
+	 */
 	void canContinueGameGameOverTest() {
 		GameEnvironment.initialise();
 		
@@ -117,9 +130,10 @@ class GameEnvironmentTest {
 		assertEquals(false, GameEnvironment.canContinueGame()); // Test gameOver
 	}
 	
-
-	
 	@Test
+	/**
+	 * Tests whether or not the sail function works
+	 */
 	void sailTest() {
 		GameEnvironment.initialise();
 		Ship testShip = new Ship("Test Ship", 30, 40, 50);
@@ -137,6 +151,9 @@ class GameEnvironmentTest {
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the InsufficientDaysException gets thrown properly
+	 */
 	void sailDaysTest() {
 		GameEnvironment.initialise();
 		Ship testShip = new Ship("Test Ship", 30, 40, 50);
@@ -155,6 +172,9 @@ class GameEnvironmentTest {
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the InsufficientFundsException gets thrown properly
+	 */
 	void sailFundsTest() {
 		GameEnvironment.initialise();
 		Ship testShip = new Ship("Test Ship", 30, 40, 50);
@@ -174,6 +194,9 @@ class GameEnvironmentTest {
 	}
 	
 	@Test
+	/**
+	 *  Tests whether or not InsufficientRepairsException gets thrown properly
+	 */
 	void sailRepairsTest() {
 		GameEnvironment.initialise();
 		Ship testShip = new Ship("Test Ship", 30, 40, 50);

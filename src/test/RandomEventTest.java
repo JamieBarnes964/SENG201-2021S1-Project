@@ -12,24 +12,36 @@ import main.Ship;
 class RandomEventTest {
 	Ship testShip = new Ship("Test Ship", 80, 60, 40);
 	@Test
+	/**
+	 * Tests whether or not the player can encounter pirates
+	 */
 	void pirateAttackTest() {
 		assertEquals("You have encountered pirates!", RandomEvent.tryEvent(testShip, 1.0, 0, 0.2).get(0));
 		
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the player can escape pirates
+	 */
 	void pirateEscapeTest() {
 		Ship testShip = new Ship("Test Ship", 80, 6000, 40);
 		assertEquals("You escaped the enemy pirates!", RandomEvent.tryEvent(testShip, 1.0, 0, 0.2).get(1));
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the player can walk the plank
+	 */
 	void pirateDeathTest() {
 		Ship testShip = new Ship("Test Ship", 800, 60, 40);
 		assertEquals("The pirates are unhappy with your cargo. You have been made to walk the plank.", RandomEvent.tryEvent(testShip, 1.0, 0, 0.2).get(2));
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the player can encounter pirates and have them take their cargo
+	 */
 	void pirateTakeCargoTest() {
 		Ship testShip = new Ship("Test Ship", 800, 60, 40);
 		Item testItem = new Item("", 0, 1000);
@@ -40,6 +52,9 @@ class RandomEventTest {
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the player can encounter a storm
+	 */
 	void stormTest() {
 		GameEnvironment.initialise();
 		testShip = new Ship("Test Ship", 80, 60, 40);
@@ -50,6 +65,9 @@ class RandomEventTest {
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the player can lose their ship to the storm
+	 */
 	void shipDeathTest() {
 		Ship testShip = new Ship("Test Ship", 80, 60, 5);
 		for (Item item: GameEnvironment.getItems()) {
@@ -60,16 +78,25 @@ class RandomEventTest {
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the player can rescue stranded sailors
+	 */
 	void rescueTest() {
 		assertEquals("You spot some drowning sailors and decide to rescue them.\nThey give you some gold as thanks.", RandomEvent.tryEvent(testShip, 1.0, 0, 1).get(0));
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the player can bypass all encounters
+	 */
 	void nothingTest() {
 		assertEquals("The journey between the islands was uneventful", RandomEvent.tryEvent(testShip, 0, 1, 0).get(0));
 	}
 	
 	@Test
+	/**
+	 * Tests whether or not the player can lose their fine china to the storm
+	 */
 	void brokenChinaTest() {
 		GameEnvironment.initialise();
 		testShip = new Ship("Test Ship", 80, 60, 40);
