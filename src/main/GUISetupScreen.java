@@ -59,7 +59,7 @@ public class GUISetupScreen {
 		window.getContentPane().add(lblNewLabel);
 		
 		JLabel playerNameLabel = new JLabel("Name:");
-		playerNameLabel.setBounds(10, 44, 46, 14);
+		playerNameLabel.setBounds(10, 44, 86, 14);
 		window.getContentPane().add(playerNameLabel);
 
 		JTextField nameTextField = new JTextField();
@@ -68,7 +68,7 @@ public class GUISetupScreen {
 		nameTextField.setColumns(10);
 		
 		JLabel daysLabel = new JLabel("Number of days: 0");
-		daysLabel.setBounds(10, 89, 114, 14);
+		daysLabel.setBounds(10, 89, 160, 14);
 		window.getContentPane().add(daysLabel);
 		
 		JSlider daysSlider = new JSlider();
