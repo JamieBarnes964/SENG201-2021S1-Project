@@ -326,27 +326,27 @@ public class GUIMainScreen {
 		
 		JLabel shipNameLabel = new JLabel(GameEnvironment.getActiveShip().getName());
 		shipNameLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		shipNameLabel.setBounds(10, 11, 119, 14);
+		shipNameLabel.setBounds(10, 11, 135, 14);
 		parentPanel.add(shipNameLabel);
 		
 		JLabel crewSizeLabel = new JLabel("Crew: " + GameEnvironment.getActiveShip().getCrewSize());
-		crewSizeLabel.setBounds(10, 36, 94, 14);
+		crewSizeLabel.setBounds(10, 36, 135, 14);
 		parentPanel.add(crewSizeLabel);
 		
 		JLabel cargoCapacityLabel = new JLabel("Cargo: " + (GameEnvironment.getActiveShip().getCapacity() - GameEnvironment.getActiveShip().getAvailableCargoSpace()) + "/" + GameEnvironment.getActiveShip().getCapacity());
-		cargoCapacityLabel.setBounds(10, 61, 94, 14);
+		cargoCapacityLabel.setBounds(10, 61, 135, 14);
 		parentPanel.add(cargoCapacityLabel);
 		
 		JLabel lblDurabilitycurrentmax = new JLabel("Durability: " + (int) GameEnvironment.getActiveShip().getDurability() + "/" + GameEnvironment.getActiveShip().getMaxDurability());
-		lblDurabilitycurrentmax.setBounds(10, 86, 94, 14);
+		lblDurabilitycurrentmax.setBounds(10, 86, 135, 14);
 		parentPanel.add(lblDurabilitycurrentmax);
 		
 		JLabel shipSpeedLabel = new JLabel("Speed: " + GameEnvironment.getActiveShip().getSpeed());
-		shipSpeedLabel.setBounds(166, 36, 94, 14);
+		shipSpeedLabel.setBounds(155, 36, 105, 14);
 		parentPanel.add(shipSpeedLabel);
 		
 		JLabel sailingCost = new JLabel("Cost to Sail / Day: $" + GameEnvironment.getActiveShip().getCrewSize() * GameEnvironment.DAILYPAYPERHEAD);
-		sailingCost.setBounds(166, 61, 135, 14);
+		sailingCost.setBounds(155, 61, 146, 14);
 		parentPanel.add(sailingCost);
 		
 		JButton repairButton = new JButton("Repair");
@@ -368,7 +368,7 @@ public class GUIMainScreen {
 				}
 			}
 		});
-		repairButton.setBounds(166, 82, 89, 23);
+		repairButton.setBounds(155, 82, 89, 23);
 		parentPanel.add(repairButton);
 	}
 	
@@ -454,28 +454,30 @@ public class GUIMainScreen {
 			}
 			
 			JLabel islandTolsetReefLabel = new JLabel("Tolset Reef");
+			islandTolsetReefLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			mapPanel.setLayer(islandTolsetReefLabel, 1);
-			islandTolsetReefLabel.setBounds(164, 21, 73, 20);
+			islandTolsetReefLabel.setBounds(136, 21, 101, 20);
 			mapPanel.add(islandTolsetReefLabel);
 			
 			JLabel islandAlegateLabel = new JLabel("Alegate");
 			mapPanel.setLayer(islandAlegateLabel, 1);
-			islandAlegateLabel.setBounds(71, 79, 50, 20);
+			islandAlegateLabel.setBounds(71, 79, 73, 20);
 			mapPanel.add(islandAlegateLabel);
 			
 			JLabel islandPardeaLabel = new JLabel("Pardea");
 			mapPanel.setLayer(islandPardeaLabel, 1);
-			islandPardeaLabel.setBounds(189, 111, 50, 20);
+			islandPardeaLabel.setBounds(189, 111, 73, 20);
 			mapPanel.add(islandPardeaLabel);
 			
 			JLabel islandErbestLabel = new JLabel("Erberst");
+			islandErbestLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			mapPanel.setLayer(islandErbestLabel, 1);
-			islandErbestLabel.setBounds(22, 223, 50, 20);
+			islandErbestLabel.setBounds(0, 223, 60, 20);
 			mapPanel.add(islandErbestLabel);
 			
 			JLabel islandMahkarnLabel = new JLabel("Mahkarn");
 			mapPanel.setLayer(islandMahkarnLabel, 1);
-			islandMahkarnLabel.setBounds(258, 225, 50, 20);
+			islandMahkarnLabel.setBounds(253, 225, 60, 20);
 			mapPanel.add(islandMahkarnLabel);
 			
 			JLabel mapBoatIcon = new JLabel();
@@ -592,11 +594,12 @@ public class GUIMainScreen {
 		statsPanel.setLayout(null);
 		
 			playerMoneyLabel = new JLabel("Money: $" + GameEnvironment.STARTINGMONEY);
-			playerMoneyLabel.setBounds(10, 6, 94, 14);
+			playerMoneyLabel.setBounds(10, 6, 135, 14);
 			statsPanel.add(playerMoneyLabel);
 			
 			daysRemainingLabel = new JLabel("Days Remaining: " + GameEnvironment.getGameDays());
-			daysRemainingLabel.setBounds(196, 6, 116, 14);
+			daysRemainingLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+			daysRemainingLabel.setBounds(155, 6, 148, 14);
 			statsPanel.add(daysRemainingLabel);
 		
 		

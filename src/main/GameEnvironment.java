@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class GameEnvironment {
 	public final static int STARTINGMONEY = 2000;
-	public final static int DAILYPAYPERHEAD = 2;
+	public final static int DAILYPAYPERHEAD = 1;
 	public final static int REPAIRCOSTPERUNIT = 2;
 	
 	
