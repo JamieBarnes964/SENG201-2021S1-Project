@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class GUISetupScreen {
 
@@ -46,7 +48,7 @@ public class GUISetupScreen {
 		window = new JFrame();
 		window.setTitle("Island Trader Setup");
 		window.setResizable(false);
-		window.setBounds(100, 100, 470, 330);
+		window.setBounds(100, 100, 470, 360);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.getContentPane().setLayout(null);
 		
@@ -57,16 +59,16 @@ public class GUISetupScreen {
 		window.getContentPane().add(lblNewLabel);
 		
 		JLabel playerNameLabel = new JLabel("Name:");
-		playerNameLabel.setBounds(10, 55, 46, 14);
+		playerNameLabel.setBounds(10, 44, 46, 14);
 		window.getContentPane().add(playerNameLabel);
 
 		JTextField nameTextField = new JTextField();
-		nameTextField.setBounds(10, 69, 160, 20);
+		nameTextField.setBounds(10, 58, 160, 20);
 		window.getContentPane().add(nameTextField);
 		nameTextField.setColumns(10);
 		
 		JLabel daysLabel = new JLabel("Number of days: 0");
-		daysLabel.setBounds(10, 100, 114, 14);
+		daysLabel.setBounds(10, 89, 114, 14);
 		window.getContentPane().add(daysLabel);
 		
 		JSlider daysSlider = new JSlider();
@@ -79,28 +81,30 @@ public class GUISetupScreen {
 		daysSlider.setMajorTickSpacing(1);
 		daysSlider.setMaximum(50);
 		daysSlider.setMinimum(20);
-		daysSlider.setBounds(10, 114, 200, 20);
+		daysSlider.setBounds(10, 103, 200, 20);
 		window.getContentPane().add(daysSlider);
 		
 		JLabel shipLabel = new JLabel("Choose a Ship:");
-		shipLabel.setBounds(10, 145, 86, 14);
+		shipLabel.setBounds(10, 134, 86, 14);
 		window.getContentPane().add(shipLabel);
 		
-		JPanel shipsArrayPanel = new JPanel();
-		shipsArrayPanel.setBounds(84, 161, 370, 99);
-		window.getContentPane().add(shipsArrayPanel);
-		shipsArrayPanel.setLayout(new GridLayout(1, 0, 0, 0));
-		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(10, 149, 444, 145);
+		window.getContentPane().add(scrollPane);
 		
 		// Ship Array Panel #################################################
 		
+		JPanel shipsArrayPanel = new JPanel();
+		scrollPane.setViewportView(shipsArrayPanel);
+		shipsArrayPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		ButtonGroup shipSelectionButtons = new ButtonGroup();
 		ArrayList<JRadioButton> radioButtons = new ArrayList<JRadioButton>();
 		
 		for (Ship ship: GameEnvironment.getShips()) {
 			JPanel panel = new JPanel();
-			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+//			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 			shipsArrayPanel.add(panel);
 			panel.setLayout(new GridLayout(0, 1, 0, 0));
 			
@@ -133,43 +137,17 @@ public class GUISetupScreen {
 		}
 		
 		
-		// Ship Label Panel #################################################
-		JPanel shipLabelPanel = new JPanel();
-		shipLabelPanel.setBounds(10, 161, 64, 99);
-		window.getContentPane().add(shipLabelPanel);
-		shipLabelPanel.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		JLabel nameLabel = new JLabel("Name:");
-		nameLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		shipLabelPanel.add(nameLabel);
-		
-		JLabel cargoLabel = new JLabel("Cargo Size:");
-		cargoLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		shipLabelPanel.add(cargoLabel);
-		
-		JLabel crewLabel = new JLabel("Crew Size:");
-		crewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		shipLabelPanel.add(crewLabel);
-		
-		JLabel durabilityLabel = new JLabel("Durability");
-		durabilityLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		shipLabelPanel.add(durabilityLabel);
-		
-		JLabel speedLabel = new JLabel("Speed:");
-		speedLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		shipLabelPanel.add(speedLabel);
-		
-		JLabel spacingLabel = new JLabel("");
-		shipLabelPanel.add(spacingLabel);
-		
-		
 		
 		
 		
 		JLabel errorDisplayLabel = new JLabel("");
 		errorDisplayLabel.setForeground(Color.RED);
-		errorDisplayLabel.setBounds(10, 271, 293, 14);
+		errorDisplayLabel.setBounds(10, 297, 293, 23);
 		window.getContentPane().add(errorDisplayLabel);
+		
+		
+		
+		
 		
 		JButton startGameButton = new JButton("Start New Game");
 		startGameButton.addActionListener(new ActionListener() {
@@ -211,8 +189,35 @@ public class GUISetupScreen {
 				
 			}
 		});
-		startGameButton.setBounds(319, 267, 135, 23);
+		startGameButton.setBounds(319, 297, 135, 23);
 		window.getContentPane().add(startGameButton);
+		
+		// Ship Label Panel #################################################
+		JPanel shipLabelPanel = new JPanel();
+		scrollPane.setRowHeaderView(shipLabelPanel);
+		shipLabelPanel.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JLabel nameLabel = new JLabel("Name:");
+		nameLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+		shipLabelPanel.add(nameLabel);
+		
+		JLabel cargoLabel = new JLabel("Cargo Size:");
+		cargoLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+		shipLabelPanel.add(cargoLabel);
+		
+		JLabel crewLabel = new JLabel("Crew Size:");
+		crewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+		shipLabelPanel.add(crewLabel);
+		
+		JLabel durabilityLabel = new JLabel("Durability");
+		durabilityLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+		shipLabelPanel.add(durabilityLabel);
+		
+		JLabel speedLabel = new JLabel("Speed:");
+		speedLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
+		shipLabelPanel.add(speedLabel);
+		
+		
 		
 		
 	}
