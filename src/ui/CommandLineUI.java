@@ -1,6 +1,13 @@
-package main;
+package ui;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import main.GameEnvironment;
+import main.InsufficientDaysException;
+import main.InsufficientFundsException;
+import main.Item;
+import main.Route;
+import main.Ship;
 
 public class CommandLineUI {
 

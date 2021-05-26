@@ -1,6 +1,6 @@
-package main;
+package ui.gui;
 
-
+import main.*;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;

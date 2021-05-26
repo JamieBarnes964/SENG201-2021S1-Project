@@ -1,4 +1,4 @@
-package main;
+package ui.gui;
 import javax.swing.JFrame;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -10,13 +10,15 @@ import java.awt.GridLayout;
 import javax.swing.JRadioButton;
 import java.awt.Color;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
+
+import main.*;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;

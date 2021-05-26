@@ -3,6 +3,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import ui.gui.GUIGameOverScreen;
+import ui.gui.GUIMainScreen;
+import ui.gui.GUISetupScreen;
+
 public class GameEnvironment {
 	public final static int STARTINGMONEY = 2000;
 	public final static int DAILYPAYPERHEAD = 1;

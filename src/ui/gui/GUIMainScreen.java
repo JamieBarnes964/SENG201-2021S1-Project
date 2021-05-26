@@ -1,4 +1,6 @@
-package main;
+package ui.gui;
+
+import main.*;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
