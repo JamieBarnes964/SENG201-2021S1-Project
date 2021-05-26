@@ -27,7 +27,7 @@ public class GameEnvironment {
 	private static int statTraded = 0;	// Stores the number of items the player traded
 	
 	/**
-	 * 
+	 * Returns a value that is changed when the game can no longer continue
 	 * @return returns a true or false to check whether or not the game is over
 	 */
 	public static boolean isGameOver() {
@@ -35,7 +35,7 @@ public class GameEnvironment {
 	}
 	
 	/**
-	 * 
+	 * Returns the amount of money the player starts with
 	 * @return returns the starting money amount
 	 */
 	public static int getStartingmoney() {
@@ -43,77 +43,145 @@ public class GameEnvironment {
 	}
 	
 	/**
-	 * 
+	 * Returns a list of all of the islands in the game
 	 * @return returns an ArrayList of the islands
 	 */
 	public static ArrayList<Island> getIslands() {
 		return islands;
 	}
 	
+	/**
+	 * Returns a list of all of the ships in the game
+	 * @return returns an ArrayList of the ships
+	 */
 	public static ArrayList<Ship> getShips() {
 		return ships;
 	}
 
+	/**
+	 * Returns a list of all of the items in the game
+	 * @return returns an array list of the items
+	 */
 	public static ArrayList<Item> getItems() {
 		return items;
 	}
 	
+	/**
+	 * Sets the active island (the island that the player is currently on)
+	 * @param activeIsland the island that the player is currently on
+	 */
 	public static void setActiveIsland(Island activeIsland) {
 		GameEnvironment.activeIsland = activeIsland;
 	}
 	
+	/**
+	 * Returns the island that the player is currently on
+	 * @return the current island
+	 */
 	public static Island getActiveIsland() {
 		return activeIsland;
 	}
 	
+	/**
+	 * Sets the ship to the ship that the player has chosen
+	 * @param activeShip the chosen ship
+	 */
 	public static void setActiveShip(Ship activeShip) {
 		GameEnvironment.activeShip = activeShip;
 	}
 	
+	/**
+	 * Returns the current ship that the player has
+	 * @return the current ship
+	 */
 	public static Ship getActiveShip() {
 		return activeShip;
 	}
 	
+	/**
+	 * Returns the amount of money that the player currently has
+	 * @return the current money
+	 */
 	public static int getPlayerMoney() {
 		return playerMoney;
 	}
 	
+	/**
+	 * Returns the amount of days the player has left in the game
+	 * @return the current amount of days left
+	 */
 	public static int getGameDays() {
 		return gameDays;
 	}
 
+	/**
+	 * Sets the amount of game days that the player chooses in the beginning as well as removes days when the player travels
+	 * @param gameDays the amount of days
+	 */
 	public static void setGameDays(int gameDays) {
 		GameEnvironment.gameDays = gameDays;
 	}
 
+	/**
+	 * Returns the name the player chooses
+	 * @return the players name
+	 */
 	public static String getPlayerName() {
 		return playerName;
 	}
 
+	/**
+	 * Sets the players name to the one they type out at the start of the game
+	 * @param playerName the players name
+	 */
 	public static void setPlayerName(String playerName) {
 		GameEnvironment.playerName = playerName;
 	}
 
+	/**
+	 * Returns the amount of times the player has set sail (used on the end game screen)
+	 * @return the amount of times sailed
+	 */
 	public static int getStatSailed() {
 		return statSailed;
 	}
-
+	
+	/**
+	 * Adds to the number of times the player has sailed
+	 * @param statSailed the number of times set sail
+	 */
 	public static void addStatSailed(int statSailed) {
 		GameEnvironment.statSailed += statSailed;
 	}
-
+	
+	/**
+	 * The amount of money the player has lost/earned from trading throughout the game
+	 * @return the total amount of money made/lost
+	 */
 	public static int getStatTraded() {
 		return statTraded;
 	}
-
+	
+	/**
+	 * Adds to the amount of money the player has made
+	 * @param statTraded the amount of money made
+	 */
 	public static void addStatTraded(int statTraded) {
 		GameEnvironment.statTraded += statTraded;
 	}
-
+	
+	/**
+	 * Calculates the amount of money that the player will need to spend to repair their ship
+	 * @return the amount of money that it will cost to repair
+	 */
 	public static int getRepairCost() {
 		return (activeShip.getMaxDurability() - activeShip.getDurability()) * REPAIRCOSTPERUNIT;
 	}
 	
+	/**
+	 * Generates a random number
+	 * @return a random number
+	 */
 	public static double randomNumber() {
 		Random rand = new Random();
 		double randomDouble = rand.nextDouble();
@@ -137,7 +205,8 @@ public class GameEnvironment {
 	
 	
 	/**
-	 * Need to implement variable prices
+	 * Initialises all  of the game variables such as 
+	 * ships, items, trades on islands and sailing routes.
 	 */
 	public static void initialise() {
 		islands = new ArrayList<Island>();
@@ -256,14 +325,6 @@ public class GameEnvironment {
 		setActiveIsland(islands.get(3));
 	}
 	
-
-	
-
-	
-	
-
-	
-	
 	/**
 	 * Generalised Sail function for use by command line and graphical UI environments
 	 * @param route	the route that will be sailed. Type: Route
@@ -289,6 +350,9 @@ public class GameEnvironment {
 		
 	}
 	
+	/**
+	 * Sets gameOver to true
+	 */
 	public static void gameOver() {
 		gameOver = true;
 	}
@@ -314,29 +378,46 @@ public class GameEnvironment {
 		}
 	}
 	
-	
+	/**
+	 * Opens the main GUI interface
+	 */
 	public static void launchGUIMainScreen() {
 		GUIMainScreen mainWindow = new GUIMainScreen();
 	}
 	
+	/**
+	 * Closes the main GUI interface
+	 */
 	public static void closeGUIMainScreen(GUIMainScreen mainWindow) {
 		mainWindow.closeWindow();
 		lauchGUIEndGameScreen();
 	}
 	
+	/**
+	 * Opens the setup GUI interface
+	 */
 	public static void launchGUISetupScreen() {
 		GUISetupScreen setupWindow = new GUISetupScreen();
 	}
 	
+	/**
+	 * Closes the setup GUI interface
+	 */
 	public static void closeGUISetupScreen(GUISetupScreen setupWindow) {
 		setupWindow.closeWindow();
 		launchGUIMainScreen();
 	}
 	
+	/**
+	 * Opens the end game GUI interface
+	 */
 	public static void lauchGUIEndGameScreen() {
 		GUIGameOverScreen endGameWindow = new GUIGameOverScreen();
 	}
 	
+	/**
+	 * Closes the end game GUI interface
+	 */
 	public static void closeGUIEndGameScreen(GUIGameOverScreen endGameWindow) {
 		endGameWindow.closeWindow();
 	}
