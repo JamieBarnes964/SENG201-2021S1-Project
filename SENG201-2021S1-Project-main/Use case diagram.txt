@@ -1,0 +1,35 @@
+@startuml
+
+skinparam actorStyle awesome
+
+left to right direction
+
+actor Player as p
+actor Time as t
+
+package Game {
+	usecase "Start Game" as UC1
+	usecase "Sail To Another Island" as UC2
+	usecase "View Island's Shop" as UC3
+	usecase "Interact with Random Event" as UC4
+	usecase "See Ship Status" as UC5
+	usecase "Pay Crew" as UC6
+	usecase "Input Name" as IC1
+	usecase "Select Boat" as IC2
+  	usecase "Sell Items" as EC1
+  	usecase "Buy Items" as EC2
+}
+
+p ---> UC1
+p ---> UC2
+p ---> UC3
+p ---> UC4
+p ---> UC5
+t -up--> UC6
+UC1 ..> IC1 : <<Includes>>
+UC1 ..> IC2 : <<Includes>>
+
+EC1 .up.> UC3 : <<extends>>
+EC2 .right.> UC3 : <<extends>>
+
+@enduml
