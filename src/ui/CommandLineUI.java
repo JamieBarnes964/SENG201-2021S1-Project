@@ -12,8 +12,10 @@ import main.Ship;
 public class CommandLineUI {
 
 	private static Scanner consoleInput = new Scanner(System.in);
+	private GameEnvironment manager;
 	
-	public CommandLineUI() {
+	public CommandLineUI(GameEnvironment manager) {
+		this.manager = manager;
 		initialisePlayerValues();
 		mainGameplayLoop();
 	}
@@ -96,30 +98,30 @@ public class CommandLineUI {
 	public void consoleSail() {
 		// Establish the route choices the player can make
 		ArrayList<String> routeChoices = new ArrayList<String>();
-		for (Route route: GameEnvironment.getActiveIsland().getRoutes()) {
+		for (Route route: manager.getActiveIsland().getRoutes()) {
 			routeChoices.add(route.getDestinationIsland().getName() + " in " + route.getDays() + " days (" + route.getEventChance() + " Risk)");
 		}
 		routeChoices.add("Cancel");
 		
 		int chosenRouteIndex = getPlayerDecision("Select the route you would like to take:", routeChoices); // Get the user to choose the route index
 		
-		if (chosenRouteIndex != GameEnvironment.getActiveIsland().getRoutes().size()) { // if not cancelled
-			Route chosenRoute = GameEnvironment.getActiveIsland().getRoutes().get(chosenRouteIndex); // Get the chosen route as a Route
+		if (chosenRouteIndex != manager.getActiveIsland().getRoutes().size()) { // if not cancelled
+			Route chosenRoute = manager.getActiveIsland().getRoutes().get(chosenRouteIndex); // Get the chosen route as a Route
 			
 			System.out.println("You have selected the route to " + chosenRoute.getDestinationIsland().getName() + "!");
 			
 			try {
-				ArrayList<String> notifyEventStrings = GameEnvironment.sail(chosenRoute); // Sail using the chosen route and receive the Random Event strings
+				ArrayList<String> notifyEventStrings = manager.sail(chosenRoute); // Sail using the chosen route and receive the Random Event strings
 				System.out.println("\n######################################\n");
 				for (String notification: notifyEventStrings) { // Print the returned random event strings
 					System.out.println(notification);
 				}
-				if (!GameEnvironment.isGameOver()) { // If the player has not died while sailing, prints out the items that the Island sells
-					System.out.println("\n######################################\nYou have made it to " + GameEnvironment.getActiveIsland().getName() + "!\n");
-					System.out.println(GameEnvironment.getActiveIsland().getName() + " buys and sells: ");
-					for (Item item: GameEnvironment.getItems()) {
-						if (GameEnvironment.getActiveIsland().getTrades().get(item) != 0) {
-							System.out.println("- " + item.getName() + " for " + item.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(item) + " gold.");
+				if (!manager.isGameOver()) { // If the player has not died while sailing, prints out the items that the Island sells
+					System.out.println("\n######################################\nYou have made it to " + manager.getActiveIsland().getName() + "!\n");
+					System.out.println(manager.getActiveIsland().getName() + " buys and sells: ");
+					for (Item item: manager.getItems()) {
+						if (manager.getActiveIsland().getTrades().get(item) != 0) {
+							System.out.println("- " + item.getName() + " for " + item.getPrice() * manager.getActiveIsland().getTrades().get(item) + " gold.");
 						}
 					}
 				}
@@ -147,17 +149,17 @@ public class CommandLineUI {
 		// Determine which item to trade, or cancel the 
 		ArrayList<String> itemOptions = new ArrayList<String>();
 		ArrayList<Item> tradableItems = new ArrayList<Item>();
-		for (Item item: GameEnvironment.getItems()) {
-			if (GameEnvironment.getActiveIsland().getTrades().get(item) != 0) {
+		for (Item item: manager.getItems()) {
+			if (manager.getActiveIsland().getTrades().get(item) != 0) {
 				tradableItems.add(item);
 				if (bsDecision == 0) {
 					itemOptions.add(item.getName() + 
-							"\n   Value:  " + (item.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(item)) +
+							"\n   Value:  " + (item.getPrice() * manager.getActiveIsland().getTrades().get(item)) +
 							"\n   Weight: " + item.getWeight() + "\n");
 				} else {
 					itemOptions.add(item.getName() + 
-							"\n   Value:    " + (item.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(item)) +
-							"\n   Quantity: " + GameEnvironment.getActiveShip().getCargo().get(item) + "\n");
+							"\n   Value:    " + (item.getPrice() * manager.getActiveIsland().getTrades().get(item)) +
+							"\n   Quantity: " + manager.getActiveShip().getCargo().get(item) + "\n");
 				}
 			}
 		}
@@ -172,11 +174,11 @@ public class CommandLineUI {
 			if (bsDecision == 0) {
 				// Get the minimum between:	the max number of the chosen item that can fit in the remaining space
 				//							the max number of the chosen item that the player can afford
-				maxBuySell = Math.min(Math.floorDiv(GameEnvironment.getActiveShip().getAvailableCargoSpace(), chosenItem.getWeight()),
-									  Math.floorDiv(GameEnvironment.getPlayerMoney(), (int) (chosenItem.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(chosenItem))));
+				maxBuySell = Math.min(Math.floorDiv(manager.getActiveShip().getAvailableCargoSpace(), chosenItem.getWeight()),
+									  Math.floorDiv(manager.getPlayerMoney(), (int) (chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem))));
 			} else {
 				// Get the 
-				maxBuySell = GameEnvironment.getActiveShip().getCargo().get(chosenItem);
+				maxBuySell = manager.getActiveShip().getCargo().get(chosenItem);
 			}
 			
 			// Get the quantity to buy/sell
@@ -184,19 +186,19 @@ public class CommandLineUI {
 			
 			if (quantity != 0) { // If not 0 (to cancel)
 				if (bsDecision == 0) { // If Buying
-					GameEnvironment.addStatTraded(quantity);
-					GameEnvironment.addMoney((int) -(quantity * chosenItem.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(chosenItem))); 				// Remove Money
-					GameEnvironment.getActiveShip().addItemCargo(chosenItem, quantity);																	// Add Item * Quantity to Cargo
+					manager.addStatTraded(quantity);
+					manager.addMoney((int) -(quantity * chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem))); 				// Remove Money
+					manager.getActiveShip().addItemCargo(chosenItem, quantity);																	// Add Item * Quantity to Cargo
 					System.out.println("You have bought " + quantity + " " + chosenItem.getName() + " for " 
-										+ (int) (quantity * chosenItem.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(chosenItem)) 
-										+ " gold.\nYou now have " + GameEnvironment.getPlayerMoney() + " gold.");
+										+ (int) (quantity * chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem)) 
+										+ " gold.\nYou now have " + manager.getPlayerMoney() + " gold.");
 				} else { // If Selling
-					GameEnvironment.addStatTraded(quantity);
-					GameEnvironment.addMoney((int) (quantity * chosenItem.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(chosenItem)));					// Add Money
-					GameEnvironment.getActiveShip().addItemCargo(chosenItem, -quantity);																	// Remove Item * Quantity from Cargo
+					manager.addStatTraded(quantity);
+					manager.addMoney((int) (quantity * chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem)));					// Add Money
+					manager.getActiveShip().addItemCargo(chosenItem, -quantity);																	// Remove Item * Quantity from Cargo
 					System.out.println("You have sold " + quantity + " " + chosenItem.getName() + " for " 
-							+ (int) (quantity * chosenItem.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(chosenItem)) 
-							+ " gold.\nYou now have " + GameEnvironment.getPlayerMoney() + " gold.");
+							+ (int) (quantity * chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem)) 
+							+ " gold.\nYou now have " + manager.getPlayerMoney() + " gold.");
 				}
 			}
 		}
@@ -215,12 +217,12 @@ public class CommandLineUI {
 				System.out.println("######################################");
 				System.out.println("Please enter your name: ");
 				// gets the user's input
-				GameEnvironment.setPlayerName((consoleInput.nextLine()));
+				manager.setPlayerName((consoleInput.nextLine()));
 				
-				boolean isAlphaNumeric = GameEnvironment.getPlayerName().matches("^([a-zA-Z]| )*$");
+				boolean isAlphaNumeric = manager.getPlayerName().matches("^([a-zA-Z]| )*$");
 				nameDecided = true;
 				// checks if the input string is in the range of choices
-				if (GameEnvironment.getPlayerName().length() < 3|| GameEnvironment.getPlayerName().length() > 15) {
+				if (manager.getPlayerName().length() < 3|| manager.getPlayerName().length() > 15) {
 					nameDecided = false;
 					throw new Exception("Please enter a name that is between 3 and 15 characters.");
 				}
@@ -235,24 +237,24 @@ public class CommandLineUI {
 		}
 		
 		// Gets the number of game days the game will take place over
-		GameEnvironment.setGameDays(getUserIntInRange("Please choose the number of days that you wish the game to take place over: ", 20, 50));
+		manager.setStartGameDays(getUserIntInRange("Please choose the number of days that you wish the game to take place over: ", 20, 50));
 		
 		// Gets the ship that the user chooses
 		ArrayList<String> choices = new ArrayList<String>();
 		String query = "Choose a Ship:";
-		for (Ship ship: GameEnvironment.getShips()) {
+		for (Ship ship: manager.getShips()) {
 			choices.add("Ship Name: " + ship.getName() + 
 					"\n   Durability: " + ship.getDurability() + 
 					"\n   Cargo Capacity: " + ship.getCapacity() + 
 					"\n   Crew Size: " + ship.getCrewSize() + 
 					"\n   Speed: " + ship.getSpeed() + "\n");
 		}
-		GameEnvironment.setActiveShip(GameEnvironment.getShips().get(getPlayerDecision(query, choices)));
-		System.out.println("You have selected " + GameEnvironment.getActiveShip().getName() + "!");
+		manager.setActiveShip(manager.getShips().get(getPlayerDecision(query, choices)));
+		System.out.println("You have selected " + manager.getActiveShip().getName() + "!");
 		
 		// Initialises the chosen ship's cargo
-		for (Item item: GameEnvironment.getItems()) {
-			GameEnvironment.getActiveShip().initialiseCargo(item);
+		for (Item item: manager.getItems()) {
+			manager.getActiveShip().initialiseCargo(item);
 		}
 	}
 	
@@ -265,10 +267,13 @@ public class CommandLineUI {
 		mainGameOptionsStrings.add("Sail");
 		mainGameOptionsStrings.add("View Ship Stats");
 		mainGameOptionsStrings.add("View Cargo");
+		if (manager.getActiveShip().getNeedRepairs()) {
+			mainGameOptionsStrings.add("Repair Ship");
+		}
 		mainGameOptionsStrings.add("Exit");
 		
 		// While the game can continue, run the main gameplay loop
-		while (GameEnvironment.canContinueGame()) {
+		while (manager.canContinueGame()) {
 			int selectedGameOption = getPlayerDecision("Select an option: ", mainGameOptionsStrings);
 			if (selectedGameOption == 0) {
 				consoleTrade();
@@ -277,18 +282,18 @@ public class CommandLineUI {
 				consoleSail();
 			}
 			else if (selectedGameOption == 2) {
-				System.out.println("Ship Name: " + GameEnvironment.getActiveShip().getName() + 
-						"\n   Durability: " + GameEnvironment.getActiveShip().getDurability() + 
-						"\n   Cargo Capacity: " + GameEnvironment.getActiveShip().getCapacity() + 
-						"\n   Crew Size: " + GameEnvironment.getActiveShip().getCrewSize() + 
-						"\n   Speed: " + GameEnvironment.getActiveShip().getSpeed() + "\n");
+				System.out.println("Ship Name: " + manager.getActiveShip().getName() + 
+						"\n   Durability: " + manager.getActiveShip().getDurability() + 
+						"\n   Cargo Capacity: " + manager.getActiveShip().getCapacity() + 
+						"\n   Crew Size: " + manager.getActiveShip().getCrewSize() + 
+						"\n   Speed: " + manager.getActiveShip().getSpeed() + "\n");
 			}
 			else if (selectedGameOption == 3) {
 				int total = 0;
-				for (Item item: GameEnvironment.getActiveShip().getCargo().keySet()) {
+				for (Item item: manager.getActiveShip().getCargo().keySet()) {
 					
-					if (GameEnvironment.getActiveShip().getCargo().get(item) != 0) {
-						System.out.println((total + 1) + ". " + item.getName() + ": " + GameEnvironment.getActiveShip().getCargo().get(item));
+					if (manager.getActiveShip().getCargo().get(item) != 0) {
+						System.out.println((total + 1) + ". " + item.getName() + ": " + manager.getActiveShip().getCargo().get(item));
 						total += 1;
 					}
 				}
@@ -296,14 +301,22 @@ public class CommandLineUI {
 					System.out.println("\nYou have no items in your hold!\n");
 				}
 			}
-			else if (selectedGameOption == 4) {
-				GameEnvironment.gameOver();
+			else if (selectedGameOption >= 4) {
+				if (mainGameOptionsStrings.size() == 6) {
+					if (manager.getPlayerMoney() >= manager.getRepairCost()) {
+						System.out.println("You have repaired your ship for $" + manager.getRepairCost());
+					} else {
+						System.out.println("You don't have enough money to pay for Repairs!");
+					}
+				} else {
+					manager.gameOver();
+				}
 			}
 		}
 		
 		System.out.println("Game Over!");
-		System.out.println("You made " + (GameEnvironment.getPlayerMoney() - GameEnvironment.getStartingmoney()) + " gold!\n"
-				+ "You sailed " + GameEnvironment.getStatSailed() + " times.\n"
-				+ "You traded " + GameEnvironment.getStatTraded() + " items.");
+		System.out.println("You made " + (manager.getPlayerMoney() - manager.getStartingmoney()) + " gold!\n"
+				+ "You sailed " + manager.getStatSailed() + " times.\n"
+				+ "You traded " + manager.getStatTraded() + " items.");
 	}
 }

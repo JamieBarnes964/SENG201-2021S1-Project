@@ -30,6 +30,7 @@ import javax.swing.ImageIcon;
 
 public class GUIMainScreen {
 
+	private GameEnvironment manager;
 	private JFrame window;
 	private ArrayList<JRadioButton> routeRadioButtons;
 	private JLabel playerMoneyLabel;
@@ -41,7 +42,8 @@ public class GUIMainScreen {
 	/**
 	 * Create the application.
 	 */
-	public GUIMainScreen() {
+	public GUIMainScreen(GameEnvironment manager) {
+		this.manager = manager;
 		initialize();
 		this.window.setVisible(true);
 	}
@@ -51,7 +53,7 @@ public class GUIMainScreen {
 	}
 	
 	public void finishedWindow() {
-		GameEnvironment.closeGUIMainScreen(this);
+		manager.closeGUIMainScreen(this);
 	}
 	
 	
@@ -72,9 +74,9 @@ public class GUIMainScreen {
 	 * Updates the main game values of playerMoney and daysRemaining within the GUI
 	 */
 	private void updateGameValues() {
-		playerMoneyLabel.setText("Money: $" + GameEnvironment.getPlayerMoney());
-		daysRemainingLabel.setText("Days Remaining: " + GameEnvironment.getGameDays());
-		activeIslandNameLabel.setText(GameEnvironment.getActiveIsland().getName());
+		playerMoneyLabel.setText("Money: $" + manager.getPlayerMoney());
+		daysRemainingLabel.setText("Days Remaining: " + manager.getGameDays());
+		activeIslandNameLabel.setText(manager.getActiveIsland().getName());
 	}
 	
 	
@@ -86,14 +88,14 @@ public class GUIMainScreen {
 	 * @param buyableItems
 	 */
 	private void buySlidersMax(ArrayList<JSlider> sliderList, ArrayList<Item> buyableItems) {
-		int tempAvailableSpace = GameEnvironment.getActiveShip().getAvailableCargoSpace();
-		int tempAvailableMoney = GameEnvironment.getPlayerMoney();
+		int tempAvailableSpace = manager.getActiveShip().getAvailableCargoSpace();
+		int tempAvailableMoney = manager.getPlayerMoney();
 		for (int i = 0; i < sliderList.size(); i++) {
 			tempAvailableSpace -= sliderList.get(i).getValue() * buyableItems.get(i).getWeight();
-			tempAvailableMoney -= sliderList.get(i).getValue() * buyableItems.get(i).getPrice() * GameEnvironment.getActiveIsland().getTrades().get(buyableItems.get(i));
+			tempAvailableMoney -= sliderList.get(i).getValue() * buyableItems.get(i).getPrice() * manager.getActiveIsland().getTrades().get(buyableItems.get(i));
 		}
 		for (int i = 0; i < sliderList.size(); i++) {
-			int ithItemValue = (int) (buyableItems.get(i).getPrice() * GameEnvironment.getActiveIsland().getTrades().get(buyableItems.get(i)));
+			int ithItemValue = (int) (buyableItems.get(i).getPrice() * manager.getActiveIsland().getTrades().get(buyableItems.get(i)));
 			sliderList.get(i).setMaximum(Math.min(Math.floorDiv(tempAvailableSpace + sliderList.get(i).getValue() * buyableItems.get(i).getWeight(), buyableItems.get(i).getWeight()),
   				   						 		  Math.floorDiv(tempAvailableMoney + sliderList.get(i).getValue() * ithItemValue, ithItemValue)));
 		}
@@ -119,8 +121,8 @@ public class GUIMainScreen {
 		ArrayList<JSlider> sliderList = new ArrayList<JSlider>();
 		ArrayList<Item> tradableItems = new ArrayList<Item>();
 		
-		for (Item item: GameEnvironment.getActiveIsland().getTrades().keySet()) {
-			if (GameEnvironment.getActiveIsland().getTrades().get(item) != 0) { // If the item is traded by the island
+		for (Item item: manager.getActiveIsland().getTrades().keySet()) {
+			if (manager.getActiveIsland().getTrades().get(item) != 0) { // If the item is traded by the island
 				tradableItems.add(item);
 				
 				JPanel singleItemPane = new JPanel();
@@ -133,11 +135,11 @@ public class GUIMainScreen {
 				
 				// Display price and difference from the default value
 				DecimalFormat numberFormat = new DecimalFormat("#");
-				String itemValueString = "Price: $" + (int) (item.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(item));
-				if (GameEnvironment.getActiveIsland().getTrades().get(item) > 1) {
-					itemValueString += " (+" + numberFormat.format((GameEnvironment.getActiveIsland().getTrades().get(item) - 1) * 100) + "%)";
+				String itemValueString = "Price: $" + (int) (item.getPrice() * manager.getActiveIsland().getTrades().get(item));
+				if (manager.getActiveIsland().getTrades().get(item) > 1) {
+					itemValueString += " (+" + numberFormat.format((manager.getActiveIsland().getTrades().get(item) - 1) * 100) + "%)";
 				} else {
-					itemValueString += " (" + numberFormat.format((GameEnvironment.getActiveIsland().getTrades().get(item) - 1) * 100) + "%)";
+					itemValueString += " (" + numberFormat.format((manager.getActiveIsland().getTrades().get(item) - 1) * 100) + "%)";
 				}
 				JLabel itemValue = new JLabel(itemValueString);
 				itemValue.setBounds(0, 15, 221, 15);
@@ -166,7 +168,7 @@ public class GUIMainScreen {
 					sliderList.add(slider);
 					buySlidersMax(sliderList, tradableItems);
 				} else { // else Selling
-					JSlider slider = new JSlider(0, GameEnvironment.getActiveShip().getCargo().get(item), 0); // set slider max to the number of items 
+					JSlider slider = new JSlider(0, manager.getActiveShip().getCargo().get(item), 0); // set slider max to the number of items 
 					slider.setBounds(10, 45, 175, 20);
 					singleItemPane.add(slider);
 					slider.addChangeListener(new ChangeListener() { // Simple display of the slider value
@@ -192,13 +194,13 @@ public class GUIMainScreen {
 					for (int i = 0; i < sliderList.size(); i++) { // For each index in sliderList
 						int quantity = sliderList.get(i).getValue(); // Get the value of the slider at that index
 						Item sliderItem = tradableItems.get(i); // Get the item that slider represents
-						GameEnvironment.addStatTraded(quantity); // Handle statistics
+						manager.addStatTraded(quantity); // Handle statistics
 						if (buySell == 0) { // if buying
-							GameEnvironment.addMoney((int) -(quantity * sliderItem.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(sliderItem))); // Remove Money
-							GameEnvironment.getActiveShip().addItemCargo(sliderItem, quantity);	// Add Item * Quantity to Cargo
+							manager.addMoney((int) -(quantity * sliderItem.getPrice() * manager.getActiveIsland().getTrades().get(sliderItem))); // Remove Money
+							manager.getActiveShip().addItemCargo(sliderItem, quantity);	// Add Item * Quantity to Cargo
 						} else { // if selling
-							GameEnvironment.addMoney((int) (quantity * sliderItem.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(sliderItem))); // Add Money
-							GameEnvironment.getActiveShip().addItemCargo(sliderItem, -quantity); // Remove Item * Quantity from Cargo
+							manager.addMoney((int) (quantity * sliderItem.getPrice() * manager.getActiveIsland().getTrades().get(sliderItem))); // Add Money
+							manager.getActiveShip().addItemCargo(sliderItem, -quantity); // Remove Item * Quantity from Cargo
 						}
 					}
 					updateGameValues();
@@ -232,8 +234,8 @@ public class GUIMainScreen {
 	 */
 	private void updateCargoCard(JPanel itemListPanel) {
 		itemListPanel.removeAll();
-		for (Item item: GameEnvironment.getActiveShip().getCargo().keySet()) {
-			if (GameEnvironment.getActiveShip().getCargo().get(item) != 0) {
+		for (Item item: manager.getActiveShip().getCargo().keySet()) {
+			if (manager.getActiveShip().getCargo().get(item) != 0) {
 				JPanel singleItemPane = new JPanel();
 				itemListPanel.add(singleItemPane);
 				singleItemPane.setLayout(new GridLayout(0, 1, 0, 0));
@@ -242,11 +244,11 @@ public class GUIMainScreen {
 					itemName.setHorizontalAlignment(SwingConstants.CENTER);
 					singleItemPane.add(itemName);
 					
-					JLabel itemTotalWeight = new JLabel("" + item.getWeight() * GameEnvironment.getActiveShip().getCargo().get(item));
+					JLabel itemTotalWeight = new JLabel("" + item.getWeight() * manager.getActiveShip().getCargo().get(item));
 					itemTotalWeight.setHorizontalAlignment(SwingConstants.CENTER);
 					singleItemPane.add(itemTotalWeight);
 					
-					JLabel itemQuantity = new JLabel("" + GameEnvironment.getActiveShip().getCargo().get(item));
+					JLabel itemQuantity = new JLabel("" + manager.getActiveShip().getCargo().get(item));
 					itemQuantity.setHorizontalAlignment(SwingConstants.CENTER);
 					singleItemPane.add(itemQuantity);
 					
@@ -270,7 +272,7 @@ public class GUIMainScreen {
 		ArrayList<JRadioButton> routeRadioButtons = new ArrayList<JRadioButton>();
 		ButtonGroup routeButtonGroup = new ButtonGroup();
 		
-		for (Route route: GameEnvironment.getActiveIsland().getRoutes()) {
+		for (Route route: manager.getActiveIsland().getRoutes()) {
 			JPanel singleRoutePane = new JPanel();
 			routeListPanel.add(singleRoutePane);
 			singleRoutePane.setLayout(null);
@@ -298,7 +300,7 @@ public class GUIMainScreen {
 			routeDaysLabel.setBounds(0, 33, 114, 14);
 			singleRoutePane.add(routeDaysLabel);
 			
-			JLabel routeCostLabel = new JLabel("Cost: $" + route.getDays() * GameEnvironment.getActiveShip().getCrewSize() * GameEnvironment.DAILYPAYPERHEAD);
+			JLabel routeCostLabel = new JLabel("Cost: $" + route.getDays() * manager.getActiveShip().getCrewSize() * manager.DAILYPAYPERHEAD);
 			routeCostLabel.setBounds(0, 48, 114, 14);
 			singleRoutePane.add(routeCostLabel);
 			
@@ -314,7 +316,7 @@ public class GUIMainScreen {
 	
 	
 	private void updateMapBoatLocation(ArrayList<JLabel> islandIconList, JLabel boat) {
-		JLabel activeIslandIcon = islandIconList.get(GameEnvironment.getIslands().indexOf(GameEnvironment.getActiveIsland()));
+		JLabel activeIslandIcon = islandIconList.get(manager.getIslands().indexOf(manager.getActiveIsland()));
 		boat.setBounds(activeIslandIcon.getX() - 20, activeIslandIcon.getY(), 50, 50);
 	}
 	
@@ -326,42 +328,42 @@ public class GUIMainScreen {
 	private void updateShipStatsCard(JLayeredPane parentPanel) {
 		parentPanel.removeAll();
 		
-		JLabel shipNameLabel = new JLabel(GameEnvironment.getActiveShip().getName());
+		JLabel shipNameLabel = new JLabel(manager.getActiveShip().getName());
 		shipNameLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		shipNameLabel.setBounds(10, 11, 135, 14);
 		parentPanel.add(shipNameLabel);
 		
-		JLabel crewSizeLabel = new JLabel("Crew: " + GameEnvironment.getActiveShip().getCrewSize());
+		JLabel crewSizeLabel = new JLabel("Crew: " + manager.getActiveShip().getCrewSize());
 		crewSizeLabel.setBounds(10, 36, 124, 14);
 		parentPanel.add(crewSizeLabel);
 		
-		JLabel cargoCapacityLabel = new JLabel("Cargo: " + (GameEnvironment.getActiveShip().getCapacity() - GameEnvironment.getActiveShip().getAvailableCargoSpace()) + "/" + GameEnvironment.getActiveShip().getCapacity());
+		JLabel cargoCapacityLabel = new JLabel("Cargo: " + (manager.getActiveShip().getCapacity() - manager.getActiveShip().getAvailableCargoSpace()) + "/" + manager.getActiveShip().getCapacity());
 		cargoCapacityLabel.setBounds(10, 61, 124, 14);
 		parentPanel.add(cargoCapacityLabel);
 		
-		JLabel lblDurabilitycurrentmax = new JLabel("Durability: " + (int) GameEnvironment.getActiveShip().getDurability() + "/" + GameEnvironment.getActiveShip().getMaxDurability());
+		JLabel lblDurabilitycurrentmax = new JLabel("Durability: " + (int) manager.getActiveShip().getDurability() + "/" + manager.getActiveShip().getMaxDurability());
 		lblDurabilitycurrentmax.setBounds(10, 86, 135, 14);
 		parentPanel.add(lblDurabilitycurrentmax);
 		
-		JLabel shipSpeedLabel = new JLabel("Speed: " + GameEnvironment.getActiveShip().getSpeed());
+		JLabel shipSpeedLabel = new JLabel("Speed: " + manager.getActiveShip().getSpeed());
 		shipSpeedLabel.setBounds(144, 36, 105, 14);
 		parentPanel.add(shipSpeedLabel);
 		
-		JLabel sailingCost = new JLabel("Cost to Sail / Day: $" + GameEnvironment.getActiveShip().getCrewSize() * GameEnvironment.DAILYPAYPERHEAD);
+		JLabel sailingCost = new JLabel("Cost to Sail / Day: $" + manager.getActiveShip().getCrewSize() * manager.DAILYPAYPERHEAD);
 		sailingCost.setBounds(144, 61, 167, 14);
 		parentPanel.add(sailingCost);
 		
 		JButton repairButton = new JButton("Repair");
-		if (GameEnvironment.getActiveShip().getNeedRepairs()) {
+		if (manager.getActiveShip().getNeedRepairs()) {
 			repairButton.setEnabled(true);
 		} else {
 			repairButton.setEnabled(false);
 		}
 		repairButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(window, "The repairs will cost $" + GameEnvironment.getRepairCost());
-				if (GameEnvironment.addMoney(-GameEnvironment.getRepairCost())) {
-					GameEnvironment.getActiveShip().repairShip();
+				JOptionPane.showMessageDialog(window, "The repairs will cost $" + manager.getRepairCost());
+				if (manager.addMoney(-manager.getRepairCost())) {
+					manager.getActiveShip().repairShip();
 					updateShipStatsCard(parentPanel);
 					updateGameValues();
 				} else {
@@ -382,7 +384,7 @@ public class GUIMainScreen {
 	private void initialize() {
 		window = new JFrame();
 		window.setResizable(false);
-		window.setTitle("Island Trader - " + GameEnvironment.getPlayerName());
+		window.setTitle("Island Trader - " + manager.getPlayerName());
 		window.setBounds(100, 100, 600, 470);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.getContentPane().setLayout(null);
@@ -440,7 +442,7 @@ public class GUIMainScreen {
 			
 			DecimalFormat numberFormat = new DecimalFormat("#");
 			for (int i = 0; i < islandIconList.size(); i++) {
-				Island tempIsland = GameEnvironment.getIslands().get(i);
+				Island tempIsland = manager.getIslands().get(i);
 				String toolTipText = "<html>" + tempIsland.getName() + "<br>Trades:<br>";
 				for (Item item: tempIsland.getTrades().keySet()) {
 					if (tempIsland.getTrades().get(item) != 0) {
@@ -517,7 +519,7 @@ public class GUIMainScreen {
 			interactionPanel.add(mainOptionsCard, "name_371154961016800");
 			mainOptionsCard.setLayout(null);
 			
-			activeIslandNameLabel = new JLabel(GameEnvironment.getActiveIsland().getName());
+			activeIslandNameLabel = new JLabel(manager.getActiveIsland().getName());
 			activeIslandNameLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
 			activeIslandNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			activeIslandNameLabel.setBounds(40, 11, 159, 23);
@@ -595,11 +597,11 @@ public class GUIMainScreen {
 		window.getContentPane().add(statsPanel);
 		statsPanel.setLayout(null);
 		
-			playerMoneyLabel = new JLabel("Money: $" + GameEnvironment.STARTINGMONEY);
+			playerMoneyLabel = new JLabel("Money: $" + manager.STARTINGMONEY);
 			playerMoneyLabel.setBounds(10, 6, 135, 14);
 			statsPanel.add(playerMoneyLabel);
 			
-			daysRemainingLabel = new JLabel("Days Remaining: " + GameEnvironment.getGameDays());
+			daysRemainingLabel = new JLabel("Days Remaining: " + manager.getGameDays());
 			daysRemainingLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 			daysRemainingLabel.setBounds(155, 6, 148, 14);
 			statsPanel.add(daysRemainingLabel);
@@ -715,7 +717,7 @@ public class GUIMainScreen {
 					for (JRadioButton radButton: routeRadioButtons) { // finds the selected route
 						if (radButton.isSelected()) {
 							try {
-								ArrayList<String> eventStrings = GameEnvironment.sail(GameEnvironment.getActiveIsland().getRoutes().get(routeRadioButtons.indexOf(radButton)));
+								ArrayList<String> eventStrings = manager.sail(manager.getActiveIsland().getRoutes().get(routeRadioButtons.indexOf(radButton)));
 								for (String string: eventStrings) {
 									JOptionPane.showMessageDialog(window, string); // Display given eventStrings from sail method
 								}
@@ -723,7 +725,7 @@ public class GUIMainScreen {
 								switchCard(interactionPanel, mainOptionsCard);
 								updateMapBoatLocation(islandIconList, mapBoatIcon);
 								switchCard(statsSubPanel, new JLayeredPane());
-								if (!GameEnvironment.canContinueGame()) { // If the game cannot continue -> finishedWindow()
+								if (!manager.canContinueGame()) { // If the game cannot continue -> finishedWindow()
 									finishedWindow();
 								}
 							} catch (InsufficientDaysException ex) {

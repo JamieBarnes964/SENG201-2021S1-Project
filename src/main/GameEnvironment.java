@@ -1,40 +1,47 @@
 package main;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 import ui.gui.GUIGameOverScreen;
 import ui.gui.GUIMainScreen;
 import ui.gui.GUISetupScreen;
 
 public class GameEnvironment {
-	public final static int STARTINGMONEY = 2000;
-	public final static int DAILYPAYPERHEAD = 1;
-	public final static int REPAIRCOSTPERUNIT = 2;
+	public final int STARTINGMONEY = 2000;
+	public final int DAILYPAYPERHEAD = 1;
+	public final int REPAIRCOSTPERUNIT = 2;
 	
 	
-	private static ArrayList<Island> islands;
-	private static ArrayList<Ship> ships;
-	private static ArrayList<Item> items;
+	private ArrayList<Island> islands;
+	private ArrayList<Ship> ships;
+	private ArrayList<Item> items;
 	
-	private static int gameDays;
-	private static String playerName;
+	private int startGameDays;
+	private int gameDays;
+	private String playerName;
 	
-	private static Ship activeShip;
-	private static Island activeIsland;
-	private static int playerMoney;
+	private Ship activeShip;
+	private Island activeIsland;
+	private int playerMoney;
 	
-	private static boolean gameOver = false;
+	private boolean gameOver = false;
 	
 	// Statistics
-	private static int statSailed = 0;	// Stores the number of times the player sailed between islands
-	private static int statTraded = 0;	// Stores the number of items the player traded
+	private int statSailed = 0;	// Stores the number of times the player sailed between islands
+	private int statTraded = 0;	// Stores the number of items the player traded
+	
+	
+	public GameEnvironment() {
+		this.initialise();
+	}
+	
+	
 	
 	/**
 	 * Returns a value that is changed when the game can no longer continue
 	 * @return returns a true or false to check whether or not the game is over
 	 */
-	public static boolean isGameOver() {
+	public boolean isGameOver() {
 		return gameOver;
 	}
 	
@@ -42,7 +49,7 @@ public class GameEnvironment {
 	 * Returns the amount of money the player starts with
 	 * @return returns the starting money amount
 	 */
-	public static int getStartingmoney() {
+	public int getStartingmoney() {
 		return STARTINGMONEY;
 	}
 	
@@ -50,7 +57,7 @@ public class GameEnvironment {
 	 * Returns a list of all of the islands in the game
 	 * @return returns an ArrayList of the islands
 	 */
-	public static ArrayList<Island> getIslands() {
+	public ArrayList<Island> getIslands() {
 		return islands;
 	}
 	
@@ -58,7 +65,7 @@ public class GameEnvironment {
 	 * Returns a list of all of the ships in the game
 	 * @return returns an ArrayList of the ships
 	 */
-	public static ArrayList<Ship> getShips() {
+	public ArrayList<Ship> getShips() {
 		return ships;
 	}
 
@@ -66,7 +73,7 @@ public class GameEnvironment {
 	 * Returns a list of all of the items in the game
 	 * @return returns an array list of the items
 	 */
-	public static ArrayList<Item> getItems() {
+	public ArrayList<Item> getItems() {
 		return items;
 	}
 	
@@ -74,15 +81,15 @@ public class GameEnvironment {
 	 * Sets the active island (the island that the player is currently on)
 	 * @param activeIsland the island that the player is currently on
 	 */
-	public static void setActiveIsland(Island activeIsland) {
-		GameEnvironment.activeIsland = activeIsland;
+	public void setActiveIsland(Island activeIsland) {
+		this.activeIsland = activeIsland;
 	}
 	
 	/**
 	 * Returns the island that the player is currently on
 	 * @return the current island
 	 */
-	public static Island getActiveIsland() {
+	public Island getActiveIsland() {
 		return activeIsland;
 	}
 	
@@ -90,15 +97,15 @@ public class GameEnvironment {
 	 * Sets the ship to the ship that the player has chosen
 	 * @param activeShip the chosen ship
 	 */
-	public static void setActiveShip(Ship activeShip) {
-		GameEnvironment.activeShip = activeShip;
+	public void setActiveShip(Ship activeShip) {
+		this.activeShip = activeShip;
 	}
 	
 	/**
 	 * Returns the current ship that the player has
 	 * @return the current ship
 	 */
-	public static Ship getActiveShip() {
+	public Ship getActiveShip() {
 		return activeShip;
 	}
 	
@@ -106,15 +113,32 @@ public class GameEnvironment {
 	 * Returns the amount of money that the player currently has
 	 * @return the current money
 	 */
-	public static int getPlayerMoney() {
+	public int getPlayerMoney() {
 		return playerMoney;
+	}
+	
+	/**
+	 * Returns the number of days the player started with
+	 * @return the number of days the player started with
+	 */
+	public int getStartGameDays() {
+		return startGameDays;
+	}
+	
+	/**
+	 * Sets the number of game days the game starts with 
+	 * @param startGameDays the number of days 
+	 */
+	public void setStartGameDays(int startGameDays) {
+		this.startGameDays = startGameDays;
+		this.gameDays = startGameDays;
 	}
 	
 	/**
 	 * Returns the amount of days the player has left in the game
 	 * @return the current amount of days left
 	 */
-	public static int getGameDays() {
+	public int getGameDays() {
 		return gameDays;
 	}
 
@@ -122,15 +146,15 @@ public class GameEnvironment {
 	 * Sets the amount of game days that the player chooses in the beginning as well as removes days when the player travels
 	 * @param gameDays the amount of days
 	 */
-	public static void setGameDays(int gameDays) {
-		GameEnvironment.gameDays = gameDays;
+	public void setGameDays(int gameDays) {
+		this.gameDays = gameDays;
 	}
 
 	/**
 	 * Returns the name the player chooses
 	 * @return the players name
 	 */
-	public static String getPlayerName() {
+	public String getPlayerName() {
 		return playerName;
 	}
 
@@ -138,15 +162,15 @@ public class GameEnvironment {
 	 * Sets the players name to the one they type out at the start of the game
 	 * @param playerName the players name
 	 */
-	public static void setPlayerName(String playerName) {
-		GameEnvironment.playerName = playerName;
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
 	}
 
 	/**
 	 * Returns the amount of times the player has set sail (used on the end game screen)
 	 * @return the amount of times sailed
 	 */
-	public static int getStatSailed() {
+	public int getStatSailed() {
 		return statSailed;
 	}
 	
@@ -154,15 +178,15 @@ public class GameEnvironment {
 	 * Adds to the number of times the player has sailed
 	 * @param statSailed the number of times set sail
 	 */
-	public static void addStatSailed(int statSailed) {
-		GameEnvironment.statSailed += statSailed;
+	public void addStatSailed(int statSailed) {
+		this.statSailed += statSailed;
 	}
 	
 	/**
 	 * The amount of money the player has lost/earned from trading throughout the game
 	 * @return the total amount of money made/lost
 	 */
-	public static int getStatTraded() {
+	public int getStatTraded() {
 		return statTraded;
 	}
 	
@@ -170,26 +194,16 @@ public class GameEnvironment {
 	 * Adds to the amount of money the player has made
 	 * @param statTraded the amount of money made
 	 */
-	public static void addStatTraded(int statTraded) {
-		GameEnvironment.statTraded += statTraded;
+	public void addStatTraded(int statTraded) {
+		this.statTraded += statTraded;
 	}
 	
 	/**
 	 * Calculates the amount of money that the player will need to spend to repair their ship
 	 * @return the amount of money that it will cost to repair
 	 */
-	public static int getRepairCost() {
+	public int getRepairCost() {
 		return (activeShip.getMaxDurability() - activeShip.getDurability()) * REPAIRCOSTPERUNIT;
-	}
-	
-	/**
-	 * Generates a random number
-	 * @return a random number
-	 */
-	public static double randomNumber() {
-		Random rand = new Random();
-		double randomDouble = rand.nextDouble();
-		return randomDouble;
 	}
 	
 	
@@ -198,7 +212,7 @@ public class GameEnvironment {
 	 * @param change the integer amount to change playerMoney by. Negative integers are allowed.
 	 * @return true if the combination of playerMoney and the given integer change is > 0, false otherwise
 	 */
-	public static boolean addMoney(int change) {
+	public boolean addMoney(int change) {
 		if (playerMoney + change < 0) {
 			return false;
 		} else {
@@ -209,10 +223,10 @@ public class GameEnvironment {
 	
 	
 	/**
-	 * Initialises all  of the game variables such as 
+	 * Initialises all of the game variables such as 
 	 * ships, items, trades on islands and sailing routes.
 	 */
-	public static void initialise() {
+	public void initialise() {
 		islands = new ArrayList<Island>();
 		ships = new ArrayList<Ship>();
 		items = new ArrayList<Item>();
@@ -336,7 +350,7 @@ public class GameEnvironment {
 	 * @throws InsufficientDaysException	throws if there are not enough days left to take the route
 	 * @throws InsufficientFundsException	throws if the player does not have enough money to pay their sailors for the route
 	 */
-	public static ArrayList<String> sail(Route route) throws InsufficientDaysException, InsufficientFundsException, InsufficientRepairsException {
+	public ArrayList<String> sail(Route route) throws InsufficientDaysException, InsufficientFundsException, InsufficientRepairsException {
 		if (route.getDays() > gameDays) {
 			throw new InsufficientDaysException();
 		} else if (getPlayerMoney() < (DAILYPAYPERHEAD * activeShip.getCrewSize() * route.getDays())) {
@@ -345,7 +359,8 @@ public class GameEnvironment {
 			throw new InsufficientRepairsException();
 		} else {
 			addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize() * route.getDays());
-			ArrayList<String> notifyEventStrings = RandomEvent.tryEvent(activeShip, route.getEventChance(), randomNumber(), randomNumber());
+			RandomEvent randomEvent = new RandomEvent(this, route.getEventChance());
+			ArrayList<String> notifyEventStrings = randomEvent.getEventStrings();
 			statSailed += 1;
 			gameDays -= route.getDays();
 			setActiveIsland(route.getDestinationIsland());
@@ -357,7 +372,7 @@ public class GameEnvironment {
 	/**
 	 * Sets gameOver to true
 	 */
-	public static void gameOver() {
+	public void gameOver() {
 		gameOver = true;
 	}
 	
@@ -365,7 +380,7 @@ public class GameEnvironment {
 	 * Returns true if the player can continue the game, false otherwise.
 	 * @return true if the player can continue the game, false otherwise.
 	 */
-	public static boolean canContinueGame(){
+	public boolean canContinueGame(){
 		double minRouteDays = Double.POSITIVE_INFINITY;
 		for (Route route: activeIsland.getRoutes()) {
 			if (route.getDays() < minRouteDays) {minRouteDays = route.getDays();}
@@ -385,14 +400,14 @@ public class GameEnvironment {
 	/**
 	 * Opens the main GUI interface
 	 */
-	public static void launchGUIMainScreen() {
-		GUIMainScreen mainWindow = new GUIMainScreen();
+	public void launchGUIMainScreen() {
+		GUIMainScreen mainWindow = new GUIMainScreen(this);
 	}
 	
 	/**
 	 * Closes the main GUI interface
 	 */
-	public static void closeGUIMainScreen(GUIMainScreen mainWindow) {
+	public void closeGUIMainScreen(GUIMainScreen mainWindow) {
 		mainWindow.closeWindow();
 		lauchGUIEndGameScreen();
 	}
@@ -400,14 +415,14 @@ public class GameEnvironment {
 	/**
 	 * Opens the setup GUI interface
 	 */
-	public static void launchGUISetupScreen() {
-		GUISetupScreen setupWindow = new GUISetupScreen();
+	public void launchGUISetupScreen() {
+		GUISetupScreen setupWindow = new GUISetupScreen(this);
 	}
 	
 	/**
 	 * Closes the setup GUI interface
 	 */
-	public static void closeGUISetupScreen(GUISetupScreen setupWindow) {
+	public void closeGUISetupScreen(GUISetupScreen setupWindow) {
 		setupWindow.closeWindow();
 		launchGUIMainScreen();
 	}
@@ -415,19 +430,14 @@ public class GameEnvironment {
 	/**
 	 * Opens the end game GUI interface
 	 */
-	public static void lauchGUIEndGameScreen() {
-		GUIGameOverScreen endGameWindow = new GUIGameOverScreen();
+	public void lauchGUIEndGameScreen() {
+		GUIGameOverScreen endGameWindow = new GUIGameOverScreen(this);
 	}
 	
 	/**
 	 * Closes the end game GUI interface
 	 */
-	public static void closeGUIEndGameScreen(GUIGameOverScreen endGameWindow) {
+	public void closeGUIEndGameScreen(GUIGameOverScreen endGameWindow) {
 		endGameWindow.closeWindow();
-	}
-	
-	public static void main(String[] args) {
-		initialise();
-		launchGUISetupScreen();
 	}
 }

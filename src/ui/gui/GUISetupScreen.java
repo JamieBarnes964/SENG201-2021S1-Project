@@ -26,11 +26,13 @@ import javax.swing.ScrollPaneConstants;
 public class GUISetupScreen {
 
 	private JFrame window;
-
+	private GameEnvironment manager;
+	
 	/**
 	 * Create and open the application.
 	 */
-	public GUISetupScreen() {
+	public GUISetupScreen(GameEnvironment manager) {
+		this.manager = manager;
 		initialize();
 		this.window.setVisible(true);
 	}
@@ -40,7 +42,7 @@ public class GUISetupScreen {
 	}
 	
 	public void finishedWindow() {
-		GameEnvironment.closeGUISetupScreen(this);
+		manager.closeGUISetupScreen(this);
 	}
 
 	/**
@@ -104,7 +106,7 @@ public class GUISetupScreen {
 		ButtonGroup shipSelectionButtons = new ButtonGroup();
 		ArrayList<JRadioButton> radioButtons = new ArrayList<JRadioButton>();
 		
-		for (Ship ship: GameEnvironment.getShips()) {
+		for (Ship ship: manager.getShips()) {
 			JPanel panel = new JPanel();
 //			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 			shipsArrayPanel.add(panel);
@@ -173,13 +175,13 @@ public class GUISetupScreen {
 					}
 					errorDisplayLabel.setText("");
 					
-					GameEnvironment.setPlayerName(nameTextField.getText());
-					GameEnvironment.setGameDays(daysSlider.getValue());
-					GameEnvironment.setActiveShip(GameEnvironment.getShips().get(chosenShipIndex));
+					manager.setPlayerName(nameTextField.getText());
+					manager.setStartGameDays(daysSlider.getValue());
+					manager.setActiveShip(manager.getShips().get(chosenShipIndex));
 					
 					// Initialises the chosen ship's cargo
-					for (Item item: GameEnvironment.getItems()) {
-						GameEnvironment.getActiveShip().initialiseCargo(item);
+					for (Item item: manager.getItems()) {
+						manager.getActiveShip().initialiseCargo(item);
 					}
 					
 					finishedWindow();

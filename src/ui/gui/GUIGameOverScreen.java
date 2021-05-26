@@ -14,13 +14,14 @@ import java.awt.event.ActionEvent;
 public class GUIGameOverScreen {
 
 	private JFrame window;
-
+	private GameEnvironment manager;
 
 
 	/**
 	 * Create the application.
 	 */
-	public GUIGameOverScreen() {
+	public GUIGameOverScreen(GameEnvironment manager) {
+		this.manager = manager;
 		initialize();
 		this.window.setVisible(true);
 	}
@@ -37,7 +38,7 @@ public class GUIGameOverScreen {
 	 * initialises the closing of this window
 	 */
 	private void finishedWindow() {
-		GameEnvironment.closeGUIEndGameScreen(this);
+		manager.closeGUIEndGameScreen(this);
 	}
 
 	/**
@@ -64,12 +65,20 @@ public class GUIGameOverScreen {
 		finalStatsPanel.add(allStatsLabel);
 			
 			int totalCargoValueAtIsland = 0;
-			for (Item item: GameEnvironment.getActiveShip().getCargo().keySet()) {
-				totalCargoValueAtIsland += item.getPrice() * GameEnvironment.getActiveIsland().getTrades().get(item) * GameEnvironment.getActiveShip().getCargo().get(item);
+			for (Item item: manager.getActiveShip().getCargo().keySet()) {
+				totalCargoValueAtIsland += item.getPrice() * manager.getActiveIsland().getTrades().get(item) * manager.getActiveShip().getCargo().get(item);
 			}
-			String statsString = "<html>" + GameEnvironment.getPlayerName() + " made: $" + (GameEnvironment.getPlayerMoney() + totalCargoValueAtIsland - GameEnvironment.getStartingmoney()) + 
-								   "<br>" + GameEnvironment.getPlayerName() + " traded items " + GameEnvironment.getStatTraded() + " times" +
-								   "<br>" + GameEnvironment.getPlayerName() + " sailed " + GameEnvironment.getStatSailed() + " times</html>";
+			int finalScore;
+			try {
+				finalScore = Math.floorDiv(manager.getPlayerMoney() + totalCargoValueAtIsland - manager.getStartingmoney(), manager.getStartGameDays() - manager.getGameDays());
+			} catch (ArithmeticException e) {
+				finalScore = 0;
+			}
+			String statsString = "<html>" + "Score: " + finalScore;
+			statsString += "<br>Played " + (manager.getStartGameDays() - manager.getGameDays()) + " of " + manager.getStartGameDays() + " days" + 
+								 	"<br>"+ manager.getPlayerName() + " made: $" + (manager.getPlayerMoney() + totalCargoValueAtIsland - manager.getStartingmoney()) + 
+								 	"<br>" + manager.getPlayerName() + " traded items " + manager.getStatTraded() + " times" +
+								 	"<br>" + manager.getPlayerName() + " sailed " + manager.getStatSailed() + " times</html>";
 			
 			allStatsLabel.setText(statsString);
 		
