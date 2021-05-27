@@ -18,7 +18,8 @@ public class GUIGameOverScreen {
 
 
 	/**
-	 * Create the application.
+	 * Creates and opens the Game Over screen window
+	 * @param manager A GameEnvironment object that is actively running the game
 	 */
 	public GUIGameOverScreen(GameEnvironment manager) {
 		this.manager = manager;

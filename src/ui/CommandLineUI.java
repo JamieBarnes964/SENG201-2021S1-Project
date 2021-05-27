@@ -14,6 +14,10 @@ public class CommandLineUI {
 	private static Scanner consoleInput = new Scanner(System.in);
 	private GameEnvironment manager;
 	
+	/**
+	 * Creates and runs the command line user interface app
+	 * @param manager A GameEnvironment object that is actively running the game
+	 */
 	public CommandLineUI(GameEnvironment manager) {
 		this.manager = manager;
 		initialisePlayerValues();
@@ -29,7 +33,7 @@ public class CommandLineUI {
 	 * @param max		the maximum number that the user can input (inclusive)
 	 * @return the user's input as an integer.
 	 */
-	public int getUserIntInRange(String prompt, int min, int max) {
+	private int getUserIntInRange(String prompt, int min, int max) {
 		boolean acceptedInput = false;
 		int userInput = 0;
 		while (!acceptedInput) {
@@ -60,7 +64,7 @@ public class CommandLineUI {
 	 * @param choices		the string choices that the user can choose
 	 * @return the index of the user's choice in the choices array.
 	 */
-	public int getPlayerDecision(String prompt, ArrayList<String> choices) {
+	private int getPlayerDecision(String prompt, ArrayList<String> choices) {
 		int userChoice = 0;
 		// repeat until a recognised choice is made
 		while (userChoice < 1 || userChoice > choices.size()) {
@@ -95,7 +99,7 @@ public class CommandLineUI {
 	/**
 	 * Console environment representation of the Sailing Menu
 	 */
-	public void consoleSail() {
+	private void consoleSail() {
 		// Establish the route choices the player can make
 		ArrayList<String> routeChoices = new ArrayList<String>();
 		for (Route route: manager.getActiveIsland().getRoutes()) {
@@ -138,7 +142,7 @@ public class CommandLineUI {
 	/**
 	 * Console environment representation of the Trading Menu
 	 */
-	public void consoleTrade() {
+	private void consoleTrade() {
 		
 		// Determine whether to Buy or Sell
 		ArrayList<String> bsOptions = new ArrayList<String>();
@@ -209,7 +213,7 @@ public class CommandLineUI {
 	/**
 	 * Initialises the player name, the game days they wish to play for and which ship they would like to use
 	 */
-	public void initialisePlayerValues() {
+	private void initialisePlayerValues() {
 		
 		boolean nameDecided = false;
 		while (nameDecided == false) {
@@ -259,8 +263,10 @@ public class CommandLineUI {
 	}
 	
 	
-	
-	public void mainGameplayLoop() {
+	/**
+	 * Runs the main gameplay loop
+	 */
+	private void mainGameplayLoop() {
 		// Define the main options
 		ArrayList<String> mainGameOptionsStrings = new ArrayList<String>();
 		mainGameOptionsStrings.add("Trade");

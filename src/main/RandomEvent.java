@@ -31,7 +31,7 @@ public class RandomEvent {
 	
 	/**
 	 * 
-	 * @param manager the GameEnvironment object that is actively 
+	 * @param manager the GameEnvironment object that is actively running the game
 	 * @param eventChance is the chance of an event happening on the chosen route
 	 * @param eventCheck is a random number generated in GameEnvironment that determines whether or not the event happens
 	 * @param randomChance is a random number that determines what event happens

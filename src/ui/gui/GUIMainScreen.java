@@ -40,7 +40,8 @@ public class GUIMainScreen {
 
 
 	/**
-	 * Create the application.
+	 * Creates and opens the Main screen window
+	 * @param manager A GameEnvironment object that is actively running the game
 	 */
 	public GUIMainScreen(GameEnvironment manager) {
 		this.manager = manager;
@@ -48,11 +49,17 @@ public class GUIMainScreen {
 		this.window.setVisible(true);
 	}
 	
+	/**
+	 * Closes the window
+	 */
 	public void closeWindow() {
 		window.dispose();
 	}
 	
-	public void finishedWindow() {
+	/**
+	 * Calls the manager's function to close the window to return control
+	 */
+	private void finishedWindow() {
 		manager.closeGUIMainScreen(this);
 	}
 	
@@ -481,7 +488,7 @@ public class GUIMainScreen {
 			
 			JLabel islandMahkarnLabel = new JLabel("Mahkarn");
 			mapPanel.setLayer(islandMahkarnLabel, 1);
-			islandMahkarnLabel.setBounds(253, 225, 60, 20);
+			islandMahkarnLabel.setBounds(233, 225, 80, 20);
 			mapPanel.add(islandMahkarnLabel);
 			
 			JLabel mapBoatIcon = new JLabel();

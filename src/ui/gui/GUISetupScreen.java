@@ -22,6 +22,8 @@ import main.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
 
 public class GUISetupScreen {
 
@@ -29,7 +31,8 @@ public class GUISetupScreen {
 	private GameEnvironment manager;
 	
 	/**
-	 * Create and open the application.
+	 * Creates and opens the Setup screen window
+	 * @param manager A GameEnvironment object that is actively running the game
 	 */
 	public GUISetupScreen(GameEnvironment manager) {
 		this.manager = manager;
@@ -37,11 +40,17 @@ public class GUISetupScreen {
 		this.window.setVisible(true);
 	}
 	
+	/**
+	 * Closes the window
+	 */
 	public void closeWindow() {
 		window.dispose();
 	}
 	
-	public void finishedWindow() {
+	/**
+	 * Calls the manager's function to close the window to return control
+	 */
+	private void finishedWindow() {
 		manager.closeGUISetupScreen(this);
 	}
 
@@ -108,7 +117,6 @@ public class GUISetupScreen {
 		
 		for (Ship ship: manager.getShips()) {
 			JPanel panel = new JPanel();
-//			panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 			shipsArrayPanel.add(panel);
 			panel.setLayout(new GridLayout(0, 1, 0, 0));
 			
@@ -141,16 +149,12 @@ public class GUISetupScreen {
 		}
 		
 		
-		
-		
-		
-		JLabel errorDisplayLabel = new JLabel("");
-		errorDisplayLabel.setForeground(Color.RED);
-		errorDisplayLabel.setBounds(10, 297, 293, 23);
-		window.getContentPane().add(errorDisplayLabel);
-		
-		
-		
+
+		JTextPane errorDisplayPane = new JTextPane();
+		errorDisplayPane.setForeground(Color.RED);
+		errorDisplayPane.setEditable(false);
+		errorDisplayPane.setBounds(220, 58, 234, 80);
+		window.getContentPane().add(errorDisplayPane);
 		
 		
 		JButton startGameButton = new JButton("Start New Game");
@@ -173,7 +177,7 @@ public class GUISetupScreen {
 					} else if (nameTextField.getText().length() > 15 || nameTextField.getText().length() < 3) {
 						throw new IllegalArgumentException("Please enter a name between 3 and 15 characters");
 					}
-					errorDisplayLabel.setText("");
+					errorDisplayPane.setText("");
 					
 					manager.setPlayerName(nameTextField.getText());
 					manager.setStartGameDays(daysSlider.getValue());
@@ -187,13 +191,13 @@ public class GUISetupScreen {
 					finishedWindow();
 					
 				} catch (Exception excptn) {
-					errorDisplayLabel.setText(excptn.getMessage());
+					errorDisplayPane.setText(excptn.getMessage());
 				}
 				
 				
 			}
 		});
-		startGameButton.setBounds(319, 297, 135, 23);
+		startGameButton.setBounds(266, 297, 188, 23);
 		window.getContentPane().add(startGameButton);
 		
 		// Ship Label Panel #################################################
@@ -220,6 +224,8 @@ public class GUISetupScreen {
 		JLabel speedLabel = new JLabel("Speed:");
 		speedLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		shipLabelPanel.add(speedLabel);
+		
+		
 		
 		
 		

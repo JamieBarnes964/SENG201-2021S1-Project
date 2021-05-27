@@ -314,7 +314,7 @@ public class GameEnvironment {
 		islands.get(0).addRoute(mahkarnToErberst);
 		
 		// Initialise Tolset Reef Routes
-		Route tolsetToPardea = new Route(8, 0.2, islands.get(3));
+		Route tolsetToPardea = new Route(5, 0.2, islands.get(3));
 		islands.get(1).addRoute(tolsetToPardea);
 		
 		// Initialise Alegate Routes
@@ -327,7 +327,7 @@ public class GameEnvironment {
 		
 		// Initialise Pardea Routes
 		Route pardeaToAlegate = new Route(2, 0.3, islands.get(2));
-		Route pardeaToTolset = new Route(8, 0.2, islands.get(1));
+		Route pardeaToTolset = new Route(5, 0.2, islands.get(1));
 		Route pardeaToMahkarn = new Route(2, 0.2, islands.get(0));
 		islands.get(3).addRoute(pardeaToAlegate);
 		islands.get(3).addRoute(pardeaToTolset);
