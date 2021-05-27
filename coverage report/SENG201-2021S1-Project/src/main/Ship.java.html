@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Ship.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (27/05/2021 3:56:09 pm)</a> &gt; <a href="../../index.html" class="el_group">SENG201-2021S1-Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">main</a> &gt; <span class="el_source">Ship.java</span></div><h1>Ship.java</h1><pre class="source lang-java linenums">package main;
+import java.util.HashMap;
+
+/**
+ * Class that  models a Ship.
+ */
+public class Ship {
+	private String name;
+	private int capacity;
+	private int crewSize;
+	private int durability;
+	private int maxDurability;
+	private double speed;
+	private HashMap&lt;Item, Integer&gt; cargo;
+	private int availableCargoSpace;
+	
+	/**
+	 * Creates the Ship object with the given variables.
+	 * @param name			The name of the Ship.
+	 * @param capacity		The capacity of the Ship.
+	 * @param crewSize		The size of the crew on the Ship.
+	 * @param durability	The durability of the Ship.
+	 */
+<span class="fc" id="L24">	public Ship(String name, int capacity, int crewSize, int durability) {</span>
+<span class="fc" id="L25">		this.name = name;</span>
+<span class="fc" id="L26">		this.capacity = capacity;</span>
+<span class="fc" id="L27">		this.crewSize = crewSize;</span>
+<span class="fc" id="L28">		this.durability = durability;</span>
+<span class="fc" id="L29">		this.maxDurability = durability;</span>
+<span class="fc" id="L30">		this.speed = 1.0 + ((crewSize - capacity) / 50.0);</span>
+<span class="fc" id="L31">		this.cargo = new HashMap&lt;Item, Integer&gt;();</span>
+<span class="fc" id="L32">		this.availableCargoSpace = capacity;</span>
+<span class="fc" id="L33">	}</span>
+	
+	/**
+	 * Returns the name of the Ship.
+	 * @return the name of the Ship.
+	 */
+	public String getName() {
+<span class="nc" id="L40">		return this.name;</span>
+	}
+	
+	/**
+	 * Returns the max cargo space of the Ship.
+	 * @return the max cargo space of the Ship.
+	 */
+	public int getCapacity() {
+<span class="fc" id="L48">		return this.capacity;</span>
+	}
+	
+	/**
+	 * Returns the available cargo space in the ship
+	 * @return the available cargo space in the ship
+	 */
+	public int getAvailableCargoSpace() {
+<span class="fc" id="L56">		return this.availableCargoSpace;</span>
+	}
+	
+	/**
+	 * Returns the size of the Ship.
+	 * @return the size of the Ship.
+	 */
+	public int getCrewSize() {
+<span class="fc" id="L64">		return this.crewSize;</span>
+	}
+	
+	/**
+	 * Returns the current durability of the Ship.
+	 * @return the current durability of the Ship.
+	 */
+	public int getDurability() {
+<span class="fc" id="L72">		return this.durability;</span>
+	}
+	
+	/**
+	 * Returns the max durability of the ship
+	 * @return the max durability of the ship
+	 */
+	public int getMaxDurability() {
+<span class="fc" id="L80">		return maxDurability;</span>
+	}
+
+	/**
+	 * Returns the speed of the Ship.
+	 * @return the current speed of the Ship.
+	 */
+	public double getSpeed() {
+<span class="fc" id="L88">		return this.speed;</span>
+	}
+	
+	/**
+	 * Initialises the item in the cargo of the ship, sets quantity to 0
+	 * @param item the item that will be initialised in the ship's cargo
+	 */
+	public void initialiseCargo(Item item) {
+<span class="fc" id="L96">		this.cargo.put(item, 0);</span>
+<span class="fc" id="L97">	}</span>
+	
+	/**
+	 * Returns a list of the items stored in the cargo.
+	 * @return a list of the items stored in the cargo.
+	 */
+	public HashMap&lt;Item, Integer&gt; getCargo() {
+<span class="fc" id="L104">		return this.cargo;</span>
+	}
+	
+	/**
+	 * Calculates the total value of the items in cargo.
+	 * @return total value of items
+	 */
+	public int getCargoValue() {
+<span class="fc" id="L112">		int total = 0;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">		for (Item item: this.cargo.keySet()) {</span>
+<span class="fc" id="L114">			total += item.getPrice() * this.cargo.get(item);</span>
+		}
+<span class="fc" id="L116">		return total;</span>
+	}
+	
+	/**
+	 * Add an amount of an item to the ship's cargo.
+	 * @param item an Item to store
+	 * @param amount the amount of the item to store
+	 * @return true if there is sufficient space to store amount, false otherwise.
+	 */
+	public boolean addItemCargo(Item item, int amount) {
+<span class="fc bfc" id="L126" title="All 2 branches covered.">		if (availableCargoSpace &gt;= item.getWeight() * amount) {</span>
+<span class="fc" id="L127">			this.cargo.put(item, this.cargo.get(item) + amount);</span>
+<span class="fc" id="L128">			availableCargoSpace -= item.getWeight() * amount;</span>
+<span class="fc" id="L129">			return true;</span>
+		} else {
+<span class="fc" id="L131">			return false;</span>
+		}
+	}
+	
+	/**
+	 * Removes all cargo from the ship.
+	 */
+	public void emptyCargo() {
+<span class="fc bfc" id="L139" title="All 2 branches covered.">		for (Item item: this.cargo.keySet()) {</span>
+<span class="fc" id="L140">			this.cargo.put(item, 0);</span>
+		}
+<span class="fc" id="L142">		this.availableCargoSpace = this.capacity;</span>
+<span class="fc" id="L143">	}</span>
+
+	/**
+	 * Returns the status of whether or not the ship needs repairs.
+	 * @return True or False depending on whether or not the ship needs repairs
+	 */
+	public boolean getNeedRepairs() {
+<span class="fc bfc" id="L150" title="All 2 branches covered.">		return maxDurability &gt; durability;</span>
+	}
+	
+	/**
+	 * Repairs the ship
+	 */
+	public void repairShip() {
+<span class="fc" id="L157">		this.durability = this.maxDurability;</span>
+<span class="fc" id="L158">	}</span>
+	
+	/**
+	 * Damages the ship based on the amount supplied by the integer damageTaken.
+	 * @param damageTaken an integer that determines how much damage the ship takes
+	 */
+	public void takeDamage(int damageTaken) {
+<span class="fc" id="L165">		this.durability -= damageTaken;</span>
+<span class="fc" id="L166">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>src (27/05/2021 3:56:09 pm)</div></body></html>

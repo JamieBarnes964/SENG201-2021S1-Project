@@ -1,14 +1,17 @@
 package main;
 
+/**
+ * Class that models a Route.
+ */
 public class Route {
 	private int days;
 	private double eventChance;
 	private Island destinationIsland;
 	
 	/**
-	 * @param days			Days needed to travel to the destination island.
-	 * @param eventChance	The likelihood of an event happening on a given route.
-	 * @param island		The destination island.
+	 * @param days 				Days needed to travel to the destination island.
+	 * @param eventChance 		The likelihood of an event happening on a given route.
+	 * @param destinationIsland The destination island.
 	 */
 	public Route(int days, double eventChance, Island destinationIsland) {
 		this.days = days;

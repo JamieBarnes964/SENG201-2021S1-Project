@@ -9,14 +9,17 @@ import main.Item;
 import main.Route;
 import main.Ship;
 
+/**
+ * A command line user interface for a {@link GameEnvironment}
+ */
 public class CommandLineUI {
 
-	private static Scanner consoleInput = new Scanner(System.in);
+	private Scanner consoleInput = new Scanner(System.in);
 	private GameEnvironment manager;
 	
 	/**
 	 * Creates and runs the command line user interface app
-	 * @param manager A GameEnvironment object that is actively running the game
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
 	 */
 	public CommandLineUI(GameEnvironment manager) {
 		this.manager = manager;

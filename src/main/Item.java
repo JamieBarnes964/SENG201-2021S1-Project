@@ -1,5 +1,8 @@
 package main;
 
+/**
+ * Class that models an Item.
+ */
 public class Item {
 	private String name;
 	private int weight;

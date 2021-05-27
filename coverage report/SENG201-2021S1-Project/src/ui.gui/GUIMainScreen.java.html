@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>GUIMainScreen.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (27/05/2021 3:56:09 pm)</a> &gt; <a href="../../index.html" class="el_group">SENG201-2021S1-Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">ui.gui</a> &gt; <span class="el_source">GUIMainScreen.java</span></div><h1>GUIMainScreen.java</h1><pre class="source lang-java linenums">package ui.gui;
+
+import main.*;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import java.awt.Font;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+import javax.swing.JRadioButton;
+import javax.swing.ImageIcon;
+
+/**
+ * A graphical user interface for the main gameplay for a {@link GameEnvironment}
+ */
+public class GUIMainScreen {
+
+	private GameEnvironment manager;
+	private JFrame window;
+	private ArrayList&lt;JRadioButton&gt; routeRadioButtons;
+	private JLabel playerMoneyLabel;
+	private JLabel daysRemainingLabel;
+	private JLabel activeIslandNameLabel;
+	private JPanel statsSubPanel;
+
+
+	/**
+	 * Creates and opens the Main screen window
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
+	 */
+<span class="nc" id="L49">	public GUIMainScreen(GameEnvironment manager) {</span>
+<span class="nc" id="L50">		this.manager = manager;</span>
+<span class="nc" id="L51">		initialize();</span>
+<span class="nc" id="L52">		this.window.setVisible(true);</span>
+<span class="nc" id="L53">	}</span>
+	
+	/**
+	 * Closes the window
+	 */
+	public void closeWindow() {
+<span class="nc" id="L59">		window.dispose();</span>
+<span class="nc" id="L60">	}</span>
+	
+	/**
+	 * Calls the manager's function to close the window to return control
+	 */
+	private void finishedWindow() {
+<span class="nc" id="L66">		manager.closeGUIMainScreen(this);</span>
+<span class="nc" id="L67">	}</span>
+	
+	
+	/**
+	 * A tool for switching cards in a JPanel with a card layout
+	 * @param panel	a panel with a card layout which will change to the given card
+	 * @param card	a JLayeredPane card which will be displayed on the given panel
+	 */
+	private void switchCard(JPanel panel, JLayeredPane card) {
+<span class="nc" id="L76">		panel.removeAll();</span>
+<span class="nc" id="L77">		panel.add(card);</span>
+<span class="nc" id="L78">		panel.repaint();</span>
+<span class="nc" id="L79">		panel.revalidate();</span>
+<span class="nc" id="L80">	}</span>
+	
+	
+	/**
+	 * Updates the main game values of playerMoney and daysRemaining within the GUI
+	 */
+	private void updateGameValues() {
+<span class="nc" id="L87">		playerMoneyLabel.setText(&quot;Money: $&quot; + manager.getPlayerMoney());</span>
+<span class="nc" id="L88">		daysRemainingLabel.setText(&quot;Days Remaining: &quot; + manager.getGameDays());</span>
+<span class="nc" id="L89">		activeIslandNameLabel.setText(manager.getActiveIsland().getName());</span>
+<span class="nc" id="L90">	}</span>
+	
+	
+	
+	/**
+	 * Updates all sliders in the given slider list to their maximum values that can be bought of their respective item
+	 * @param slider		the slider that is being 
+	 * @param sliderList
+	 * @param buyableItems
+	 */
+	private void buySlidersMax(ArrayList&lt;JSlider&gt; sliderList, ArrayList&lt;Item&gt; buyableItems) {
+<span class="nc" id="L101">		int tempAvailableSpace = manager.getActiveShip().getAvailableCargoSpace();</span>
+<span class="nc" id="L102">		int tempAvailableMoney = manager.getPlayerMoney();</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">		for (int i = 0; i &lt; sliderList.size(); i++) {</span>
+<span class="nc" id="L104">			tempAvailableSpace -= sliderList.get(i).getValue() * buyableItems.get(i).getWeight();</span>
+<span class="nc" id="L105">			tempAvailableMoney -= sliderList.get(i).getValue() * buyableItems.get(i).getPrice() * manager.getActiveIsland().getTrades().get(buyableItems.get(i));</span>
+		}
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		for (int i = 0; i &lt; sliderList.size(); i++) {</span>
+<span class="nc" id="L108">			int ithItemValue = (int) (buyableItems.get(i).getPrice() * manager.getActiveIsland().getTrades().get(buyableItems.get(i)));</span>
+<span class="nc" id="L109">			sliderList.get(i).setMaximum(Math.min(Math.floorDiv(tempAvailableSpace + sliderList.get(i).getValue() * buyableItems.get(i).getWeight(), buyableItems.get(i).getWeight()),</span>
+<span class="nc" id="L110">  				   						 		  Math.floorDiv(tempAvailableMoney + sliderList.get(i).getValue() * ithItemValue, ithItemValue)));</span>
+		}
+<span class="nc" id="L112">	}</span>
+	
+	
+	
+	/**
+	 * 
+	 * @param buySell
+	 * @param parentPanel
+	 * @param addToCard
+	 * @param returnToCard
+	 */
+	private void tradingCardBuyOrSell(int buySell, JPanel parentPanel, JLayeredPane addToCard, JLayeredPane returnToCard) {
+<span class="nc" id="L124">		addToCard.removeAll();</span>
+		
+<span class="nc" id="L126">		JPanel itemsPane = new JPanel();</span>
+<span class="nc" id="L127">		itemsPane.setBounds(10, 11, 221, 353);</span>
+<span class="nc" id="L128">		addToCard.add(itemsPane);</span>
+<span class="nc" id="L129">		itemsPane.setLayout(new GridLayout(0, 1, 0, 0));</span>
+
+<span class="nc" id="L131">		ArrayList&lt;JSlider&gt; sliderList = new ArrayList&lt;JSlider&gt;();</span>
+<span class="nc" id="L132">		ArrayList&lt;Item&gt; tradableItems = new ArrayList&lt;Item&gt;();</span>
+		
+<span class="nc bnc" id="L134" title="All 2 branches missed.">		for (Item item: manager.getActiveIsland().getTrades().keySet()) {</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">			if (manager.getActiveIsland().getTrades().get(item) != 0) { // If the item is traded by the island</span>
+<span class="nc" id="L136">				tradableItems.add(item);</span>
+				
+<span class="nc" id="L138">				JPanel singleItemPane = new JPanel();</span>
+<span class="nc" id="L139">				itemsPane.add(singleItemPane);</span>
+<span class="nc" id="L140">				singleItemPane.setLayout(null);</span>
+				
+<span class="nc" id="L142">				JLabel itemName = new JLabel(item.getName());</span>
+<span class="nc" id="L143">				itemName.setBounds(0, 0, 221, 15);</span>
+<span class="nc" id="L144">				singleItemPane.add(itemName);</span>
+				
+				// Display price and difference from the default value
+<span class="nc" id="L147">				DecimalFormat numberFormat = new DecimalFormat(&quot;#&quot;);</span>
+<span class="nc" id="L148">				String itemValueString = &quot;Price: $&quot; + (int) (item.getPrice() * manager.getActiveIsland().getTrades().get(item));</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">				if (manager.getActiveIsland().getTrades().get(item) &gt; 1) {</span>
+<span class="nc" id="L150">					itemValueString += &quot; (+&quot; + numberFormat.format((manager.getActiveIsland().getTrades().get(item) - 1) * 100) + &quot;%)&quot;;</span>
+<span class="nc" id="L151">				} else {</span>
+<span class="nc" id="L152">					itemValueString += &quot; (&quot; + numberFormat.format((manager.getActiveIsland().getTrades().get(item) - 1) * 100) + &quot;%)&quot;;</span>
+				}
+<span class="nc" id="L154">				JLabel itemValue = new JLabel(itemValueString);</span>
+<span class="nc" id="L155">				itemValue.setBounds(0, 15, 221, 15);</span>
+<span class="nc" id="L156">				singleItemPane.add(itemValue);</span>
+				
+<span class="nc" id="L158">				JLabel itemWeight = new JLabel(&quot;Weight: &quot; + item.getWeight());</span>
+<span class="nc" id="L159">				itemWeight.setBounds(0, 30, 221, 15);</span>
+<span class="nc" id="L160">				singleItemPane.add(itemWeight);</span>
+				
+<span class="nc" id="L162">				JLabel quantityLabel = new JLabel(&quot;0&quot;);</span>
+<span class="nc" id="L163">				quantityLabel.setBounds(195, 48, 46, 14);</span>
+<span class="nc" id="L164">				singleItemPane.add(quantityLabel);</span>
+				
+<span class="nc bnc" id="L166" title="All 2 branches missed.">				if (buySell == 0) { // If Buying</span>
+<span class="nc" id="L167">					JSlider slider = new JSlider(0, 0, 0);</span>
+<span class="nc" id="L168">					slider.setBounds(10, 45, 175, 20);</span>
+<span class="nc" id="L169">					singleItemPane.add(slider);</span>
+<span class="nc" id="L170">					slider.addChangeListener(new ChangeListener() {</span>
+				        public void stateChanged(ChangeEvent ce) {
+<span class="nc" id="L172">				        	quantityLabel.setText(&quot;&quot; + slider.getValue());</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">				        	if (!slider.getValueIsAdjusting()) {</span>
+<span class="nc" id="L174">				        		buySlidersMax(sliderList, tradableItems);</span>
+							}
+<span class="nc" id="L176">				        }</span>
+					});
+<span class="nc" id="L178">					sliderList.add(slider);</span>
+<span class="nc" id="L179">					buySlidersMax(sliderList, tradableItems);</span>
+<span class="nc" id="L180">				} else { // else Selling</span>
+<span class="nc" id="L181">					JSlider slider = new JSlider(0, manager.getActiveShip().getCargo().get(item), 0); // set slider max to the number of items </span>
+<span class="nc" id="L182">					slider.setBounds(10, 45, 175, 20);</span>
+<span class="nc" id="L183">					singleItemPane.add(slider);</span>
+<span class="nc" id="L184">					slider.addChangeListener(new ChangeListener() { // Simple display of the slider value</span>
+				        public void stateChanged(ChangeEvent ce) {
+<span class="nc" id="L186">				        	quantityLabel.setText(&quot;&quot; + slider.getValue());</span>
+<span class="nc" id="L187">				        }</span>
+					});
+<span class="nc" id="L189">					sliderList.add(slider);</span>
+				}
+			}
+		}
+		// Buy or Sell button
+		JButton buySellButton;
+<span class="nc bnc" id="L195" title="All 2 branches missed.">		if (buySell == 0) { // if buying then button is &quot;Buy&quot;</span>
+<span class="nc" id="L196">			buySellButton = new JButton(&quot;Buy&quot;);</span>
+<span class="nc" id="L197">		} else { // else selling and button is &quot;Sell&quot;</span>
+<span class="nc" id="L198">			buySellButton = new JButton(&quot;Sell&quot;);</span>
+		}
+<span class="nc" id="L200">		buySellButton.addActionListener(new ActionListener() {</span>
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L202">				int choice = JOptionPane.showConfirmDialog(window, &quot;Are you sure you want to &quot; + buySellButton.getText() + &quot; these items?&quot;, &quot;Confim&quot;, 0); // Show confirm Dialog</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">				if (choice == 0) { // if confirmed</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">					for (int i = 0; i &lt; sliderList.size(); i++) { // For each index in sliderList</span>
+<span class="nc" id="L205">						int quantity = sliderList.get(i).getValue(); // Get the value of the slider at that index</span>
+<span class="nc" id="L206">						Item sliderItem = tradableItems.get(i); // Get the item that slider represents</span>
+<span class="nc" id="L207">						manager.addStatTraded(quantity); // Handle statistics</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">						if (buySell == 0) { // if buying</span>
+<span class="nc" id="L209">							manager.addMoney((int) -(quantity * sliderItem.getPrice() * manager.getActiveIsland().getTrades().get(sliderItem))); // Remove Money</span>
+<span class="nc" id="L210">							manager.getActiveShip().addItemCargo(sliderItem, quantity);	// Add Item * Quantity to Cargo</span>
+<span class="nc" id="L211">						} else { // if selling</span>
+<span class="nc" id="L212">							manager.addMoney((int) (quantity * sliderItem.getPrice() * manager.getActiveIsland().getTrades().get(sliderItem))); // Add Money</span>
+<span class="nc" id="L213">							manager.getActiveShip().addItemCargo(sliderItem, -quantity); // Remove Item * Quantity from Cargo</span>
+						}
+					}
+<span class="nc" id="L216">					updateGameValues();</span>
+<span class="nc" id="L217">					switchCard(parentPanel, returnToCard);</span>
+<span class="nc" id="L218">					switchCard(statsSubPanel, new JLayeredPane());</span>
+				}
+<span class="nc" id="L220">			}</span>
+		});
+<span class="nc" id="L222">		buySellButton.setBounds(10, 375, 89, 23);</span>
+<span class="nc" id="L223">		addToCard.add(buySellButton);</span>
+		
+		// Cancel Button
+<span class="nc" id="L226">		JButton cancelButton = new JButton(&quot;Cancel&quot;);</span>
+<span class="nc" id="L227">		cancelButton.setBounds(142, 375, 89, 23);</span>
+<span class="nc" id="L228">		cancelButton.addActionListener(new ActionListener() {</span>
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L230">				switchCard(parentPanel, returnToCard);</span>
+<span class="nc" id="L231">				switchCard(statsSubPanel, new JLayeredPane());</span>
+<span class="nc" id="L232">			}</span>
+		});
+<span class="nc" id="L234">		addToCard.add(cancelButton);</span>
+		
+<span class="nc" id="L236">		switchCard(parentPanel, addToCard);</span>
+<span class="nc" id="L237">	}</span>
+	
+	
+	
+	/**
+	 * Updates the Ship Cargo Card to display the list of current cargo
+	 * @param itemListPanel	the JPanel which the cargo list of cargo will be added to
+	 */
+	private void updateCargoCard(JPanel itemListPanel) {
+<span class="nc" id="L246">		itemListPanel.removeAll();</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">		for (Item item: manager.getActiveShip().getCargo().keySet()) {</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">			if (manager.getActiveShip().getCargo().get(item) != 0) {</span>
+<span class="nc" id="L249">				JPanel singleItemPane = new JPanel();</span>
+<span class="nc" id="L250">				itemListPanel.add(singleItemPane);</span>
+<span class="nc" id="L251">				singleItemPane.setLayout(new GridLayout(0, 1, 0, 0));</span>
+				
+<span class="nc" id="L253">					JLabel itemName = new JLabel(item.getName());</span>
+<span class="nc" id="L254">					itemName.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L255">					singleItemPane.add(itemName);</span>
+					
+<span class="nc" id="L257">					JLabel itemTotalWeight = new JLabel(&quot;&quot; + item.getWeight() * manager.getActiveShip().getCargo().get(item));</span>
+<span class="nc" id="L258">					itemTotalWeight.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L259">					singleItemPane.add(itemTotalWeight);</span>
+					
+<span class="nc" id="L261">					JLabel itemQuantity = new JLabel(&quot;&quot; + manager.getActiveShip().getCargo().get(item));</span>
+<span class="nc" id="L262">					itemQuantity.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L263">					singleItemPane.add(itemQuantity);</span>
+					
+<span class="nc" id="L265">					JLabel itemBaseValue = new JLabel(&quot;&quot; + item.getPrice());</span>
+<span class="nc" id="L266">					itemBaseValue.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L267">					singleItemPane.add(itemBaseValue);</span>
+					
+			}
+		}
+<span class="nc" id="L271">	}</span>
+	
+	
+	/**
+	 * Handles the Sailing Routes List panel, adds the list of routes to the given JPanel
+	 * @param routeListPanel	the panel of which routes will be listed on (usually routeScrollPaneViewport)
+	 * @return 
+	 */
+	private ArrayList&lt;JRadioButton&gt; updateSailRoutesCard(JPanel routeListPanel) {
+<span class="nc" id="L280">		routeListPanel.removeAll();</span>
+		
+<span class="nc" id="L282">		ArrayList&lt;JRadioButton&gt; routeRadioButtons = new ArrayList&lt;JRadioButton&gt;();</span>
+<span class="nc" id="L283">		ButtonGroup routeButtonGroup = new ButtonGroup();</span>
+		
+<span class="nc bnc" id="L285" title="All 2 branches missed.">		for (Route route: manager.getActiveIsland().getRoutes()) {</span>
+<span class="nc" id="L286">			JPanel singleRoutePane = new JPanel();</span>
+<span class="nc" id="L287">			routeListPanel.add(singleRoutePane);</span>
+<span class="nc" id="L288">			singleRoutePane.setLayout(null);</span>
+			
+<span class="nc" id="L290">			JLabel routeIslandNameLabel = new JLabel(&quot;To &quot; + route.getDestinationIsland().getName());</span>
+<span class="nc" id="L291">			routeIslandNameLabel.setFont(new Font(&quot;Tahoma&quot;, Font.BOLD, 12));</span>
+<span class="nc" id="L292">			routeIslandNameLabel.setBounds(0, 0, 142, 14);</span>
+<span class="nc" id="L293">			singleRoutePane.add(routeIslandNameLabel);</span>
+			
+			JLabel routeDangerLabel;
+<span class="nc bnc" id="L296" title="All 2 branches missed.">			if (route.getEventChance() &gt;= 0.4) {</span>
+<span class="nc" id="L297">				routeDangerLabel = new JLabel(&quot;Dangerous&quot;);</span>
+<span class="nc" id="L298">				routeDangerLabel.setForeground(Color.RED);</span>
+<span class="nc bnc" id="L299" title="All 2 branches missed.">			} else if (route.getEventChance() &gt;= 0.3) {</span>
+<span class="nc" id="L300">				routeDangerLabel = new JLabel(&quot;Risky&quot;);</span>
+<span class="nc" id="L301">				routeDangerLabel.setForeground(Color.ORANGE);</span>
+<span class="nc" id="L302">			} else {</span>
+<span class="nc" id="L303">				routeDangerLabel = new JLabel(&quot;Relatively Safe&quot;);</span>
+<span class="nc" id="L304">				routeDangerLabel.setForeground(new Color(0, 153, 51));</span>
+			}
+<span class="nc" id="L306">			routeDangerLabel.setBounds(0, 18, 114, 14);</span>
+<span class="nc" id="L307">			singleRoutePane.add(routeDangerLabel);</span>
+			
+<span class="nc" id="L309">			JLabel routeDaysLabel = new JLabel(&quot;Days: &quot; + route.getDays());</span>
+<span class="nc" id="L310">			routeDaysLabel.setBounds(0, 33, 114, 14);</span>
+<span class="nc" id="L311">			singleRoutePane.add(routeDaysLabel);</span>
+			
+<span class="nc" id="L313">			JLabel routeCostLabel = new JLabel(&quot;Cost: $&quot; + route.getDays() * manager.getActiveShip().getCrewSize() * manager.getDailyPayPerHead());</span>
+<span class="nc" id="L314">			routeCostLabel.setBounds(0, 48, 114, 14);</span>
+<span class="nc" id="L315">			singleRoutePane.add(routeCostLabel);</span>
+			
+<span class="nc" id="L317">			JRadioButton routeRadioButton = new JRadioButton();</span>
+<span class="nc" id="L318">			routeRadioButton.setBounds(190, 21, 21, 23);</span>
+<span class="nc" id="L319">			singleRoutePane.add(routeRadioButton);</span>
+<span class="nc" id="L320">			routeRadioButtons.add(routeRadioButton);</span>
+<span class="nc" id="L321">			routeButtonGroup.add(routeRadioButton);</span>
+		}
+<span class="nc" id="L323">		return routeRadioButtons;</span>
+	}
+	
+	
+	
+	private void updateMapBoatLocation(ArrayList&lt;JLabel&gt; islandIconList, JLabel boat) {
+<span class="nc" id="L329">		JLabel activeIslandIcon = islandIconList.get(manager.getIslands().indexOf(manager.getActiveIsland()));</span>
+<span class="nc" id="L330">		boat.setBounds(activeIslandIcon.getX() - 20, activeIslandIcon.getY(), 50, 50);</span>
+<span class="nc" id="L331">	}</span>
+	
+	
+	/**
+	 * Updates the ShipStatsCard to most recent values
+	 * @param parentPanel	the parent panel which will be updated (usually shipStatsCard)
+	 */
+	private void updateShipStatsCard(JLayeredPane parentPanel) {
+<span class="nc" id="L339">		parentPanel.removeAll();</span>
+		
+<span class="nc" id="L341">		JLabel shipNameLabel = new JLabel(manager.getActiveShip().getName());</span>
+<span class="nc" id="L342">		shipNameLabel.setFont(new Font(&quot;Tahoma&quot;, Font.BOLD, 11));</span>
+<span class="nc" id="L343">		shipNameLabel.setBounds(10, 11, 135, 14);</span>
+<span class="nc" id="L344">		parentPanel.add(shipNameLabel);</span>
+		
+<span class="nc" id="L346">		JLabel crewSizeLabel = new JLabel(&quot;Crew: &quot; + manager.getActiveShip().getCrewSize());</span>
+<span class="nc" id="L347">		crewSizeLabel.setBounds(10, 36, 124, 14);</span>
+<span class="nc" id="L348">		parentPanel.add(crewSizeLabel);</span>
+		
+<span class="nc" id="L350">		JLabel cargoCapacityLabel = new JLabel(&quot;Cargo: &quot; + (manager.getActiveShip().getCapacity() - manager.getActiveShip().getAvailableCargoSpace()) + &quot;/&quot; + manager.getActiveShip().getCapacity());</span>
+<span class="nc" id="L351">		cargoCapacityLabel.setBounds(10, 61, 124, 14);</span>
+<span class="nc" id="L352">		parentPanel.add(cargoCapacityLabel);</span>
+		
+<span class="nc" id="L354">		JLabel lblDurabilitycurrentmax = new JLabel(&quot;Durability: &quot; + (int) manager.getActiveShip().getDurability() + &quot;/&quot; + manager.getActiveShip().getMaxDurability());</span>
+<span class="nc" id="L355">		lblDurabilitycurrentmax.setBounds(10, 86, 135, 14);</span>
+<span class="nc" id="L356">		parentPanel.add(lblDurabilitycurrentmax);</span>
+		
+<span class="nc" id="L358">		JLabel shipSpeedLabel = new JLabel(&quot;Speed: &quot; + manager.getActiveShip().getSpeed());</span>
+<span class="nc" id="L359">		shipSpeedLabel.setBounds(144, 36, 105, 14);</span>
+<span class="nc" id="L360">		parentPanel.add(shipSpeedLabel);</span>
+		
+<span class="nc" id="L362">		JLabel sailingCost = new JLabel(&quot;Cost to Sail / Day: $&quot; + manager.getActiveShip().getCrewSize() * manager.getDailyPayPerHead());</span>
+<span class="nc" id="L363">		sailingCost.setBounds(144, 61, 167, 14);</span>
+<span class="nc" id="L364">		parentPanel.add(sailingCost);</span>
+		
+<span class="nc" id="L366">		JButton repairButton = new JButton(&quot;Repair&quot;);</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">		if (manager.getActiveShip().getNeedRepairs()) {</span>
+<span class="nc" id="L368">			repairButton.setEnabled(true);</span>
+<span class="nc" id="L369">		} else {</span>
+<span class="nc" id="L370">			repairButton.setEnabled(false);</span>
+		}
+<span class="nc" id="L372">		repairButton.addActionListener(new ActionListener() {</span>
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L374">				JOptionPane.showMessageDialog(window, &quot;The repairs will cost $&quot; + manager.getRepairCost());</span>
+<span class="nc bnc" id="L375" title="All 2 branches missed.">				if (manager.addMoney(-manager.getRepairCost())) {</span>
+<span class="nc" id="L376">					manager.getActiveShip().repairShip();</span>
+<span class="nc" id="L377">					updateShipStatsCard(parentPanel);</span>
+<span class="nc" id="L378">					updateGameValues();</span>
+<span class="nc" id="L379">				} else {</span>
+<span class="nc" id="L380">					JOptionPane.showMessageDialog(window, &quot;&lt;html&gt;You do not have enough money to pay for repairs!&lt;br&gt;&quot; + </span>
+							  							  &quot;Sell some cargo to be able to afford the repairs.&lt;/html&gt;&quot;);
+				}
+<span class="nc" id="L383">			}</span>
+		});
+<span class="nc" id="L385">		repairButton.setBounds(155, 82, 89, 23);</span>
+<span class="nc" id="L386">		parentPanel.add(repairButton);</span>
+<span class="nc" id="L387">	}</span>
+	
+	
+	
+	/**
+	 * Initialize the contents of the window.
+	 */
+	private void initialize() {
+<span class="nc" id="L395">		window = new JFrame();</span>
+<span class="nc" id="L396">		window.setResizable(false);</span>
+<span class="nc" id="L397">		window.setTitle(&quot;Island Trader - &quot; + manager.getPlayerName());</span>
+<span class="nc" id="L398">		window.setBounds(100, 100, 600, 470);</span>
+<span class="nc" id="L399">		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L400">		window.getContentPane().setLayout(null);</span>
+		
+		
+		
+		// Map Panel
+<span class="nc" id="L405">		JLayeredPane mapPanel = new JLayeredPane();</span>
+<span class="nc" id="L406">		mapPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));</span>
+<span class="nc" id="L407">		mapPanel.setBounds(261, 11, 313, 249);</span>
+<span class="nc" id="L408">		window.getContentPane().add(mapPanel);</span>
+<span class="nc" id="L409">		mapPanel.setLayout(null);</span>
+			
+<span class="nc" id="L411">			ArrayList&lt;JLabel&gt; islandIconList = new ArrayList&lt;JLabel&gt;();</span>
+			
+<span class="nc" id="L413">			JLabel islandMahkarnIcon = new JLabel(&quot;&quot;);</span>
+<span class="nc" id="L414">			mapPanel.setLayer(islandMahkarnIcon, 1);</span>
+<span class="nc" id="L415">			islandMahkarnIcon.setIcon(new ImageIcon(GUIMainScreen.class.getResource(&quot;/img/Island.png&quot;)));</span>
+<span class="nc" id="L416">			islandMahkarnIcon.setToolTipText(&quot;Mahkarn&quot;);</span>
+<span class="nc" id="L417">			islandMahkarnIcon.setBounds(223, 182, 50, 50);</span>
+<span class="nc" id="L418">			mapPanel.add(islandMahkarnIcon);</span>
+<span class="nc" id="L419">			islandIconList.add(islandMahkarnIcon);</span>
+			
+<span class="nc" id="L421">			JLabel islandTolsetReefIcon = new JLabel(&quot;&quot;);</span>
+<span class="nc" id="L422">			mapPanel.setLayer(islandTolsetReefIcon, 1);</span>
+<span class="nc" id="L423">			islandTolsetReefIcon.setToolTipText(&quot;&lt;html&gt;Tolset Reef&lt;br&gt;obama&lt;html&gt;&quot;);</span>
+<span class="nc" id="L424">			islandTolsetReefIcon.setIcon(new ImageIcon(GUIMainScreen.class.getResource(&quot;/img/Island.png&quot;)));</span>
+<span class="nc" id="L425">			islandTolsetReefIcon.setBounds(235, 11, 57, 50);</span>
+<span class="nc" id="L426">			mapPanel.add(islandTolsetReefIcon);</span>
+<span class="nc" id="L427">			islandIconList.add(islandTolsetReefIcon);</span>
+			
+<span class="nc" id="L429">			JLabel islandAlegateIcon = new JLabel(&quot;&quot;);</span>
+<span class="nc" id="L430">			mapPanel.setLayer(islandAlegateIcon, 1);</span>
+<span class="nc" id="L431">			islandAlegateIcon.setIcon(new ImageIcon(GUIMainScreen.class.getResource(&quot;/img/Island.png&quot;)));</span>
+<span class="nc" id="L432">			islandAlegateIcon.setToolTipText(&quot;Alegate&quot;);</span>
+<span class="nc" id="L433">			islandAlegateIcon.setBounds(22, 70, 50, 50);</span>
+<span class="nc" id="L434">			mapPanel.add(islandAlegateIcon);</span>
+<span class="nc" id="L435">			islandIconList.add(islandAlegateIcon);</span>
+			
+<span class="nc" id="L437">			JLabel islandPardeaIcon = new JLabel(&quot;&quot;);</span>
+<span class="nc" id="L438">			mapPanel.setLayer(islandPardeaIcon, 1);</span>
+<span class="nc" id="L439">			islandPardeaIcon.setIcon(new ImageIcon(GUIMainScreen.class.getResource(&quot;/img/Island.png&quot;)));</span>
+<span class="nc" id="L440">			islandPardeaIcon.setToolTipText(&quot;Pardea&quot;);</span>
+<span class="nc" id="L441">			islandPardeaIcon.setBounds(136, 89, 50, 50);</span>
+<span class="nc" id="L442">			mapPanel.add(islandPardeaIcon);</span>
+<span class="nc" id="L443">			islandIconList.add(islandPardeaIcon);</span>
+			
+<span class="nc" id="L445">			JLabel islandErbestIcon = new JLabel(&quot;&quot;);</span>
+<span class="nc" id="L446">			mapPanel.setLayer(islandErbestIcon, 1);</span>
+<span class="nc" id="L447">			islandErbestIcon.setIcon(new ImageIcon(GUIMainScreen.class.getResource(&quot;/img/Island.png&quot;)));</span>
+<span class="nc" id="L448">			islandErbestIcon.setToolTipText(&quot;Erberst&quot;);</span>
+<span class="nc" id="L449">			islandErbestIcon.setBounds(56, 189, 50, 50);</span>
+<span class="nc" id="L450">			mapPanel.add(islandErbestIcon);</span>
+<span class="nc" id="L451">			islandIconList.add(islandErbestIcon);</span>
+			
+<span class="nc" id="L453">			DecimalFormat numberFormat = new DecimalFormat(&quot;#&quot;);</span>
+<span class="nc bnc" id="L454" title="All 2 branches missed.">			for (int i = 0; i &lt; islandIconList.size(); i++) {</span>
+<span class="nc" id="L455">				Island tempIsland = manager.getIslands().get(i);</span>
+<span class="nc" id="L456">				String toolTipText = &quot;&lt;html&gt;&quot; + tempIsland.getName() + &quot;&lt;br&gt;Trades:&lt;br&gt;&quot;;</span>
+<span class="nc bnc" id="L457" title="All 2 branches missed.">				for (Item item: tempIsland.getTrades().keySet()) {</span>
+<span class="nc bnc" id="L458" title="All 2 branches missed.">					if (tempIsland.getTrades().get(item) != 0) {</span>
+<span class="nc" id="L459">						toolTipText += item.getName() + &quot;&lt;br&gt;$&quot; + (int) (item.getPrice() * tempIsland.getTrades().get(item));</span>
+<span class="nc bnc" id="L460" title="All 2 branches missed.">						if (tempIsland.getTrades().get(item) &gt; 1) {</span>
+<span class="nc" id="L461">							toolTipText += &quot; (+&quot; + numberFormat.format((tempIsland.getTrades().get(item) - 1) * 100) + &quot;%)&lt;br&gt;&quot;;</span>
+<span class="nc" id="L462">						} else {</span>
+<span class="nc" id="L463">							toolTipText += &quot; (&quot; + numberFormat.format((tempIsland.getTrades().get(item) - 1) * 100) + &quot;%)&lt;br&gt;&quot;;</span>
+						}
+					}
+				}
+<span class="nc" id="L467">				islandIconList.get(i).setToolTipText(toolTipText);</span>
+			}
+			
+<span class="nc" id="L470">			JLabel islandTolsetReefLabel = new JLabel(&quot;Tolset Reef&quot;);</span>
+<span class="nc" id="L471">			islandTolsetReefLabel.setHorizontalAlignment(SwingConstants.RIGHT);</span>
+<span class="nc" id="L472">			mapPanel.setLayer(islandTolsetReefLabel, 1);</span>
+<span class="nc" id="L473">			islandTolsetReefLabel.setBounds(136, 21, 101, 20);</span>
+<span class="nc" id="L474">			mapPanel.add(islandTolsetReefLabel);</span>
+			
+<span class="nc" id="L476">			JLabel islandAlegateLabel = new JLabel(&quot;Alegate&quot;);</span>
+<span class="nc" id="L477">			mapPanel.setLayer(islandAlegateLabel, 1);</span>
+<span class="nc" id="L478">			islandAlegateLabel.setBounds(71, 79, 73, 20);</span>
+<span class="nc" id="L479">			mapPanel.add(islandAlegateLabel);</span>
+			
+<span class="nc" id="L481">			JLabel islandPardeaLabel = new JLabel(&quot;Pardea&quot;);</span>
+<span class="nc" id="L482">			mapPanel.setLayer(islandPardeaLabel, 1);</span>
+<span class="nc" id="L483">			islandPardeaLabel.setBounds(189, 111, 73, 20);</span>
+<span class="nc" id="L484">			mapPanel.add(islandPardeaLabel);</span>
+			
+<span class="nc" id="L486">			JLabel islandErbestLabel = new JLabel(&quot;Erberst&quot;);</span>
+<span class="nc" id="L487">			islandErbestLabel.setHorizontalAlignment(SwingConstants.RIGHT);</span>
+<span class="nc" id="L488">			mapPanel.setLayer(islandErbestLabel, 1);</span>
+<span class="nc" id="L489">			islandErbestLabel.setBounds(0, 223, 60, 20);</span>
+<span class="nc" id="L490">			mapPanel.add(islandErbestLabel);</span>
+			
+<span class="nc" id="L492">			JLabel islandMahkarnLabel = new JLabel(&quot;Mahkarn&quot;);</span>
+<span class="nc" id="L493">			mapPanel.setLayer(islandMahkarnLabel, 1);</span>
+<span class="nc" id="L494">			islandMahkarnLabel.setBounds(233, 225, 80, 20);</span>
+<span class="nc" id="L495">			mapPanel.add(islandMahkarnLabel);</span>
+			
+<span class="nc" id="L497">			JLabel mapBoatIcon = new JLabel();</span>
+<span class="nc" id="L498">			mapBoatIcon.setIcon(new ImageIcon(GUIMainScreen.class.getResource(&quot;/img/ship.png&quot;)));</span>
+<span class="nc" id="L499">			mapPanel.setLayer(mapBoatIcon, 2);</span>
+<span class="nc" id="L500">			mapBoatIcon.setBounds(0, 0, 50, 50);</span>
+<span class="nc" id="L501">			mapPanel.add(mapBoatIcon);</span>
+			
+<span class="nc" id="L503">			JPanel seaColourPanel = new JPanel();</span>
+<span class="nc" id="L504">			seaColourPanel.setBorder(new LineBorder(new Color(0, 0, 0)));</span>
+<span class="nc" id="L505">			mapPanel.setLayer(seaColourPanel, -1);</span>
+<span class="nc" id="L506">			seaColourPanel.setBackground(new Color(176, 224, 230));</span>
+<span class="nc" id="L507">			seaColourPanel.setBounds(0, 0, 313, 249);</span>
+<span class="nc" id="L508">			mapPanel.add(seaColourPanel);</span>
+			
+<span class="nc" id="L510">			JLabel islandRoutesMapImg = new JLabel();</span>
+<span class="nc" id="L511">			mapPanel.setLayer(islandRoutesMapImg, 0);</span>
+<span class="nc" id="L512">			islandRoutesMapImg.setIcon(new ImageIcon(GUIMainScreen.class.getResource(&quot;/img/routeMapImg.png&quot;)));</span>
+<span class="nc" id="L513">			islandRoutesMapImg.setBounds(0, 0, 313, 249);</span>
+<span class="nc" id="L514">			mapPanel.add(islandRoutesMapImg);</span>
+			
+<span class="nc" id="L516">			updateMapBoatLocation(islandIconList, mapBoatIcon);</span>
+		
+		
+		
+		
+		// Iteraction Panel
+<span class="nc" id="L522">		JPanel interactionPanel = new JPanel();</span>
+<span class="nc" id="L523">		interactionPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));</span>
+<span class="nc" id="L524">		interactionPanel.setBounds(10, 11, 241, 409);</span>
+<span class="nc" id="L525">		window.getContentPane().add(interactionPanel);</span>
+<span class="nc" id="L526">		interactionPanel.setLayout(new CardLayout(0, 0));</span>
+		
+<span class="nc" id="L528">			JLayeredPane mainOptionsCard = new JLayeredPane();</span>
+<span class="nc" id="L529">			interactionPanel.add(mainOptionsCard, &quot;name_371154961016800&quot;);</span>
+<span class="nc" id="L530">			mainOptionsCard.setLayout(null);</span>
+			
+<span class="nc" id="L532">			activeIslandNameLabel = new JLabel(manager.getActiveIsland().getName());</span>
+<span class="nc" id="L533">			activeIslandNameLabel.setFont(new Font(&quot;Comic Sans MS&quot;, Font.BOLD, 16));</span>
+<span class="nc" id="L534">			activeIslandNameLabel.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L535">			activeIslandNameLabel.setBounds(40, 11, 159, 23);</span>
+<span class="nc" id="L536">			mainOptionsCard.add(activeIslandNameLabel);</span>
+			
+<span class="nc" id="L538">			JButton shipStatsButton = new JButton(&quot;View Ship Stats&quot;);</span>
+<span class="nc" id="L539">			shipStatsButton.setBounds(40, 66, 159, 23);</span>
+<span class="nc" id="L540">			mainOptionsCard.add(shipStatsButton);</span>
+			
+<span class="nc" id="L542">			JButton viewCargoButton = new JButton(&quot;View Cargo&quot;);</span>
+<span class="nc" id="L543">			viewCargoButton.setBounds(40, 129, 159, 23);</span>
+<span class="nc" id="L544">			mainOptionsCard.add(viewCargoButton);</span>
+			
+<span class="nc" id="L546">			JButton tradeButton = new JButton(&quot;Trade&quot;);</span>
+<span class="nc" id="L547">			tradeButton.setBounds(40, 192, 159, 23);</span>
+<span class="nc" id="L548">			mainOptionsCard.add(tradeButton);</span>
+			
+<span class="nc" id="L550">			JButton sailButton = new JButton(&quot;Sail&quot;);</span>
+<span class="nc" id="L551">			sailButton.setBounds(40, 255, 159, 23);</span>
+<span class="nc" id="L552">			mainOptionsCard.add(sailButton);</span>
+			
+<span class="nc" id="L554">			JButton quitGameButton = new JButton(&quot;Quit Game&quot;);</span>
+<span class="nc" id="L555">			quitGameButton.setBounds(40, 373, 159, 23);</span>
+<span class="nc" id="L556">			mainOptionsCard.add(quitGameButton);</span>
+		
+			
+			
+		// Buy Sell Choice Card
+<span class="nc" id="L561">		JLayeredPane buySellCard = new JLayeredPane();</span>
+<span class="nc" id="L562">		interactionPanel.add(buySellCard, &quot;name_476595512279500&quot;);</span>
+		
+<span class="nc" id="L564">			JButton buyButton = new JButton(&quot;Buy&quot;);</span>
+<span class="nc" id="L565">			buyButton.setBounds(40, 125, 159, 23);</span>
+<span class="nc" id="L566">			buySellCard.add(buyButton);</span>
+			
+<span class="nc" id="L568">			JButton sellButton = new JButton(&quot;Sell&quot;);</span>
+<span class="nc" id="L569">			sellButton.setBounds(40, 226, 159, 23);</span>
+<span class="nc" id="L570">			buySellCard.add(sellButton);</span>
+		
+		// Trading Card
+<span class="nc" id="L573">		JLayeredPane tradingCard = new JLayeredPane();</span>
+<span class="nc" id="L574">		interactionPanel.add(tradingCard, &quot;name_285505433482700&quot;);</span>
+<span class="nc" id="L575">		tradingCard.setLayout(null);</span>
+		
+		
+		
+		// Sailing Interaction Card
+<span class="nc" id="L580">		JLayeredPane sailingCard = new JLayeredPane();</span>
+<span class="nc" id="L581">		interactionPanel.add(sailingCard, &quot;name_454086212272400&quot;);</span>
+		
+<span class="nc" id="L583">			JScrollPane routeScrollPane = new JScrollPane();</span>
+<span class="nc" id="L584">			routeScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);</span>
+<span class="nc" id="L585">			routeScrollPane.setViewportBorder(null);</span>
+<span class="nc" id="L586">			routeScrollPane.setBounds(10, 11, 219, 324);</span>
+<span class="nc" id="L587">			sailingCard.add(routeScrollPane);</span>
+			
+<span class="nc" id="L589">				JPanel routeScrollPaneViewport = new JPanel();</span>
+<span class="nc" id="L590">				routeScrollPane.setViewportView(routeScrollPaneViewport);</span>
+<span class="nc" id="L591">				routeScrollPaneViewport.setLayout(new GridLayout(0, 1, 0, 0));</span>
+			
+<span class="nc" id="L593">			JButton sailCardSailButton = new JButton(&quot;Sail&quot;);</span>
+<span class="nc" id="L594">			sailCardSailButton.setBounds(10, 373, 89, 23);</span>
+<span class="nc" id="L595">			sailingCard.add(sailCardSailButton);</span>
+			
+<span class="nc" id="L597">			JButton sailCardCancelButton = new JButton(&quot;Cancel&quot;);</span>
+<span class="nc" id="L598">			sailCardCancelButton.setBounds(140, 373, 89, 23);</span>
+<span class="nc" id="L599">			sailingCard.add(sailCardCancelButton);</span>
+		
+		
+		// Stats Panel
+		
+<span class="nc" id="L604">		JPanel statsPanel = new JPanel();</span>
+<span class="nc" id="L605">		statsPanel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));</span>
+<span class="nc" id="L606">		statsPanel.setBounds(261, 271, 313, 149);</span>
+<span class="nc" id="L607">		window.getContentPane().add(statsPanel);</span>
+<span class="nc" id="L608">		statsPanel.setLayout(null);</span>
+		
+<span class="nc" id="L610">			playerMoneyLabel = new JLabel(&quot;Money: $&quot; + manager.getStartingmoney());</span>
+<span class="nc" id="L611">			playerMoneyLabel.setBounds(10, 6, 135, 14);</span>
+<span class="nc" id="L612">			statsPanel.add(playerMoneyLabel);</span>
+			
+<span class="nc" id="L614">			daysRemainingLabel = new JLabel(&quot;Days Remaining: &quot; + manager.getGameDays());</span>
+<span class="nc" id="L615">			daysRemainingLabel.setHorizontalAlignment(SwingConstants.RIGHT);</span>
+<span class="nc" id="L616">			daysRemainingLabel.setBounds(155, 6, 148, 14);</span>
+<span class="nc" id="L617">			statsPanel.add(daysRemainingLabel);</span>
+		
+		
+			// Stats Sub Panel
+<span class="nc" id="L621">			statsSubPanel = new JPanel();</span>
+<span class="nc" id="L622">			statsSubPanel.setBounds(1, 23, 311, 125);</span>
+<span class="nc" id="L623">			statsPanel.add(statsSubPanel);</span>
+<span class="nc" id="L624">			statsSubPanel.setLayout(new CardLayout(0, 0));</span>
+			
+			
+				// Ship Stats Card
+<span class="nc" id="L628">				JLayeredPane shipStatsCard = new JLayeredPane();</span>
+<span class="nc" id="L629">				statsSubPanel.add(shipStatsCard, &quot;name_476153800316500&quot;);</span>
+<span class="nc" id="L630">				shipStatsCard.setLayout(null);</span>
+				
+<span class="nc" id="L632">					updateShipStatsCard(shipStatsCard);</span>
+				
+	
+				// Ship Cargo Card
+<span class="nc" id="L636">				JLayeredPane shipCargoCard = new JLayeredPane();</span>
+<span class="nc" id="L637">				statsSubPanel.add(shipCargoCard, &quot;name_541647390610900&quot;);</span>
+					
+<span class="nc" id="L639">					JLabel cargoTitleLabel = new JLabel(&quot;Cargo&quot;);</span>
+<span class="nc" id="L640">					cargoTitleLabel.setFont(new Font(&quot;Tahoma&quot;, Font.BOLD, 11));</span>
+<span class="nc" id="L641">					cargoTitleLabel.setBounds(10, 0, 46, 14);</span>
+<span class="nc" id="L642">					shipCargoCard.add(cargoTitleLabel);</span>
+					
+<span class="nc" id="L644">					JScrollPane scrollPane = new JScrollPane();</span>
+<span class="nc" id="L645">					scrollPane.setViewportBorder(null);</span>
+<span class="nc" id="L646">					scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);</span>
+<span class="nc" id="L647">					scrollPane.setBounds(10, 15, 291, 99);</span>
+<span class="nc" id="L648">					shipCargoCard.add(scrollPane);</span>
+					
+<span class="nc" id="L650">						JPanel cargoItemsViewportPanel = new JPanel();</span>
+<span class="nc" id="L651">						scrollPane.setViewportView(cargoItemsViewportPanel);</span>
+<span class="nc" id="L652">						cargoItemsViewportPanel.setLayout(new GridLayout(1, 0, 0, 0));</span>
+						
+<span class="nc" id="L654">							updateCargoCard(cargoItemsViewportPanel);</span>
+							
+<span class="nc" id="L656">							JPanel labelPanel = new JPanel();</span>
+<span class="nc" id="L657">							scrollPane.setRowHeaderView(labelPanel);</span>
+<span class="nc" id="L658">							labelPanel.setLayout(new GridLayout(0, 1, 0, 0));</span>
+							
+<span class="nc" id="L660">							JLabel itemNameLabel = new JLabel(&quot;Item:&quot;);</span>
+<span class="nc" id="L661">							labelPanel.add(itemNameLabel);</span>
+							
+<span class="nc" id="L663">							JLabel totalWeightLabel = new JLabel(&quot;Total Weight:&quot;);</span>
+<span class="nc" id="L664">							labelPanel.add(totalWeightLabel);</span>
+							
+<span class="nc" id="L666">							JLabel quantityLabel = new JLabel(&quot;Quantity:&quot;);</span>
+<span class="nc" id="L667">							labelPanel.add(quantityLabel);</span>
+							
+<span class="nc" id="L669">							JLabel baseValueLabel = new JLabel(&quot;Base Value:&quot;);</span>
+<span class="nc" id="L670">							labelPanel.add(baseValueLabel);</span>
+		
+		
+		
+		// Switch Card Button Actions
+		
+			// Main Options Card Buttons
+			
+			// Shows ship statistics
+<span class="nc" id="L679">			shipStatsButton.addActionListener(new ActionListener() {</span>
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L681">					updateShipStatsCard(shipStatsCard);</span>
+<span class="nc" id="L682">					switchCard(statsSubPanel, shipStatsCard);</span>
+<span class="nc" id="L683">				}</span>
+			});
+			
+			// Trade Option Button
+<span class="nc" id="L687">			tradeButton.addActionListener(new ActionListener() {</span>
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L689">					updateCargoCard(cargoItemsViewportPanel);</span>
+<span class="nc" id="L690">					switchCard(statsSubPanel, shipCargoCard);</span>
+<span class="nc" id="L691">					switchCard(interactionPanel, buySellCard);</span>
+<span class="nc" id="L692">				}</span>
+			});
+				
+				// Buy Sell Card Buttons in Trading Card
+<span class="nc" id="L696">				buyButton.addActionListener(new ActionListener() {</span>
+					public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L698">						tradingCardBuyOrSell(0, interactionPanel, tradingCard, mainOptionsCard);</span>
+<span class="nc" id="L699">					}</span>
+				});
+				
+<span class="nc" id="L702">				sellButton.addActionListener(new ActionListener() {</span>
+					public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L704">						tradingCardBuyOrSell(1, interactionPanel, tradingCard, mainOptionsCard);</span>
+<span class="nc" id="L705">					}</span>
+				});
+			
+			// View Cargo Option button
+<span class="nc" id="L709">			viewCargoButton.addActionListener(new ActionListener() {</span>
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L711">					updateCargoCard(cargoItemsViewportPanel);</span>
+<span class="nc" id="L712">					switchCard(statsSubPanel, shipCargoCard);</span>
+<span class="nc" id="L713">				}</span>
+			});
+			
+		// Sail Button on Main Options Card takes player to sailing card
+<span class="nc" id="L717">		sailButton.addActionListener(new ActionListener() {</span>
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L719">				routeRadioButtons = updateSailRoutesCard(routeScrollPaneViewport);</span>
+<span class="nc" id="L720">				switchCard(interactionPanel, sailingCard);</span>
+<span class="nc" id="L721">			}</span>
+		});
+			
+			// Sail Card Buttons
+<span class="nc" id="L725">			sailCardSailButton.addActionListener(new ActionListener() {</span>
+				public void actionPerformed(ActionEvent e) {
+<span class="nc bnc" id="L727" title="All 2 branches missed.">					for (JRadioButton radButton: routeRadioButtons) { // finds the selected route</span>
+<span class="nc bnc" id="L728" title="All 2 branches missed.">						if (radButton.isSelected()) {</span>
+							try {
+<span class="nc" id="L730">								ArrayList&lt;String&gt; eventStrings = manager.sail(manager.getActiveIsland().getRoutes().get(routeRadioButtons.indexOf(radButton)));</span>
+<span class="nc bnc" id="L731" title="All 2 branches missed.">								for (String string: eventStrings) {</span>
+<span class="nc" id="L732">									JOptionPane.showMessageDialog(window, string); // Display given eventStrings from sail method</span>
+								}
+<span class="nc" id="L734">								updateGameValues();</span>
+<span class="nc" id="L735">								switchCard(interactionPanel, mainOptionsCard);</span>
+<span class="nc" id="L736">								updateMapBoatLocation(islandIconList, mapBoatIcon);</span>
+<span class="nc" id="L737">								switchCard(statsSubPanel, new JLayeredPane());</span>
+<span class="nc bnc" id="L738" title="All 2 branches missed.">								if (!manager.canContinueGame()) { // If the game cannot continue -&gt; finishedWindow()</span>
+<span class="nc" id="L739">									finishedWindow();</span>
+								}
+<span class="nc" id="L741">							} catch (InsufficientDaysException ex) {</span>
+<span class="nc" id="L742">								JOptionPane.showMessageDialog(window, &quot;There are not enough days remaining to take this Route!&quot;);</span>
+<span class="nc" id="L743">							} catch (InsufficientFundsException ex) {</span>
+<span class="nc" id="L744">								JOptionPane.showMessageDialog(window, &quot;&lt;html&gt;You do not have enough money to pay your crew for this Route!&lt;br&gt;&quot; + </span>
+																				  &quot;Sell some cargo to be able to afford this route, or take another.&lt;/html&gt;&quot;);
+<span class="nc" id="L746">							} catch (InsufficientRepairsException ex) {</span>
+<span class="nc" id="L747">								JOptionPane.showMessageDialog(window, &quot;Your ship needs to be repaired before sailing!&quot;);</span>
+							}
+						}
+					}
+<span class="nc" id="L751">				}</span>
+			});
+			
+<span class="nc" id="L754">			sailCardCancelButton.addActionListener(new ActionListener() {</span>
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L756">					switchCard(interactionPanel, mainOptionsCard);</span>
+<span class="nc" id="L757">				}</span>
+			});
+		
+		
+		// Quit game button takes user to game over screen
+<span class="nc" id="L762">		quitGameButton.addActionListener(new ActionListener() {</span>
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L764">				int choice = JOptionPane.showConfirmDialog(window, &quot;Are you sure you want to quit the game?&quot;, &quot;Quit Game&quot;, 0);</span>
+<span class="nc bnc" id="L765" title="All 2 branches missed.">				if (choice == 0) {</span>
+<span class="nc" id="L766">					finishedWindow();</span>
+				}
+<span class="nc" id="L768">			}</span>
+		});
+		
+<span class="nc" id="L771">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>src (27/05/2021 3:56:09 pm)</div></body></html>

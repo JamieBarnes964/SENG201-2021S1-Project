@@ -6,10 +6,13 @@ import ui.gui.GUIGameOverScreen;
 import ui.gui.GUIMainScreen;
 import ui.gui.GUISetupScreen;
 
+/**
+ * Class where the main values and functionality of the game is stored
+ */
 public class GameEnvironment {
-	public final int STARTINGMONEY = 2000;
-	public final int DAILYPAYPERHEAD = 1;
-	public final int REPAIRCOSTPERUNIT = 2;
+	private final int STARTINGMONEY = 2000;
+	private final int DAILYPAYPERHEAD = 1;
+	private final int REPAIRCOSTPERUNIT = 2;
 	
 	
 	private ArrayList<Island> islands;
@@ -30,12 +33,12 @@ public class GameEnvironment {
 	private int statSailed = 0;	// Stores the number of times the player sailed between islands
 	private int statTraded = 0;	// Stores the number of items the player traded
 	
-	
+	/**
+	 * Initialises the Game Environment
+	 */
 	public GameEnvironment() {
 		this.initialise();
 	}
-	
-	
 	
 	/**
 	 * Returns a value that is changed when the game can no longer continue
@@ -43,6 +46,14 @@ public class GameEnvironment {
 	 */
 	public boolean isGameOver() {
 		return gameOver;
+	}
+	
+	/**
+	 * Returns the cost of sailing per person per day
+	 * @return the cost of sailing per person per day
+	 */
+	public int getDailyPayPerHead() {
+		return DAILYPAYPERHEAD;
 	}
 	
 	/**
@@ -406,6 +417,7 @@ public class GameEnvironment {
 	
 	/**
 	 * Closes the main GUI interface
+	 * @param mainWindow the window that will be closed
 	 */
 	public void closeGUIMainScreen(GUIMainScreen mainWindow) {
 		mainWindow.closeWindow();
@@ -421,6 +433,7 @@ public class GameEnvironment {
 	
 	/**
 	 * Closes the setup GUI interface
+	 * @param setupWindow the window that will be closed
 	 */
 	public void closeGUISetupScreen(GUISetupScreen setupWindow) {
 		setupWindow.closeWindow();
@@ -436,6 +449,7 @@ public class GameEnvironment {
 	
 	/**
 	 * Closes the end game GUI interface
+	 * @param endGameWindow the window that will be closed
 	 */
 	public void closeGUIEndGameScreen(GUIGameOverScreen endGameWindow) {
 		endGameWindow.closeWindow();
