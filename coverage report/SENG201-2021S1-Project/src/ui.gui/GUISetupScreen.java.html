@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>GUISetupScreen.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (27/05/2021 3:56:09 pm)</a> &gt; <a href="../../index.html" class="el_group">SENG201-2021S1-Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">ui.gui</a> &gt; <span class="el_source">GUISetupScreen.java</span></div><h1>GUISetupScreen.java</h1><pre class="source lang-java linenums">package ui.gui;
+import javax.swing.JFrame;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JSlider;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import java.awt.GridLayout;
+import javax.swing.JRadioButton;
+import java.awt.Color;
+import javax.swing.SwingConstants;
+
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import javax.swing.event.ChangeListener;
+
+import main.*;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JTextPane;
+
+/**
+ * A graphical user interface for setting up initial player values for a {@link GameEnvironment}
+ */
+public class GUISetupScreen {
+
+	private JFrame window;
+	private GameEnvironment manager;
+	
+	/**
+	 * Creates and opens the Setup screen window
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
+	 */
+<span class="nc" id="L39">	public GUISetupScreen(GameEnvironment manager) {</span>
+<span class="nc" id="L40">		this.manager = manager;</span>
+<span class="nc" id="L41">		initialize();</span>
+<span class="nc" id="L42">		this.window.setVisible(true);</span>
+<span class="nc" id="L43">	}</span>
+	
+	/**
+	 * Closes the window
+	 */
+	public void closeWindow() {
+<span class="nc" id="L49">		window.dispose();</span>
+<span class="nc" id="L50">	}</span>
+	
+	/**
+	 * Calls the manager's function to close the window to return control
+	 */
+	private void finishedWindow() {
+<span class="nc" id="L56">		manager.closeGUISetupScreen(this);</span>
+<span class="nc" id="L57">	}</span>
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+<span class="nc" id="L63">		window = new JFrame();</span>
+<span class="nc" id="L64">		window.setTitle(&quot;Island Trader Setup&quot;);</span>
+<span class="nc" id="L65">		window.setResizable(false);</span>
+<span class="nc" id="L66">		window.setBounds(100, 100, 470, 360);</span>
+<span class="nc" id="L67">		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L68">		window.getContentPane().setLayout(null);</span>
+		
+<span class="nc" id="L70">		JLabel lblNewLabel = new JLabel(&quot;Island Trader&quot;);</span>
+<span class="nc" id="L71">		lblNewLabel.setFont(new Font(&quot;Comic Sans MS&quot;, Font.BOLD | Font.ITALIC, 20));</span>
+<span class="nc" id="L72">		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L73">		lblNewLabel.setBounds(10, 11, 444, 41);</span>
+<span class="nc" id="L74">		window.getContentPane().add(lblNewLabel);</span>
+		
+<span class="nc" id="L76">		JLabel playerNameLabel = new JLabel(&quot;Name:&quot;);</span>
+<span class="nc" id="L77">		playerNameLabel.setBounds(10, 44, 86, 14);</span>
+<span class="nc" id="L78">		window.getContentPane().add(playerNameLabel);</span>
+
+<span class="nc" id="L80">		JTextField nameTextField = new JTextField();</span>
+<span class="nc" id="L81">		nameTextField.setBounds(10, 58, 160, 20);</span>
+<span class="nc" id="L82">		window.getContentPane().add(nameTextField);</span>
+<span class="nc" id="L83">		nameTextField.setColumns(10);</span>
+		
+<span class="nc" id="L85">		JLabel daysLabel = new JLabel(&quot;Number of days: 0&quot;);</span>
+<span class="nc" id="L86">		daysLabel.setBounds(10, 89, 160, 14);</span>
+<span class="nc" id="L87">		window.getContentPane().add(daysLabel);</span>
+		
+<span class="nc" id="L89">		JSlider daysSlider = new JSlider();</span>
+<span class="nc" id="L90">		daysSlider.addChangeListener(new ChangeListener() {</span>
+			public void stateChanged(ChangeEvent e) {
+<span class="nc" id="L92">				daysLabel.setText(&quot;Number of days: &quot; + daysSlider.getValue());</span>
+<span class="nc" id="L93">			}</span>
+		});
+<span class="nc" id="L95">		daysSlider.setValue(20);</span>
+<span class="nc" id="L96">		daysSlider.setMajorTickSpacing(1);</span>
+<span class="nc" id="L97">		daysSlider.setMaximum(50);</span>
+<span class="nc" id="L98">		daysSlider.setMinimum(20);</span>
+<span class="nc" id="L99">		daysSlider.setBounds(10, 103, 200, 20);</span>
+<span class="nc" id="L100">		window.getContentPane().add(daysSlider);</span>
+		
+<span class="nc" id="L102">		JLabel shipLabel = new JLabel(&quot;Choose a Ship:&quot;);</span>
+<span class="nc" id="L103">		shipLabel.setBounds(10, 134, 200, 14);</span>
+<span class="nc" id="L104">		window.getContentPane().add(shipLabel);</span>
+		
+<span class="nc" id="L106">		JScrollPane scrollPane = new JScrollPane();</span>
+<span class="nc" id="L107">		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);</span>
+<span class="nc" id="L108">		scrollPane.setBounds(10, 149, 444, 145);</span>
+<span class="nc" id="L109">		window.getContentPane().add(scrollPane);</span>
+		
+		// Ship Array Panel #################################################
+		
+<span class="nc" id="L113">		JPanel shipsArrayPanel = new JPanel();</span>
+<span class="nc" id="L114">		scrollPane.setViewportView(shipsArrayPanel);</span>
+<span class="nc" id="L115">		shipsArrayPanel.setLayout(new GridLayout(1, 0, 0, 0));</span>
+		
+<span class="nc" id="L117">		ButtonGroup shipSelectionButtons = new ButtonGroup();</span>
+<span class="nc" id="L118">		ArrayList&lt;JRadioButton&gt; radioButtons = new ArrayList&lt;JRadioButton&gt;();</span>
+		
+<span class="nc bnc" id="L120" title="All 2 branches missed.">		for (Ship ship: manager.getShips()) {</span>
+<span class="nc" id="L121">			JPanel panel = new JPanel();</span>
+<span class="nc" id="L122">			shipsArrayPanel.add(panel);</span>
+<span class="nc" id="L123">			panel.setLayout(new GridLayout(0, 1, 0, 0));</span>
+			
+<span class="nc" id="L125">			JLabel shipNameLabel = new JLabel(ship.getName());</span>
+<span class="nc" id="L126">			panel.add(shipNameLabel);</span>
+<span class="nc" id="L127">			shipNameLabel.setHorizontalAlignment(SwingConstants.CENTER);</span>
+			
+<span class="nc" id="L129">			JLabel shipCargoLabel = new JLabel(&quot;&quot; + ship.getCapacity());</span>
+<span class="nc" id="L130">			shipCargoLabel.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L131">			panel.add(shipCargoLabel);</span>
+			
+<span class="nc" id="L133">			JLabel shipCrewLabel = new JLabel(&quot;&quot; + ship.getCrewSize());</span>
+<span class="nc" id="L134">			shipCrewLabel.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L135">			panel.add(shipCrewLabel);</span>
+			
+<span class="nc" id="L137">			JLabel shipDurabilityLabel = new JLabel(&quot;&quot; + ship.getDurability());</span>
+<span class="nc" id="L138">			shipDurabilityLabel.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L139">			panel.add(shipDurabilityLabel);</span>
+			
+<span class="nc" id="L141">			JLabel shipSpeedLabel = new JLabel(&quot;&quot; + ship.getSpeed());</span>
+<span class="nc" id="L142">			shipSpeedLabel.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L143">			panel.add(shipSpeedLabel);</span>
+			
+<span class="nc" id="L145">			JRadioButton rdbtnNewRadioButton = new JRadioButton(&quot;&quot;);</span>
+<span class="nc" id="L146">			rdbtnNewRadioButton.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L147">			panel.add(rdbtnNewRadioButton);</span>
+			
+<span class="nc" id="L149">			radioButtons.add(rdbtnNewRadioButton);</span>
+<span class="nc" id="L150">			shipSelectionButtons.add(rdbtnNewRadioButton);</span>
+		}
+		
+		
+
+<span class="nc" id="L155">		JTextPane errorDisplayPane = new JTextPane();</span>
+<span class="nc" id="L156">		errorDisplayPane.setForeground(Color.RED);</span>
+<span class="nc" id="L157">		errorDisplayPane.setEditable(false);</span>
+<span class="nc" id="L158">		errorDisplayPane.setBounds(220, 58, 234, 80);</span>
+<span class="nc" id="L159">		window.getContentPane().add(errorDisplayPane);</span>
+		
+		
+<span class="nc" id="L162">		JButton startGameButton = new JButton(&quot;Start New Game&quot;);</span>
+<span class="nc" id="L163">		startGameButton.addActionListener(new ActionListener() {</span>
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+<span class="nc" id="L167">					int chosenShipIndex = -1;</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">					for (int i = 0; i &lt; radioButtons.size(); i++) {</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">						if (radioButtons.get(i).isSelected()) {</span>
+<span class="nc" id="L170">							chosenShipIndex = i;</span>
+						}
+					}
+<span class="nc bnc" id="L173" title="All 2 branches missed.">					if (chosenShipIndex == -1) {</span>
+<span class="nc" id="L174">						throw new IllegalArgumentException(&quot;Please choose a ship using the radio buttons!&quot;);</span>
+					}
+					
+<span class="nc bnc" id="L177" title="All 2 branches missed.">					if (!nameTextField.getText().matches(&quot;^([a-zA-Z]| )*$&quot;)) {</span>
+<span class="nc" id="L178">						throw new IllegalArgumentException(&quot;Please refrain from using numbers or special characters in your name.&quot;);</span>
+<span class="nc bnc" id="L179" title="All 4 branches missed.">					} else if (nameTextField.getText().length() &gt; 15 || nameTextField.getText().length() &lt; 3) {</span>
+<span class="nc" id="L180">						throw new IllegalArgumentException(&quot;Please enter a name between 3 and 15 characters&quot;);</span>
+					}
+<span class="nc" id="L182">					errorDisplayPane.setText(&quot;&quot;);</span>
+					
+<span class="nc" id="L184">					manager.setPlayerName(nameTextField.getText());</span>
+<span class="nc" id="L185">					manager.setStartGameDays(daysSlider.getValue());</span>
+<span class="nc" id="L186">					manager.setActiveShip(manager.getShips().get(chosenShipIndex));</span>
+					
+					// Initialises the chosen ship's cargo
+<span class="nc bnc" id="L189" title="All 2 branches missed.">					for (Item item: manager.getItems()) {</span>
+<span class="nc" id="L190">						manager.getActiveShip().initialiseCargo(item);</span>
+					}
+					
+<span class="nc" id="L193">					finishedWindow();</span>
+					
+<span class="nc" id="L195">				} catch (Exception excptn) {</span>
+<span class="nc" id="L196">					errorDisplayPane.setText(excptn.getMessage());</span>
+				}
+				
+				
+<span class="nc" id="L200">			}</span>
+		});
+<span class="nc" id="L202">		startGameButton.setBounds(266, 297, 188, 23);</span>
+<span class="nc" id="L203">		window.getContentPane().add(startGameButton);</span>
+		
+		// Ship Label Panel #################################################
+<span class="nc" id="L206">		JPanel shipLabelPanel = new JPanel();</span>
+<span class="nc" id="L207">		scrollPane.setRowHeaderView(shipLabelPanel);</span>
+<span class="nc" id="L208">		shipLabelPanel.setLayout(new GridLayout(0, 1, 0, 0));</span>
+		
+<span class="nc" id="L210">		JLabel nameLabel = new JLabel(&quot;Name:&quot;);</span>
+<span class="nc" id="L211">		nameLabel.setFont(new Font(&quot;Tahoma&quot;, Font.BOLD, 11));</span>
+<span class="nc" id="L212">		shipLabelPanel.add(nameLabel);</span>
+		
+<span class="nc" id="L214">		JLabel cargoLabel = new JLabel(&quot;Cargo Size:&quot;);</span>
+<span class="nc" id="L215">		cargoLabel.setFont(new Font(&quot;Tahoma&quot;, Font.BOLD, 11));</span>
+<span class="nc" id="L216">		shipLabelPanel.add(cargoLabel);</span>
+		
+<span class="nc" id="L218">		JLabel crewLabel = new JLabel(&quot;Crew Size:&quot;);</span>
+<span class="nc" id="L219">		crewLabel.setFont(new Font(&quot;Tahoma&quot;, Font.BOLD, 11));</span>
+<span class="nc" id="L220">		shipLabelPanel.add(crewLabel);</span>
+		
+<span class="nc" id="L222">		JLabel durabilityLabel = new JLabel(&quot;Durability&quot;);</span>
+<span class="nc" id="L223">		durabilityLabel.setFont(new Font(&quot;Tahoma&quot;, Font.BOLD, 11));</span>
+<span class="nc" id="L224">		shipLabelPanel.add(durabilityLabel);</span>
+		
+<span class="nc" id="L226">		JLabel speedLabel = new JLabel(&quot;Speed:&quot;);</span>
+<span class="nc" id="L227">		speedLabel.setFont(new Font(&quot;Tahoma&quot;, Font.BOLD, 11));</span>
+<span class="nc" id="L228">		shipLabelPanel.add(speedLabel);</span>
+		
+		
+		
+		
+		
+		
+<span class="nc" id="L235">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>src (27/05/2021 3:56:09 pm)</div></body></html>

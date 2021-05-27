@@ -2,6 +2,9 @@ package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Class that models an Island.
+ */
 public class Island {
 	private String name;
 	private HashMap<Item, Double> trades;

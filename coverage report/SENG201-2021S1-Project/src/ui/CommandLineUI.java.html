@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>CommandLineUI.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (27/05/2021 3:56:09 pm)</a> &gt; <a href="../../index.html" class="el_group">SENG201-2021S1-Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">ui</a> &gt; <span class="el_source">CommandLineUI.java</span></div><h1>CommandLineUI.java</h1><pre class="source lang-java linenums">package ui;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import main.GameEnvironment;
+import main.InsufficientDaysException;
+import main.InsufficientFundsException;
+import main.Item;
+import main.Route;
+import main.Ship;
+
+/**
+ * A command line user interface for a {@link GameEnvironment}
+ */
+public class CommandLineUI {
+
+<span class="nc" id="L17">	private Scanner consoleInput = new Scanner(System.in);</span>
+	private GameEnvironment manager;
+	
+	/**
+	 * Creates and runs the command line user interface app
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
+	 */
+<span class="nc" id="L24">	public CommandLineUI(GameEnvironment manager) {</span>
+<span class="nc" id="L25">		this.manager = manager;</span>
+<span class="nc" id="L26">		initialisePlayerValues();</span>
+<span class="nc" id="L27">		mainGameplayLoop();</span>
+<span class="nc" id="L28">	}</span>
+	
+	/**
+	 * A console based user number input system.
+	 * Displays the given query and valid range that the user can input.
+	 * Returns the user's input as an integer.
+	 * @param prompt	the string query that will be displayed to the user
+	 * @param min		the minimum number that the user can input (inclusive)
+	 * @param max		the maximum number that the user can input (inclusive)
+	 * @return the user's input as an integer.
+	 */
+	private int getUserIntInRange(String prompt, int min, int max) {
+<span class="nc" id="L40">		boolean acceptedInput = false;</span>
+<span class="nc" id="L41">		int userInput = 0;</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		while (!acceptedInput) {</span>
+<span class="nc" id="L43">			System.out.println(prompt); // Prints prompt to console</span>
+<span class="nc" id="L44">			System.out.println(&quot;Please enter a number between &quot; + min + &quot; and &quot; + max); </span>
+			try {
+<span class="nc" id="L46">				userInput = Integer.parseInt(consoleInput.nextLine()); // Gets the user's input and attempts to convert it to an Integer</span>
+				// Checks if the input number is within the range
+<span class="nc bnc" id="L48" title="All 4 branches missed.">				if (userInput &lt; min || userInput &gt; max) {</span>
+<span class="nc" id="L49">					System.out.println(&quot;That is not a number between &quot; + min + &quot; and &quot; + max); // Informs the user that the input is outside the range</span>
+<span class="nc" id="L50">				} else {</span>
+<span class="nc" id="L51">					acceptedInput = true; // Breaks the loop</span>
+				}
+<span class="nc" id="L53">			} catch (IllegalArgumentException e) { // Catches an error thrown from converting the input to an integer</span>
+<span class="nc" id="L54">				System.out.println(&quot;That is not a number. Please enter a NUMBER between &quot; + min + &quot; and &quot; + max);</span>
+			}
+		}
+<span class="nc" id="L57">		return userInput;</span>
+	}
+	
+	
+	
+	/**
+	 * A console based user decision making system.
+	 * Displays the given query and choices that the user can make.
+	 * Returns the index of the user's choice in the choices array.
+	 * @param prompt		the string query that will be displayed to the user
+	 * @param choices		the string choices that the user can choose
+	 * @return the index of the user's choice in the choices array.
+	 */
+	private int getPlayerDecision(String prompt, ArrayList&lt;String&gt; choices) {
+<span class="nc" id="L71">		int userChoice = 0;</span>
+		// repeat until a recognised choice is made
+<span class="nc bnc" id="L73" title="All 4 branches missed.">		while (userChoice &lt; 1 || userChoice &gt; choices.size()) {</span>
+			try {
+				
+				// prints the query and possible choices to the console
+<span class="nc" id="L77">				System.out.println(&quot;\n######################################&quot;);</span>
+<span class="nc" id="L78">				System.out.println(prompt);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">				for (int i = 0; i &lt; choices.size(); i++) {</span>
+<span class="nc" id="L80">					System.out.println(Integer.toString(i + 1) + &quot;. &quot; + choices.get(i));</span>
+				}
+<span class="nc" id="L82">				System.out.println(&quot;\nEnter a number from the range 1-&quot; + Integer.toString(choices.size()) + &quot; to select the corresponding option: &quot;);</span>
+				
+				// gets the user's input
+<span class="nc" id="L85">				userChoice = Integer.parseInt(consoleInput.nextLine());</span>
+				
+				// checks if the input number is in the range of choices
+<span class="nc bnc" id="L88" title="All 4 branches missed.">				if (userChoice &lt; 1 || userChoice &gt; choices.size()) {</span>
+<span class="nc" id="L89">					throw new Exception(&quot;Please enter a number between 1 and &quot; + Integer.toString(choices.size()));</span>
+				}
+<span class="nc" id="L91">			} catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L92">				System.out.println(&quot;Please enter a NUMBER between 1 and &quot; + Integer.toString(choices.size()));</span>
+<span class="nc" id="L93">			} catch (Exception e) {</span>
+<span class="nc" id="L94">				System.out.println(e.getMessage());</span>
+			}
+		}
+<span class="nc" id="L97">		return userChoice - 1;</span>
+	}
+	
+	
+	
+	/**
+	 * Console environment representation of the Sailing Menu
+	 */
+	private void consoleSail() {
+		// Establish the route choices the player can make
+<span class="nc" id="L107">		ArrayList&lt;String&gt; routeChoices = new ArrayList&lt;String&gt;();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">		for (Route route: manager.getActiveIsland().getRoutes()) {</span>
+<span class="nc" id="L109">			routeChoices.add(route.getDestinationIsland().getName() + &quot; in &quot; + route.getDays() + &quot; days (&quot; + route.getEventChance() + &quot; Risk)&quot;);</span>
+		}
+<span class="nc" id="L111">		routeChoices.add(&quot;Cancel&quot;);</span>
+		
+<span class="nc" id="L113">		int chosenRouteIndex = getPlayerDecision(&quot;Select the route you would like to take:&quot;, routeChoices); // Get the user to choose the route index</span>
+		
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		if (chosenRouteIndex != manager.getActiveIsland().getRoutes().size()) { // if not cancelled</span>
+<span class="nc" id="L116">			Route chosenRoute = manager.getActiveIsland().getRoutes().get(chosenRouteIndex); // Get the chosen route as a Route</span>
+			
+<span class="nc" id="L118">			System.out.println(&quot;You have selected the route to &quot; + chosenRoute.getDestinationIsland().getName() + &quot;!&quot;);</span>
+			
+			try {
+<span class="nc" id="L121">				ArrayList&lt;String&gt; notifyEventStrings = manager.sail(chosenRoute); // Sail using the chosen route and receive the Random Event strings</span>
+<span class="nc" id="L122">				System.out.println(&quot;\n######################################\n&quot;);</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">				for (String notification: notifyEventStrings) { // Print the returned random event strings</span>
+<span class="nc" id="L124">					System.out.println(notification);</span>
+				}
+<span class="nc bnc" id="L126" title="All 2 branches missed.">				if (!manager.isGameOver()) { // If the player has not died while sailing, prints out the items that the Island sells</span>
+<span class="nc" id="L127">					System.out.println(&quot;\n######################################\nYou have made it to &quot; + manager.getActiveIsland().getName() + &quot;!\n&quot;);</span>
+<span class="nc" id="L128">					System.out.println(manager.getActiveIsland().getName() + &quot; buys and sells: &quot;);</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">					for (Item item: manager.getItems()) {</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">						if (manager.getActiveIsland().getTrades().get(item) != 0) {</span>
+<span class="nc" id="L131">							System.out.println(&quot;- &quot; + item.getName() + &quot; for &quot; + item.getPrice() * manager.getActiveIsland().getTrades().get(item) + &quot; gold.&quot;);</span>
+						}
+					}
+				}
+<span class="nc" id="L135">			} catch (InsufficientFundsException e) {</span>
+<span class="nc" id="L136">				System.out.println(&quot;You cannot pay your crew for the journey. Choose another route, or sell some cargo to afford the journey.&quot;);</span>
+<span class="nc" id="L137">			} catch (InsufficientDaysException e) {</span>
+<span class="nc" id="L138">				System.out.println(&quot;You do not have enough days left to make that journey.&quot;);</span>
+			}
+		}
+<span class="nc" id="L141">	}</span>
+	
+	
+	
+	/**
+	 * Console environment representation of the Trading Menu
+	 */
+	private void consoleTrade() {
+		
+		// Determine whether to Buy or Sell
+<span class="nc" id="L151">		ArrayList&lt;String&gt; bsOptions = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L152">		bsOptions.add(&quot;Buy&quot;);</span>
+<span class="nc" id="L153">		bsOptions.add(&quot;Sell&quot;);</span>
+<span class="nc" id="L154">		int bsDecision = getPlayerDecision(&quot;Select an option:&quot;, bsOptions);</span>
+		
+		// Determine which item to trade, or cancel the 
+<span class="nc" id="L157">		ArrayList&lt;String&gt; itemOptions = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L158">		ArrayList&lt;Item&gt; tradableItems = new ArrayList&lt;Item&gt;();</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">		for (Item item: manager.getItems()) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">			if (manager.getActiveIsland().getTrades().get(item) != 0) {</span>
+<span class="nc" id="L161">				tradableItems.add(item);</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">				if (bsDecision == 0) {</span>
+<span class="nc" id="L163">					itemOptions.add(item.getName() + </span>
+<span class="nc" id="L164">							&quot;\n   Value:  &quot; + (item.getPrice() * manager.getActiveIsland().getTrades().get(item)) +</span>
+<span class="nc" id="L165">							&quot;\n   Weight: &quot; + item.getWeight() + &quot;\n&quot;);</span>
+<span class="nc" id="L166">				} else {</span>
+<span class="nc" id="L167">					itemOptions.add(item.getName() + </span>
+<span class="nc" id="L168">							&quot;\n   Value:    &quot; + (item.getPrice() * manager.getActiveIsland().getTrades().get(item)) +</span>
+<span class="nc" id="L169">							&quot;\n   Quantity: &quot; + manager.getActiveShip().getCargo().get(item) + &quot;\n&quot;);</span>
+				}
+			}
+		}
+<span class="nc" id="L173">		itemOptions.add(&quot;Cancel&quot;);</span>
+<span class="nc" id="L174">		int chosenItemIndex = getPlayerDecision(&quot;Select an item to &quot; + bsOptions.get(bsDecision) + &quot;: &quot;, itemOptions);</span>
+		
+		
+<span class="nc bnc" id="L177" title="All 2 branches missed.">		if (chosenItemIndex != tradableItems.size()) { // If not cancel ask for a quantity to buy/sell</span>
+<span class="nc" id="L178">			Item chosenItem = tradableItems.get(chosenItemIndex);</span>
+			// Determine the maximum amount to buy or sell
+<span class="nc" id="L180">			int maxBuySell = 0;</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">			if (bsDecision == 0) {</span>
+				// Get the minimum between:	the max number of the chosen item that can fit in the remaining space
+				//							the max number of the chosen item that the player can afford
+<span class="nc" id="L184">				maxBuySell = Math.min(Math.floorDiv(manager.getActiveShip().getAvailableCargoSpace(), chosenItem.getWeight()),</span>
+<span class="nc" id="L185">									  Math.floorDiv(manager.getPlayerMoney(), (int) (chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem))));</span>
+<span class="nc" id="L186">			} else {</span>
+				// Get the 
+<span class="nc" id="L188">				maxBuySell = manager.getActiveShip().getCargo().get(chosenItem);</span>
+			}
+			
+			// Get the quantity to buy/sell
+<span class="nc" id="L192">			int quantity = getUserIntInRange(&quot;Please enter the quantity you would like to &quot; + bsOptions.get(bsDecision) + &quot; (0 to cancel): &quot;, 0, maxBuySell);</span>
+			
+<span class="nc bnc" id="L194" title="All 2 branches missed.">			if (quantity != 0) { // If not 0 (to cancel)</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">				if (bsDecision == 0) { // If Buying</span>
+<span class="nc" id="L196">					manager.addStatTraded(quantity);</span>
+<span class="nc" id="L197">					manager.addMoney((int) -(quantity * chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem))); 				// Remove Money</span>
+<span class="nc" id="L198">					manager.getActiveShip().addItemCargo(chosenItem, quantity);																	// Add Item * Quantity to Cargo</span>
+<span class="nc" id="L199">					System.out.println(&quot;You have bought &quot; + quantity + &quot; &quot; + chosenItem.getName() + &quot; for &quot; </span>
+<span class="nc" id="L200">										+ (int) (quantity * chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem)) </span>
+<span class="nc" id="L201">										+ &quot; gold.\nYou now have &quot; + manager.getPlayerMoney() + &quot; gold.&quot;);</span>
+<span class="nc" id="L202">				} else { // If Selling</span>
+<span class="nc" id="L203">					manager.addStatTraded(quantity);</span>
+<span class="nc" id="L204">					manager.addMoney((int) (quantity * chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem)));					// Add Money</span>
+<span class="nc" id="L205">					manager.getActiveShip().addItemCargo(chosenItem, -quantity);																	// Remove Item * Quantity from Cargo</span>
+<span class="nc" id="L206">					System.out.println(&quot;You have sold &quot; + quantity + &quot; &quot; + chosenItem.getName() + &quot; for &quot; </span>
+<span class="nc" id="L207">							+ (int) (quantity * chosenItem.getPrice() * manager.getActiveIsland().getTrades().get(chosenItem)) </span>
+<span class="nc" id="L208">							+ &quot; gold.\nYou now have &quot; + manager.getPlayerMoney() + &quot; gold.&quot;);</span>
+				}
+			}
+		}
+<span class="nc" id="L212">	}</span>
+	
+	
+	
+	/**
+	 * Initialises the player name, the game days they wish to play for and which ship they would like to use
+	 */
+	private void initialisePlayerValues() {
+		
+<span class="nc" id="L221">		boolean nameDecided = false;</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">		while (nameDecided == false) {</span>
+			try {
+<span class="nc" id="L224">				System.out.println(&quot;######################################&quot;);</span>
+<span class="nc" id="L225">				System.out.println(&quot;Please enter your name: &quot;);</span>
+				// gets the user's input
+<span class="nc" id="L227">				manager.setPlayerName((consoleInput.nextLine()));</span>
+				
+<span class="nc" id="L229">				boolean isAlphaNumeric = manager.getPlayerName().matches(&quot;^([a-zA-Z]| )*$&quot;);</span>
+<span class="nc" id="L230">				nameDecided = true;</span>
+				// checks if the input string is in the range of choices
+<span class="nc bnc" id="L232" title="All 4 branches missed.">				if (manager.getPlayerName().length() &lt; 3|| manager.getPlayerName().length() &gt; 15) {</span>
+<span class="nc" id="L233">					nameDecided = false;</span>
+<span class="nc" id="L234">					throw new Exception(&quot;Please enter a name that is between 3 and 15 characters.&quot;);</span>
+				}
+<span class="nc bnc" id="L236" title="All 2 branches missed.">				if (isAlphaNumeric == false) {</span>
+<span class="nc" id="L237">					nameDecided = false;</span>
+<span class="nc" id="L238">					throw new Exception(&quot;please enter a name that does not contain non alphanumeric characters.&quot;);</span>
+				}
+<span class="nc" id="L240">			}  catch (Exception e) {</span>
+<span class="nc" id="L241">				nameDecided = false;</span>
+<span class="nc" id="L242">				System.out.println(e.getMessage());</span>
+			}
+		}
+		
+		// Gets the number of game days the game will take place over
+<span class="nc" id="L247">		manager.setStartGameDays(getUserIntInRange(&quot;Please choose the number of days that you wish the game to take place over: &quot;, 20, 50));</span>
+		
+		// Gets the ship that the user chooses
+<span class="nc" id="L250">		ArrayList&lt;String&gt; choices = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L251">		String query = &quot;Choose a Ship:&quot;;</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">		for (Ship ship: manager.getShips()) {</span>
+<span class="nc" id="L253">			choices.add(&quot;Ship Name: &quot; + ship.getName() + </span>
+<span class="nc" id="L254">					&quot;\n   Durability: &quot; + ship.getDurability() + </span>
+<span class="nc" id="L255">					&quot;\n   Cargo Capacity: &quot; + ship.getCapacity() + </span>
+<span class="nc" id="L256">					&quot;\n   Crew Size: &quot; + ship.getCrewSize() + </span>
+<span class="nc" id="L257">					&quot;\n   Speed: &quot; + ship.getSpeed() + &quot;\n&quot;);</span>
+		}
+<span class="nc" id="L259">		manager.setActiveShip(manager.getShips().get(getPlayerDecision(query, choices)));</span>
+<span class="nc" id="L260">		System.out.println(&quot;You have selected &quot; + manager.getActiveShip().getName() + &quot;!&quot;);</span>
+		
+		// Initialises the chosen ship's cargo
+<span class="nc bnc" id="L263" title="All 2 branches missed.">		for (Item item: manager.getItems()) {</span>
+<span class="nc" id="L264">			manager.getActiveShip().initialiseCargo(item);</span>
+		}
+<span class="nc" id="L266">	}</span>
+	
+	
+	/**
+	 * Runs the main gameplay loop
+	 */
+	private void mainGameplayLoop() {
+		// Define the main options
+<span class="nc" id="L274">		ArrayList&lt;String&gt; mainGameOptionsStrings = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L275">		mainGameOptionsStrings.add(&quot;Trade&quot;);</span>
+<span class="nc" id="L276">		mainGameOptionsStrings.add(&quot;Sail&quot;);</span>
+<span class="nc" id="L277">		mainGameOptionsStrings.add(&quot;View Ship Stats&quot;);</span>
+<span class="nc" id="L278">		mainGameOptionsStrings.add(&quot;View Cargo&quot;);</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">		if (manager.getActiveShip().getNeedRepairs()) {</span>
+<span class="nc" id="L280">			mainGameOptionsStrings.add(&quot;Repair Ship&quot;);</span>
+		}
+<span class="nc" id="L282">		mainGameOptionsStrings.add(&quot;Exit&quot;);</span>
+		
+		// While the game can continue, run the main gameplay loop
+<span class="nc bnc" id="L285" title="All 2 branches missed.">		while (manager.canContinueGame()) {</span>
+<span class="nc" id="L286">			int selectedGameOption = getPlayerDecision(&quot;Select an option: &quot;, mainGameOptionsStrings);</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">			if (selectedGameOption == 0) {</span>
+<span class="nc" id="L288">				consoleTrade();</span>
+<span class="nc" id="L289">			}</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">			else if (selectedGameOption == 1) {</span>
+<span class="nc" id="L291">				consoleSail();</span>
+<span class="nc" id="L292">			}</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">			else if (selectedGameOption == 2) {</span>
+<span class="nc" id="L294">				System.out.println(&quot;Ship Name: &quot; + manager.getActiveShip().getName() + </span>
+<span class="nc" id="L295">						&quot;\n   Durability: &quot; + manager.getActiveShip().getDurability() + </span>
+<span class="nc" id="L296">						&quot;\n   Cargo Capacity: &quot; + manager.getActiveShip().getCapacity() + </span>
+<span class="nc" id="L297">						&quot;\n   Crew Size: &quot; + manager.getActiveShip().getCrewSize() + </span>
+<span class="nc" id="L298">						&quot;\n   Speed: &quot; + manager.getActiveShip().getSpeed() + &quot;\n&quot;);</span>
+<span class="nc" id="L299">			}</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">			else if (selectedGameOption == 3) {</span>
+<span class="nc" id="L301">				int total = 0;</span>
+<span class="nc bnc" id="L302" title="All 2 branches missed.">				for (Item item: manager.getActiveShip().getCargo().keySet()) {</span>
+					
+<span class="nc bnc" id="L304" title="All 2 branches missed.">					if (manager.getActiveShip().getCargo().get(item) != 0) {</span>
+<span class="nc" id="L305">						System.out.println((total + 1) + &quot;. &quot; + item.getName() + &quot;: &quot; + manager.getActiveShip().getCargo().get(item));</span>
+<span class="nc" id="L306">						total += 1;</span>
+					}
+				}
+<span class="nc bnc" id="L309" title="All 2 branches missed.">				if (total == 0) {</span>
+<span class="nc" id="L310">					System.out.println(&quot;\nYou have no items in your hold!\n&quot;);</span>
+				}
+<span class="nc" id="L312">			}</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">			else if (selectedGameOption &gt;= 4) {</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">				if (mainGameOptionsStrings.size() == 6) {</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">					if (manager.getPlayerMoney() &gt;= manager.getRepairCost()) {</span>
+<span class="nc" id="L316">						System.out.println(&quot;You have repaired your ship for $&quot; + manager.getRepairCost());</span>
+<span class="nc" id="L317">					} else {</span>
+<span class="nc" id="L318">						System.out.println(&quot;You don't have enough money to pay for Repairs!&quot;);</span>
+					}
+<span class="nc" id="L320">				} else {</span>
+<span class="nc" id="L321">					manager.gameOver();</span>
+				}
+			}
+		}
+		
+<span class="nc" id="L326">		System.out.println(&quot;Game Over!&quot;);</span>
+<span class="nc" id="L327">		System.out.println(&quot;You made &quot; + (manager.getPlayerMoney() - manager.getStartingmoney()) + &quot; gold!\n&quot;</span>
+<span class="nc" id="L328">				+ &quot;You sailed &quot; + manager.getStatSailed() + &quot; times.\n&quot;</span>
+<span class="nc" id="L329">				+ &quot;You traded &quot; + manager.getStatTraded() + &quot; items.&quot;);</span>
+<span class="nc" id="L330">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>src (27/05/2021 3:56:09 pm)</div></body></html>

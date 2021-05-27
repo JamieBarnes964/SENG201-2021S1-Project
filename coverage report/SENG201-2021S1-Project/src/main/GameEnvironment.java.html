@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>GameEnvironment.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (27/05/2021 3:56:09 pm)</a> &gt; <a href="../../index.html" class="el_group">SENG201-2021S1-Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">main</a> &gt; <span class="el_source">GameEnvironment.java</span></div><h1>GameEnvironment.java</h1><pre class="source lang-java linenums">package main;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import ui.gui.GUIGameOverScreen;
+import ui.gui.GUIMainScreen;
+import ui.gui.GUISetupScreen;
+
+/**
+ * Class where the main values and functionality of the game is stored
+ */
+public class GameEnvironment {
+<span class="fc" id="L13">	private final int STARTINGMONEY = 2000;</span>
+<span class="fc" id="L14">	private final int DAILYPAYPERHEAD = 1;</span>
+<span class="fc" id="L15">	private final int REPAIRCOSTPERUNIT = 2;</span>
+	
+	
+	private ArrayList&lt;Island&gt; islands;
+	private ArrayList&lt;Ship&gt; ships;
+	private ArrayList&lt;Item&gt; items;
+	
+	private int startGameDays;
+	private int gameDays;
+	private String playerName;
+	
+	private Ship activeShip;
+	private Island activeIsland;
+	private int playerMoney;
+	
+<span class="fc" id="L30">	private boolean gameOver = false;</span>
+	
+	// Statistics
+<span class="fc" id="L33">	private int statSailed = 0;	// Stores the number of times the player sailed between islands</span>
+<span class="fc" id="L34">	private int statTraded = 0;	// Stores the number of items the player traded</span>
+	
+	/**
+	 * Initialises the Game Environment
+	 */
+<span class="fc" id="L39">	public GameEnvironment() {</span>
+<span class="fc" id="L40">		this.initialise();</span>
+<span class="fc" id="L41">	}</span>
+	
+	/**
+	 * Returns a value that is changed when the game can no longer continue
+	 * @return returns a true or false to check whether or not the game is over
+	 */
+	public boolean isGameOver() {
+<span class="nc" id="L48">		return gameOver;</span>
+	}
+	
+	/**
+	 * Returns the cost of sailing per person per day
+	 * @return the cost of sailing per person per day
+	 */
+	public int getDailyPayPerHead() {
+<span class="nc" id="L56">		return DAILYPAYPERHEAD;</span>
+	}
+	
+	/**
+	 * Returns the amount of money the player starts with
+	 * @return returns the starting money amount
+	 */
+	public int getStartingmoney() {
+<span class="nc" id="L64">		return STARTINGMONEY;</span>
+	}
+	
+	/**
+	 * Returns a list of all of the islands in the game
+	 * @return returns an ArrayList of the islands
+	 */
+	public ArrayList&lt;Island&gt; getIslands() {
+<span class="nc" id="L72">		return islands;</span>
+	}
+	
+	/**
+	 * Returns a list of all of the ships in the game
+	 * @return returns an ArrayList of the ships
+	 */
+	public ArrayList&lt;Ship&gt; getShips() {
+<span class="nc" id="L80">		return ships;</span>
+	}
+
+	/**
+	 * Returns a list of all of the items in the game
+	 * @return returns an array list of the items
+	 */
+	public ArrayList&lt;Item&gt; getItems() {
+<span class="fc" id="L88">		return items;</span>
+	}
+	
+	/**
+	 * Sets the active island (the island that the player is currently on)
+	 * @param activeIsland the island that the player is currently on
+	 */
+	public void setActiveIsland(Island activeIsland) {
+<span class="fc" id="L96">		this.activeIsland = activeIsland;</span>
+<span class="fc" id="L97">	}</span>
+	
+	/**
+	 * Returns the island that the player is currently on
+	 * @return the current island
+	 */
+	public Island getActiveIsland() {
+<span class="fc" id="L104">		return activeIsland;</span>
+	}
+	
+	/**
+	 * Sets the ship to the ship that the player has chosen
+	 * @param activeShip the chosen ship
+	 */
+	public void setActiveShip(Ship activeShip) {
+<span class="fc" id="L112">		this.activeShip = activeShip;</span>
+<span class="fc" id="L113">	}</span>
+	
+	/**
+	 * Returns the current ship that the player has
+	 * @return the current ship
+	 */
+	public Ship getActiveShip() {
+<span class="fc" id="L120">		return activeShip;</span>
+	}
+	
+	/**
+	 * Returns the amount of money that the player currently has
+	 * @return the current money
+	 */
+	public int getPlayerMoney() {
+<span class="fc" id="L128">		return playerMoney;</span>
+	}
+	
+	/**
+	 * Returns the number of days the player started with
+	 * @return the number of days the player started with
+	 */
+	public int getStartGameDays() {
+<span class="nc" id="L136">		return startGameDays;</span>
+	}
+	
+	/**
+	 * Sets the number of game days the game starts with 
+	 * @param startGameDays the number of days 
+	 */
+	public void setStartGameDays(int startGameDays) {
+<span class="nc" id="L144">		this.startGameDays = startGameDays;</span>
+<span class="nc" id="L145">		this.gameDays = startGameDays;</span>
+<span class="nc" id="L146">	}</span>
+	
+	/**
+	 * Returns the amount of days the player has left in the game
+	 * @return the current amount of days left
+	 */
+	public int getGameDays() {
+<span class="nc" id="L153">		return gameDays;</span>
+	}
+
+	/**
+	 * Sets the amount of game days that the player chooses in the beginning as well as removes days when the player travels
+	 * @param gameDays the amount of days
+	 */
+	public void setGameDays(int gameDays) {
+<span class="fc" id="L161">		this.gameDays = gameDays;</span>
+<span class="fc" id="L162">	}</span>
+
+	/**
+	 * Returns the name the player chooses
+	 * @return the players name
+	 */
+	public String getPlayerName() {
+<span class="nc" id="L169">		return playerName;</span>
+	}
+
+	/**
+	 * Sets the players name to the one they type out at the start of the game
+	 * @param playerName the players name
+	 */
+	public void setPlayerName(String playerName) {
+<span class="nc" id="L177">		this.playerName = playerName;</span>
+<span class="nc" id="L178">	}</span>
+
+	/**
+	 * Returns the amount of times the player has set sail (used on the end game screen)
+	 * @return the amount of times sailed
+	 */
+	public int getStatSailed() {
+<span class="nc" id="L185">		return statSailed;</span>
+	}
+	
+	/**
+	 * Adds to the number of times the player has sailed
+	 * @param statSailed the number of times set sail
+	 */
+	public void addStatSailed(int statSailed) {
+<span class="nc" id="L193">		this.statSailed += statSailed;</span>
+<span class="nc" id="L194">	}</span>
+	
+	/**
+	 * The amount of money the player has lost/earned from trading throughout the game
+	 * @return the total amount of money made/lost
+	 */
+	public int getStatTraded() {
+<span class="nc" id="L201">		return statTraded;</span>
+	}
+	
+	/**
+	 * Adds to the amount of money the player has made
+	 * @param statTraded the amount of money made
+	 */
+	public void addStatTraded(int statTraded) {
+<span class="nc" id="L209">		this.statTraded += statTraded;</span>
+<span class="nc" id="L210">	}</span>
+	
+	/**
+	 * Calculates the amount of money that the player will need to spend to repair their ship
+	 * @return the amount of money that it will cost to repair
+	 */
+	public int getRepairCost() {
+<span class="fc" id="L217">		return (activeShip.getMaxDurability() - activeShip.getDurability()) * REPAIRCOSTPERUNIT;</span>
+	}
+	
+	
+	/**
+	 * Adds the given integer to the playerMoney. Negative integers are allowed to subtract.
+	 * @param change the integer amount to change playerMoney by. Negative integers are allowed.
+	 * @return true if the combination of playerMoney and the given integer change is &gt; 0, false otherwise
+	 */
+	public boolean addMoney(int change) {
+<span class="fc bfc" id="L227" title="All 2 branches covered.">		if (playerMoney + change &lt; 0) {</span>
+<span class="fc" id="L228">			return false;</span>
+		} else {
+<span class="fc" id="L230">			playerMoney = playerMoney + change;</span>
+<span class="fc" id="L231">			return true;</span>
+		}
+	}
+	
+	
+	/**
+	 * Initialises all of the game variables such as 
+	 * ships, items, trades on islands and sailing routes.
+	 */
+	public void initialise() {
+<span class="fc" id="L241">		islands = new ArrayList&lt;Island&gt;();</span>
+<span class="fc" id="L242">		ships = new ArrayList&lt;Ship&gt;();</span>
+<span class="fc" id="L243">		items = new ArrayList&lt;Item&gt;();</span>
+		
+		// Initialise Ships 
+<span class="fc" id="L246">		ships.add(new Ship(&quot;Saint Mary&quot;, 30, 40, 90));</span>
+<span class="fc" id="L247">		ships.add(new Ship(&quot;Perla Betty III&quot;, 80, 60, 40));</span>
+<span class="fc" id="L248">		ships.add(new Ship(&quot;The Golden Hand&quot;, 60, 55, 60));</span>
+<span class="fc" id="L249">		ships.add(new Ship(&quot;Artemis&quot;, 40, 70, 30));</span>
+		
+		// Initialise Items
+<span class="fc" id="L252">		items.add(new Item(&quot;Bushels of Bananas&quot;, 2, 75));</span>
+<span class="fc" id="L253">		items.add(new Item(&quot;Iron Rods&quot;, 6, 300));</span>
+<span class="fc" id="L254">		items.add(new Item(&quot;Gold Bars&quot;, 8, 500));</span>
+<span class="fc" id="L255">		items.add(new Item(&quot;Fine China&quot;, 2, 450));</span>
+<span class="fc" id="L256">		items.add(new Item(&quot;Barrels of Gunpowder&quot;, 4, 175));</span>
+		
+		// Initialise Islands
+<span class="fc" id="L259">		HashMap&lt;Item, Double&gt; tempTrades = new HashMap&lt;Item, Double&gt;();</span>
+<span class="fc" id="L260">		ArrayList&lt;Double&gt; tempTradeMultiplier = new ArrayList&lt;Double&gt;();</span>
+<span class="fc" id="L261">		tempTradeMultiplier.add(1.1); //Bushels of Bananas</span>
+<span class="fc" id="L262">		tempTradeMultiplier.add(0.0); //Iron Rods</span>
+<span class="fc" id="L263">		tempTradeMultiplier.add(1.1); //Gold Bars</span>
+<span class="fc" id="L264">		tempTradeMultiplier.add(0.0); //Fine China</span>
+<span class="fc" id="L265">		tempTradeMultiplier.add(1.1); //Barrels of Gunpowder</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">		for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="fc" id="L267">			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));</span>
+		}
+<span class="fc" id="L269">		islands.add(new Island(&quot;Mahkarn&quot;, tempTrades));</span>
+		
+<span class="fc" id="L271">		tempTrades = new HashMap&lt;Item, Double&gt;();</span>
+<span class="fc" id="L272">		tempTradeMultiplier.clear();</span>
+<span class="fc" id="L273">		tempTradeMultiplier.add(0.7); //Bushels of Bananas</span>
+<span class="fc" id="L274">		tempTradeMultiplier.add(1.2); //Iron Rods</span>
+<span class="fc" id="L275">		tempTradeMultiplier.add(0.0); //Gold Bars</span>
+<span class="fc" id="L276">		tempTradeMultiplier.add(0.6); //Fine China</span>
+<span class="fc" id="L277">		tempTradeMultiplier.add(0.0); //Barrels of Gunpowder</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">		for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="fc" id="L279">			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));</span>
+		}
+<span class="fc" id="L281">		islands.add(new Island(&quot;Tolset Reef&quot;, tempTrades));</span>
+		
+<span class="fc" id="L283">		tempTrades = new HashMap&lt;Item, Double&gt;();</span>
+<span class="fc" id="L284">		tempTradeMultiplier.clear();</span>
+<span class="fc" id="L285">		tempTradeMultiplier.add(1.4); //Bushels of Bananas</span>
+<span class="fc" id="L286">		tempTradeMultiplier.add(0.0); //Iron Rods</span>
+<span class="fc" id="L287">		tempTradeMultiplier.add(0.8); //Gold Bars</span>
+<span class="fc" id="L288">		tempTradeMultiplier.add(1.3); //Fine China</span>
+<span class="fc" id="L289">		tempTradeMultiplier.add(0.0); //Barrels of Gunpowder</span>
+<span class="fc bfc" id="L290" title="All 2 branches covered.">		for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="fc" id="L291">			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));</span>
+		}
+<span class="fc" id="L293">		islands.add(new Island(&quot;Alegate&quot;, tempTrades));</span>
+		
+<span class="fc" id="L295">		tempTrades = new HashMap&lt;Item, Double&gt;();</span>
+<span class="fc" id="L296">		tempTradeMultiplier.clear();</span>
+<span class="fc" id="L297">		tempTradeMultiplier.add(0.0); //Bushels of Bananas</span>
+<span class="fc" id="L298">		tempTradeMultiplier.add(1.1); //Iron Rods</span>
+<span class="fc" id="L299">		tempTradeMultiplier.add(1.0); //Gold Bars</span>
+<span class="fc" id="L300">		tempTradeMultiplier.add(0.0); //Fine China</span>
+<span class="fc" id="L301">		tempTradeMultiplier.add(1.2); //Barrels of Gunpowder</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">		for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="fc" id="L303">			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));</span>
+		}
+<span class="fc" id="L305">		islands.add(new Island(&quot;Pardea&quot;, tempTrades));</span>
+		
+<span class="fc" id="L307">		tempTrades = new HashMap&lt;Item, Double&gt;();</span>
+<span class="fc" id="L308">		tempTradeMultiplier.clear();</span>
+<span class="fc" id="L309">		tempTradeMultiplier.add(0.0); //Bushels of Bananas</span>
+<span class="fc" id="L310">		tempTradeMultiplier.add(0.7); //Iron Rods</span>
+<span class="fc" id="L311">		tempTradeMultiplier.add(0.0); //Gold Bars</span>
+<span class="fc" id="L312">		tempTradeMultiplier.add(1.6); //Fine China</span>
+<span class="fc" id="L313">		tempTradeMultiplier.add(0.9); //Barrels of Gunpowder</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">		for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="fc" id="L315">			tempTrades.put(items.get(i), tempTradeMultiplier.get(i));</span>
+		}
+<span class="fc" id="L317">		islands.add(new Island(&quot;Erbest&quot;, tempTrades));</span>
+		
+		// Initialise Mahkarn Routes
+<span class="fc" id="L320">		Route mahkarnToPardea = new Route(2, 0.2, islands.get(3));</span>
+<span class="fc" id="L321">		Route mahkarnToAlegate = new Route(3, 0.4, islands.get(2));</span>
+<span class="fc" id="L322">		Route mahkarnToErberst = new Route(4, 0.3, islands.get(4));</span>
+<span class="fc" id="L323">		islands.get(0).addRoute(mahkarnToPardea);</span>
+<span class="fc" id="L324">		islands.get(0).addRoute(mahkarnToAlegate);</span>
+<span class="fc" id="L325">		islands.get(0).addRoute(mahkarnToErberst);</span>
+		
+		// Initialise Tolset Reef Routes
+<span class="fc" id="L328">		Route tolsetToPardea = new Route(5, 0.2, islands.get(3));</span>
+<span class="fc" id="L329">		islands.get(1).addRoute(tolsetToPardea);</span>
+		
+		// Initialise Alegate Routes
+<span class="fc" id="L332">		Route alegateToPardea = new Route(2, 0.3, islands.get(3));</span>
+<span class="fc" id="L333">		Route alegateToMahkarn = new Route(3, 0.4, islands.get(0));</span>
+<span class="fc" id="L334">		Route alegateToErberst = new Route(3, 0.2, islands.get(4));</span>
+<span class="fc" id="L335">		islands.get(2).addRoute(alegateToPardea);</span>
+<span class="fc" id="L336">		islands.get(2).addRoute(alegateToMahkarn);</span>
+<span class="fc" id="L337">		islands.get(2).addRoute(alegateToErberst);</span>
+		
+		// Initialise Pardea Routes
+<span class="fc" id="L340">		Route pardeaToAlegate = new Route(2, 0.3, islands.get(2));</span>
+<span class="fc" id="L341">		Route pardeaToTolset = new Route(5, 0.2, islands.get(1));</span>
+<span class="fc" id="L342">		Route pardeaToMahkarn = new Route(2, 0.2, islands.get(0));</span>
+<span class="fc" id="L343">		islands.get(3).addRoute(pardeaToAlegate);</span>
+<span class="fc" id="L344">		islands.get(3).addRoute(pardeaToTolset);</span>
+<span class="fc" id="L345">		islands.get(3).addRoute(pardeaToMahkarn);</span>
+		
+		// Initialise Erberst Routes
+<span class="fc" id="L348">		Route erberstToAlegate = new Route(3, 0.2, islands.get(2));</span>
+<span class="fc" id="L349">		Route erberstToMahkarn = new Route(3, 0.3, islands.get(0));</span>
+<span class="fc" id="L350">		islands.get(4).addRoute(erberstToAlegate);</span>
+<span class="fc" id="L351">		islands.get(4).addRoute(erberstToMahkarn);</span>
+		
+<span class="fc" id="L353">		playerMoney = STARTINGMONEY;</span>
+<span class="fc" id="L354">		setActiveIsland(islands.get(3));</span>
+<span class="fc" id="L355">	}</span>
+	
+	/**
+	 * Generalised Sail function for use by command line and graphical UI environments
+	 * @param route	the route that will be sailed. Type: Route
+	 * @return the array list of strings given by the tryEvent method in RandomEvent
+	 * @throws InsufficientDaysException	throws if there are not enough days left to take the route
+	 * @throws InsufficientFundsException	throws if the player does not have enough money to pay their sailors for the route
+	 */
+	public ArrayList&lt;String&gt; sail(Route route) throws InsufficientDaysException, InsufficientFundsException, InsufficientRepairsException {
+<span class="fc bfc" id="L365" title="All 2 branches covered.">		if (route.getDays() &gt; gameDays) {</span>
+<span class="fc" id="L366">			throw new InsufficientDaysException();</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">		} else if (getPlayerMoney() &lt; (DAILYPAYPERHEAD * activeShip.getCrewSize() * route.getDays())) {</span>
+<span class="fc" id="L368">			throw new InsufficientFundsException();</span>
+<span class="fc bfc" id="L369" title="All 2 branches covered.">		} else if (activeShip.getNeedRepairs()) {</span>
+<span class="fc" id="L370">			throw new InsufficientRepairsException();</span>
+		} else {
+<span class="fc" id="L372">			addMoney(-DAILYPAYPERHEAD * activeShip.getCrewSize() * route.getDays());</span>
+<span class="fc" id="L373">			RandomEvent randomEvent = new RandomEvent(this, route.getEventChance());</span>
+<span class="fc" id="L374">			ArrayList&lt;String&gt; notifyEventStrings = randomEvent.getEventStrings();</span>
+<span class="fc" id="L375">			statSailed += 1;</span>
+<span class="fc" id="L376">			gameDays -= route.getDays();</span>
+<span class="fc" id="L377">			setActiveIsland(route.getDestinationIsland());</span>
+<span class="fc" id="L378">			return notifyEventStrings;</span>
+		}
+		
+	}
+	
+	/**
+	 * Sets gameOver to true
+	 */
+	public void gameOver() {
+<span class="fc" id="L387">		gameOver = true;</span>
+<span class="fc" id="L388">	}</span>
+	
+	/**
+	 * Returns true if the player can continue the game, false otherwise.
+	 * @return true if the player can continue the game, false otherwise.
+	 */
+	public boolean canContinueGame(){
+<span class="fc" id="L395">		double minRouteDays = Double.POSITIVE_INFINITY;</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">		for (Route route: activeIsland.getRoutes()) {</span>
+<span class="pc bpc" id="L397" title="1 of 2 branches missed.">			if (route.getDays() &lt; minRouteDays) {minRouteDays = route.getDays();}</span>
+		}
+<span class="fc" id="L399">		int totalCargoValueAtIsland = 0;</span>
+<span class="fc bfc" id="L400" title="All 2 branches covered.">		for (Item item: activeShip.getCargo().keySet()) {</span>
+<span class="fc" id="L401">			totalCargoValueAtIsland += item.getPrice() * activeIsland.getTrades().get(item) * activeShip.getCargo().get(item);</span>
+		}
+<span class="fc bfc" id="L403" title="All 2 branches covered.">		if (playerMoney + totalCargoValueAtIsland - (minRouteDays * DAILYPAYPERHEAD * activeShip.getCrewSize() + getRepairCost()) &gt;= 0 </span>
+<span class="fc bfc" id="L404" title="All 4 branches covered.">				&amp;&amp; minRouteDays &lt;= gameDays &amp;&amp; !gameOver) {</span>
+<span class="fc" id="L405">			return true;</span>
+		} else {
+<span class="fc" id="L407">			return false;</span>
+		}
+	}
+	
+	/**
+	 * Opens the main GUI interface
+	 */
+	public void launchGUIMainScreen() {
+<span class="nc" id="L415">		GUIMainScreen mainWindow = new GUIMainScreen(this);</span>
+<span class="nc" id="L416">	}</span>
+	
+	/**
+	 * Closes the main GUI interface
+	 * @param mainWindow the window that will be closed
+	 */
+	public void closeGUIMainScreen(GUIMainScreen mainWindow) {
+<span class="nc" id="L423">		mainWindow.closeWindow();</span>
+<span class="nc" id="L424">		lauchGUIEndGameScreen();</span>
+<span class="nc" id="L425">	}</span>
+	
+	/**
+	 * Opens the setup GUI interface
+	 */
+	public void launchGUISetupScreen() {
+<span class="nc" id="L431">		GUISetupScreen setupWindow = new GUISetupScreen(this);</span>
+<span class="nc" id="L432">	}</span>
+	
+	/**
+	 * Closes the setup GUI interface
+	 * @param setupWindow the window that will be closed
+	 */
+	public void closeGUISetupScreen(GUISetupScreen setupWindow) {
+<span class="nc" id="L439">		setupWindow.closeWindow();</span>
+<span class="nc" id="L440">		launchGUIMainScreen();</span>
+<span class="nc" id="L441">	}</span>
+	
+	/**
+	 * Opens the end game GUI interface
+	 */
+	public void lauchGUIEndGameScreen() {
+<span class="nc" id="L447">		GUIGameOverScreen endGameWindow = new GUIGameOverScreen(this);</span>
+<span class="nc" id="L448">	}</span>
+	
+	/**
+	 * Closes the end game GUI interface
+	 * @param endGameWindow the window that will be closed
+	 */
+	public void closeGUIEndGameScreen(GUIGameOverScreen endGameWindow) {
+<span class="nc" id="L455">		endGameWindow.closeWindow();</span>
+<span class="nc" id="L456">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>src (27/05/2021 3:56:09 pm)</div></body></html>

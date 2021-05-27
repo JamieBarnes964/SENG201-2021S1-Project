@@ -23,8 +23,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextPane;
-import javax.swing.UIManager;
 
+/**
+ * A graphical user interface for setting up initial player values for a {@link GameEnvironment}
+ */
 public class GUISetupScreen {
 
 	private JFrame window;
@@ -32,7 +34,7 @@ public class GUISetupScreen {
 	
 	/**
 	 * Creates and opens the Setup screen window
-	 * @param manager A GameEnvironment object that is actively running the game
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
 	 */
 	public GUISetupScreen(GameEnvironment manager) {
 		this.manager = manager;

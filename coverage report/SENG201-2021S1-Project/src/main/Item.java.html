@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Item.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (27/05/2021 3:56:09 pm)</a> &gt; <a href="../../index.html" class="el_group">SENG201-2021S1-Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">main</a> &gt; <span class="el_source">Item.java</span></div><h1>Item.java</h1><pre class="source lang-java linenums">package main;
+
+/**
+ * Class that models an Item.
+ */
+public class Item {
+	private String name;
+	private int weight;
+	private int price;
+	
+	
+	/**
+	 * Constructs an Item with the given Name and Weight.
+	 * @param name the name of the Item
+	 * @param weight the weight of the Item
+	 * @param price the default price of the Item
+	 */
+<span class="fc" id="L18">	public Item(String name, int weight, int price) {</span>
+<span class="fc" id="L19">		this.name = name;</span>
+<span class="fc" id="L20">		this.weight = weight;</span>
+<span class="fc" id="L21">		this.price = price;</span>
+<span class="fc" id="L22">	}</span>
+	
+	/**
+	 * Returns the name of the Item
+	 * @return the name of the Item
+	 */
+	public String getName() {
+<span class="nc" id="L29">		return this.name;</span>
+	}
+	
+	/**
+	 * Returns the weight of the Item
+	 * @return the weight of the Item
+	 */
+	public int getWeight() {
+<span class="fc" id="L37">		return this.weight;</span>
+	}
+	
+	/**
+	 * Returns the default price of the Item
+	 * @return the default price of the Item
+	 */
+	public int getPrice() {
+<span class="fc" id="L45">		return this.price;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>src (27/05/2021 3:56:09 pm)</div></body></html>

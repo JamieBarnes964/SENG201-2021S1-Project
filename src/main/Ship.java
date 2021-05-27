@@ -1,6 +1,9 @@
 package main;
 import java.util.HashMap;
 
+/**
+ * Class that  models a Ship.
+ */
 public class Ship {
 	private String name;
 	private int capacity;
@@ -17,8 +20,6 @@ public class Ship {
 	 * @param capacity		The capacity of the Ship.
 	 * @param crewSize		The size of the crew on the Ship.
 	 * @param durability	The durability of the Ship.
-	 * @param speed			The speed of the Ship.
-	 * @param cargo			The cargo on the Ship.
 	 */
 	public Ship(String name, int capacity, int crewSize, int durability) {
 		this.name = name;
@@ -40,13 +41,17 @@ public class Ship {
 	}
 	
 	/**
-	 * Returns the capacity of the Ship.
-	 * @return the capacity of the Ship.
+	 * Returns the max cargo space of the Ship.
+	 * @return the max cargo space of the Ship.
 	 */
 	public int getCapacity() {
 		return this.capacity;
 	}
 	
+	/**
+	 * Returns the available cargo space in the ship
+	 * @return the available cargo space in the ship
+	 */
 	public int getAvailableCargoSpace() {
 		return this.availableCargoSpace;
 	}
@@ -67,6 +72,10 @@ public class Ship {
 		return this.durability;
 	}
 	
+	/**
+	 * Returns the max durability of the ship
+	 * @return the max durability of the ship
+	 */
 	public int getMaxDurability() {
 		return maxDurability;
 	}
@@ -79,6 +88,10 @@ public class Ship {
 		return this.speed;
 	}
 	
+	/**
+	 * Initialises the item in the cargo of the ship, sets quantity to 0
+	 * @param item the item that will be initialised in the ship's cargo
+	 */
 	public void initialiseCargo(Item item) {
 		this.cargo.put(item, 0);
 	}
@@ -104,10 +117,10 @@ public class Ship {
 	}
 	
 	/**
-	 * 
-	 * @param item
-	 * @param amount
-	 * @return
+	 * Add an amount of an item to the ship's cargo.
+	 * @param item an Item to store
+	 * @param amount the amount of the item to store
+	 * @return true if there is sufficient space to store amount, false otherwise.
 	 */
 	public boolean addItemCargo(Item item, int amount) {
 		if (availableCargoSpace >= item.getWeight() * amount) {

@@ -28,6 +28,9 @@ import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.ImageIcon;
 
+/**
+ * A graphical user interface for the main gameplay for a {@link GameEnvironment}
+ */
 public class GUIMainScreen {
 
 	private GameEnvironment manager;
@@ -41,7 +44,7 @@ public class GUIMainScreen {
 
 	/**
 	 * Creates and opens the Main screen window
-	 * @param manager A GameEnvironment object that is actively running the game
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
 	 */
 	public GUIMainScreen(GameEnvironment manager) {
 		this.manager = manager;
@@ -307,7 +310,7 @@ public class GUIMainScreen {
 			routeDaysLabel.setBounds(0, 33, 114, 14);
 			singleRoutePane.add(routeDaysLabel);
 			
-			JLabel routeCostLabel = new JLabel("Cost: $" + route.getDays() * manager.getActiveShip().getCrewSize() * manager.DAILYPAYPERHEAD);
+			JLabel routeCostLabel = new JLabel("Cost: $" + route.getDays() * manager.getActiveShip().getCrewSize() * manager.getDailyPayPerHead());
 			routeCostLabel.setBounds(0, 48, 114, 14);
 			singleRoutePane.add(routeCostLabel);
 			
@@ -356,7 +359,7 @@ public class GUIMainScreen {
 		shipSpeedLabel.setBounds(144, 36, 105, 14);
 		parentPanel.add(shipSpeedLabel);
 		
-		JLabel sailingCost = new JLabel("Cost to Sail / Day: $" + manager.getActiveShip().getCrewSize() * manager.DAILYPAYPERHEAD);
+		JLabel sailingCost = new JLabel("Cost to Sail / Day: $" + manager.getActiveShip().getCrewSize() * manager.getDailyPayPerHead());
 		sailingCost.setBounds(144, 61, 167, 14);
 		parentPanel.add(sailingCost);
 		
@@ -604,7 +607,7 @@ public class GUIMainScreen {
 		window.getContentPane().add(statsPanel);
 		statsPanel.setLayout(null);
 		
-			playerMoneyLabel = new JLabel("Money: $" + manager.STARTINGMONEY);
+			playerMoneyLabel = new JLabel("Money: $" + manager.getStartingmoney());
 			playerMoneyLabel.setBounds(10, 6, 135, 14);
 			statsPanel.add(playerMoneyLabel);
 			

@@ -11,6 +11,9 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * A graphical user interface for the game end for a {@link GameEnvironment}
+ */
 public class GUIGameOverScreen {
 
 	private JFrame window;
@@ -19,7 +22,7 @@ public class GUIGameOverScreen {
 
 	/**
 	 * Creates and opens the Game Over screen window
-	 * @param manager A GameEnvironment object that is actively running the game
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
 	 */
 	public GUIGameOverScreen(GameEnvironment manager) {
 		this.manager = manager;

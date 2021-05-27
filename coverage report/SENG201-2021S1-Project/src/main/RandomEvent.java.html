@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>RandomEvent.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (27/05/2021 3:56:09 pm)</a> &gt; <a href="../../index.html" class="el_group">SENG201-2021S1-Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">main</a> &gt; <span class="el_source">RandomEvent.java</span></div><h1>RandomEvent.java</h1><pre class="source lang-java linenums">package main;
+import java.util.ArrayList;
+import java.util.Random;
+
+/**
+ * Class that handles random events.
+ */
+public class RandomEvent {
+	// This is the value that your cargo must beat for the pirates to take your cargo and let you go
+<span class="fc" id="L10">	private final int VALUENEEDED = 1000; </span>
+	private ArrayList&lt;String&gt; notifyEventList;
+	
+	/**
+	 * Initialises and runs a Random Event
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
+	 * @param eventChance the chance of an event happening on the chosen route
+	 */
+<span class="fc" id="L18">	public RandomEvent(GameEnvironment manager, double eventChance) {</span>
+<span class="fc" id="L19">		tryEvent(manager, eventChance, randomNumber(), randomNumber());</span>
+<span class="fc" id="L20">	}</span>
+	
+	/**
+	 * Initialises and runs a Random Event with the given variables (Used for Testing)
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
+	 * @param eventChance the chance of an event happening on the chosen route
+	 * @param eventCheck is a random number generated in GameEnvironment that determines whether or not the event happens
+	 * @param eventTypeCheck is a random number that determines what event happens
+	 */
+<span class="fc" id="L29">	public RandomEvent(GameEnvironment manager, double eventChance, double eventCheck, double eventTypeCheck) {</span>
+<span class="fc" id="L30">		tryEvent(manager, eventChance, eventCheck, eventTypeCheck);</span>
+<span class="fc" id="L31">	}</span>
+	
+	/**
+	 * Returns a random double between 0 and 1
+	 * @return a random double between 0 and 1
+	 */
+	private double randomNumber() {
+<span class="fc" id="L38">		Random rand = new Random();</span>
+<span class="fc" id="L39">		double randomDouble = rand.nextDouble();</span>
+<span class="fc" id="L40">		return randomDouble;</span>
+	}
+	
+	/**
+	 * Returns the set event strings list
+	 * @return the set event strings list
+	 */
+	public ArrayList&lt;String&gt; getEventStrings() {
+<span class="fc" id="L48">		return notifyEventList;</span>
+	}
+	
+	/**
+	 * 
+	 * @param manager A {@link GameEnvironment} object that is actively running the game
+	 * @param eventChance is the chance of an event happening on the chosen route
+	 * @param eventCheck is a random number generated in GameEnvironment that determines whether or not the event happens
+	 * @param eventTypeCheck is a random number that determines what event happens
+	 */
+	private void tryEvent(GameEnvironment manager, double eventChance, double eventCheck, double eventTypeCheck) {
+<span class="fc" id="L59">		Random rand = new Random();</span>
+<span class="fc" id="L60">		double randomDouble = rand.nextDouble();</span>
+		
+<span class="fc" id="L62">		notifyEventList = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">		if (eventChance &gt; eventCheck) {</span>
+			// Pirate Attack
+<span class="fc bfc" id="L65" title="All 2 branches covered.">			if (eventTypeCheck &lt;= 0.33){</span>
+<span class="fc" id="L66">				notifyEventList.add(&quot;You have encountered pirates!&quot;);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">				if (0.4 + ((manager.getActiveShip().getCapacity() * manager.getActiveShip().getSpeed())/ 250) &lt; randomDouble){</span>
+<span class="fc" id="L68">					notifyEventList.add(&quot;You haven't managed to excape!&quot;);</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">					if (manager.getActiveShip().getCargoValue() &lt; VALUENEEDED) {</span>
+<span class="fc" id="L70">						notifyEventList.add(&quot;The pirates are unhappy with your cargo. You have been made to walk the plank.&quot;);</span>
+<span class="fc" id="L71">						manager.gameOver();</span>
+<span class="fc" id="L72">					} else {</span>
+<span class="fc" id="L73">						manager.getActiveShip().emptyCargo();</span>
+<span class="fc" id="L74">						notifyEventList.add(&quot;The pirates have taken all of your cargo and mercifully let you and your crew live.&quot;);</span>
+					}
+<span class="fc" id="L76">				} else {</span>
+<span class="fc" id="L77">					notifyEventList.add(&quot;You escaped the enemy pirates!&quot;);</span>
+				}
+<span class="fc" id="L79">			}</span>
+			
+			// Stormy Weather
+<span class="fc bfc" id="L82" title="All 2 branches covered.">			else if(eventTypeCheck &lt;= 0.66) {</span>
+<span class="fc" id="L83">				int damageTaken = (int) (10 + (randomDouble * 0.3 * 100));</span>
+<span class="fc" id="L84">				notifyEventList.add(&quot;Your ship has been caught in stormy weather.\nWatch out for your cargo!&quot;);</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">				if (damageTaken &gt;= manager.getActiveShip().getDurability()) { // If the damage taken is too much for the manager.getActiveShip()</span>
+<span class="fc" id="L86">					notifyEventList.add(&quot;The storm has completely destroyed your ship and all of its cargo.&quot;);</span>
+<span class="fc" id="L87">					manager.gameOver();</span>
+<span class="fc" id="L88">				} else {</span>
+<span class="fc" id="L89">					manager.getActiveShip().takeDamage(damageTaken);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">					if (manager.getActiveShip().getCargo().get(manager.getItems().get(3)) &gt; 0) { // if there is fine china: break it</span>
+<span class="fc" id="L91">						notifyEventList.add(&quot;In the rough seas all of you fine china has broken!&quot;);</span>
+<span class="fc" id="L92">						manager.getActiveShip().addItemCargo(manager.getItems().get(3), - manager.getActiveShip().getCargo().get(manager.getItems().get(3)));</span>
+					}
+<span class="fc" id="L94">					notifyEventList.add(&quot;Your ship has taken &quot; + damageTaken + &quot; points of damage!&quot;);</span>
+				}
+<span class="fc" id="L96">			}</span>
+			
+			// Rescue Sailors
+			else {
+<span class="fc" id="L100">				int goldAmount = (int) (200 * (randomDouble + 0.5));</span>
+<span class="fc" id="L101">				notifyEventList.add(&quot;You spot some drowning sailors and decide to rescue them.\nThey give you some gold as thanks.&quot;);</span>
+<span class="fc" id="L102">				manager.addMoney(goldAmount);</span>
+<span class="fc" id="L103">				notifyEventList.add(&quot;You recieve &quot; + goldAmount + &quot; gold.\nYou now have &quot; + manager.getPlayerMoney() + &quot; gold.&quot;);</span>
+			}
+<span class="fc" id="L105">		}</span>
+		// Nothing happens
+		else {
+<span class="fc" id="L108">			notifyEventList.add(&quot;The journey between the islands was uneventful&quot;);</span>
+		}
+<span class="fc" id="L110">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>src (27/05/2021 3:56:09 pm)</div></body></html>

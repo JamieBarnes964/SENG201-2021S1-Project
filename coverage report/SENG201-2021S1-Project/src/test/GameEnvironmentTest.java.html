@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>GameEnvironmentTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (27/05/2021 3:56:09 pm)</a> &gt; <a href="../../index.html" class="el_group">SENG201-2021S1-Project</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">test</a> &gt; <span class="el_source">GameEnvironmentTest.java</span></div><h1>GameEnvironmentTest.java</h1><pre class="source lang-java linenums">package test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.HashMap;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import main.*;
+
+<span class="fc" id="L10">class managerTest {</span>
+	GameEnvironment manager;
+	
+	@BeforeEach
+	void initialise() {
+<span class="fc" id="L15">		manager = new GameEnvironment();</span>
+<span class="fc" id="L16">		manager.addMoney(-manager.getPlayerMoney() + 2000);</span>
+<span class="fc" id="L17">	}</span>
+	
+	@Test
+	/**
+	 * Tests the addMoney function
+	 */
+	void addMoneyTest() {
+<span class="fc" id="L24">		manager.addMoney(600);</span>
+<span class="fc" id="L25">		assertEquals(2600, manager.getPlayerMoney());</span>
+<span class="fc" id="L26">		assertFalse(manager.addMoney(-2601));</span>
+<span class="fc" id="L27">	}</span>
+	
+	@Test
+	/**
+	 * Tests whether or not the game can continue based on the number of days left
+	 */
+	void canContinueGameDaysTest() {
+<span class="fc" id="L34">		Ship testShip = new Ship(&quot;Test Ship&quot;, 30, 40, 50);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">		for (Item item: manager.getItems()) {</span>
+<span class="fc" id="L36">			testShip.initialiseCargo(item);</span>
+		}
+<span class="fc" id="L38">		HashMap&lt;Item, Double&gt; tempTrades = new HashMap&lt;Item, Double&gt;();</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">		for (Item item: manager.getItems()) {</span>
+<span class="fc" id="L40">			tempTrades.put(item, 0.0);</span>
+		}
+<span class="fc" id="L42">		Island testIsland = new Island(&quot;Test Island&quot;, tempTrades);</span>
+<span class="fc" id="L43">		Island testIsland2 = new Island(&quot;Test Island 2&quot;, tempTrades);</span>
+<span class="fc" id="L44">		Route testRoute = new Route(1, 0, testIsland2);</span>
+<span class="fc" id="L45">		manager.setGameDays(0);</span>
+<span class="fc" id="L46">		testIsland.addRoute(testRoute);</span>
+		
+<span class="fc" id="L48">		manager.setActiveIsland(testIsland);</span>
+<span class="fc" id="L49">		manager.setActiveShip(testShip);</span>
+		
+<span class="fc" id="L51">		assertEquals(false, manager.canContinueGame()); // Test not enough Days</span>
+<span class="fc" id="L52">	}</span>
+	
+	@Test
+	/**
+	 * Tests whether or not the game can continue based on the amount of money left
+	 */
+	void canContinueGameMoneyTest() {
+<span class="fc" id="L59">		Ship testShip = new Ship(&quot;Test Ship&quot;, 30, 40, 50);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">		for (Item item: manager.getItems()) {</span>
+<span class="fc" id="L61">			testShip.initialiseCargo(item);</span>
+		}
+<span class="fc" id="L63">		HashMap&lt;Item, Double&gt; tempTrades = new HashMap&lt;Item, Double&gt;();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		for (Item item: manager.getItems()) {</span>
+<span class="fc" id="L65">			tempTrades.put(item, 0.0);</span>
+		}
+<span class="fc" id="L67">		Island testIsland = new Island(&quot;Test Island&quot;, tempTrades);</span>
+<span class="fc" id="L68">		Island testIsland2 = new Island(&quot;Test Island 2&quot;, tempTrades);</span>
+<span class="fc" id="L69">		Route testRoute = new Route(1, 0, testIsland2);</span>
+<span class="fc" id="L70">		testIsland.addRoute(testRoute);</span>
+		
+<span class="fc" id="L72">		manager.setActiveIsland(testIsland);</span>
+<span class="fc" id="L73">		manager.setActiveShip(testShip);</span>
+<span class="fc" id="L74">		manager.setGameDays(1);</span>
+		
+<span class="fc" id="L76">		manager.addMoney(-manager.getPlayerMoney());</span>
+<span class="fc" id="L77">		assertEquals(false, manager.canContinueGame()); // Test not enough Money</span>
+<span class="fc" id="L78">	}</span>
+	
+	@Test
+	/**
+	 * Tests whether or not the game can continue
+	 */
+	void canContinueGameTrueTest() {
+<span class="fc" id="L85">		Ship testShip = new Ship(&quot;Test Ship&quot;, 30, 40, 50);</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">		for (Item item: manager.getItems()) {</span>
+<span class="fc" id="L87">			testShip.initialiseCargo(item);</span>
+		}
+<span class="fc" id="L89">		HashMap&lt;Item, Double&gt; tempTrades = new HashMap&lt;Item, Double&gt;();</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">		for (Item item: manager.getItems()) {</span>
+<span class="fc" id="L91">			tempTrades.put(item, 0.0);</span>
+		}
+<span class="fc" id="L93">		Island testIsland = new Island(&quot;Test Island&quot;, tempTrades);</span>
+<span class="fc" id="L94">		Island testIsland2 = new Island(&quot;Test Island 2&quot;, tempTrades);</span>
+<span class="fc" id="L95">		Route testRoute = new Route(1, 0, testIsland2);</span>
+<span class="fc" id="L96">		testIsland.addRoute(testRoute);</span>
+		
+<span class="fc" id="L98">		manager.setActiveIsland(testIsland);</span>
+<span class="fc" id="L99">		manager.setActiveShip(testShip);</span>
+<span class="fc" id="L100">		manager.setGameDays(1);</span>
+<span class="fc" id="L101">		manager.addMoney(-manager.getPlayerMoney());</span>
+<span class="fc" id="L102">		manager.addMoney(2000);</span>
+<span class="fc" id="L103">		assertEquals(true, manager.canContinueGame());</span>
+<span class="fc" id="L104">	}</span>
+	
+	@Test
+	/**
+	 * Tests whether or not the gameOver function works
+	 */
+	void canContinueGameGameOverTest() {
+<span class="fc" id="L111">		Ship testShip = new Ship(&quot;Test Ship&quot;, 30, 40, 50);</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">		for (Item item: manager.getItems()) {</span>
+<span class="fc" id="L113">			testShip.initialiseCargo(item);</span>
+		}
+<span class="fc" id="L115">		HashMap&lt;Item, Double&gt; tempTrades = new HashMap&lt;Item, Double&gt;();</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">		for (Item item: manager.getItems()) {</span>
+<span class="fc" id="L117">			tempTrades.put(item, 0.0);</span>
+		}
+<span class="fc" id="L119">		Island testIsland = new Island(&quot;Test Island&quot;, tempTrades);</span>
+<span class="fc" id="L120">		Island testIsland2 = new Island(&quot;Test Island 2&quot;, tempTrades);</span>
+<span class="fc" id="L121">		Route testRoute = new Route(1, 0, testIsland2);</span>
+<span class="fc" id="L122">		testIsland.addRoute(testRoute);</span>
+		
+<span class="fc" id="L124">		manager.setActiveIsland(testIsland);</span>
+<span class="fc" id="L125">		manager.setActiveShip(testShip);</span>
+<span class="fc" id="L126">		manager.setGameDays(1);</span>
+<span class="fc" id="L127">		manager.addMoney(-manager.getPlayerMoney());</span>
+<span class="fc" id="L128">		manager.addMoney(2000);</span>
+<span class="fc" id="L129">		manager.gameOver();</span>
+<span class="fc" id="L130">		assertEquals(false, manager.canContinueGame()); // Test gameOver</span>
+<span class="fc" id="L131">	}</span>
+	
+	@Test
+	/**
+	 * Tests whether or not the sail function works
+	 */
+	void sailTest() {
+<span class="fc" id="L138">		Ship testShip = new Ship(&quot;Test Ship&quot;, 30, 40, 50);</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">		for (int i=0; i &lt; 5; i++) {</span>
+<span class="fc" id="L140">			testShip.initialiseCargo(new Item(&quot;&quot;, 0, 0));</span>
+		}
+<span class="fc" id="L142">		Island testIsland = new Island(&quot;Test Island&quot;, new HashMap&lt;Item, Double&gt;());</span>
+<span class="fc" id="L143">		Island testIsland2 = new Island(&quot;Test Island 2&quot;, new HashMap&lt;Item, Double&gt;());</span>
+<span class="fc" id="L144">		Route testRoute = new Route(0, 0, testIsland2);</span>
+<span class="fc" id="L145">		testIsland.addRoute(testRoute);</span>
+<span class="fc" id="L146">		manager.setActiveIsland(testIsland);</span>
+<span class="fc" id="L147">		manager.setActiveShip(testShip);</span>
+<span class="fc" id="L148">		manager.sail(testRoute);</span>
+<span class="fc" id="L149">		assertEquals(testIsland2, manager.getActiveIsland());</span>
+<span class="fc" id="L150">	}</span>
+	
+	@Test
+	/**
+	 * Tests whether or not the InsufficientDaysException gets thrown properly
+	 */
+	void sailDaysTest() {
+<span class="fc" id="L157">		Ship testShip = new Ship(&quot;Test Ship&quot;, 30, 40, 50);</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">		for (int i=0; i &lt; 5; i++) {</span>
+<span class="fc" id="L159">			testShip.initialiseCargo(new Item(&quot;&quot;, 0, 0));</span>
+		}
+<span class="fc" id="L161">		Island testIsland = new Island(&quot;Test Island&quot;, new HashMap&lt;Item, Double&gt;());</span>
+<span class="fc" id="L162">		Island testIsland2 = new Island(&quot;Test Island 2&quot;, new HashMap&lt;Item, Double&gt;());</span>
+<span class="fc" id="L163">		Route testRoute = new Route(1, 0, testIsland2);</span>
+<span class="fc" id="L164">		testIsland.addRoute(testRoute);</span>
+<span class="fc" id="L165">		manager.setActiveIsland(testIsland);</span>
+<span class="fc" id="L166">		manager.setActiveShip(testShip);</span>
+<span class="fc" id="L167">		manager.setGameDays(0);</span>
+		
+<span class="pc" id="L169">		assertThrows(InsufficientDaysException.class, () -&gt; manager.sail(testRoute));</span>
+<span class="fc" id="L170">	}</span>
+	
+	@Test
+	/**
+	 * Tests whether or not the InsufficientFundsException gets thrown properly
+	 */
+	void sailFundsTest() {
+<span class="fc" id="L177">		Ship testShip = new Ship(&quot;Test Ship&quot;, 30, 40, 50);</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">		for (int i=0; i &lt; 5; i++) {</span>
+<span class="fc" id="L179">			testShip.initialiseCargo(new Item(&quot;&quot;, 0, 0));</span>
+		}
+<span class="fc" id="L181">		Island testIsland = new Island(&quot;Test Island&quot;, new HashMap&lt;Item, Double&gt;());</span>
+<span class="fc" id="L182">		Island testIsland2 = new Island(&quot;Test Island 2&quot;, new HashMap&lt;Item, Double&gt;());</span>
+<span class="fc" id="L183">		Route testRoute = new Route(1, 0, testIsland2);</span>
+<span class="fc" id="L184">		testIsland.addRoute(testRoute);</span>
+<span class="fc" id="L185">		manager.setActiveIsland(testIsland);</span>
+<span class="fc" id="L186">		manager.setActiveShip(testShip);</span>
+<span class="fc" id="L187">		manager.addMoney(-manager.getPlayerMoney());</span>
+<span class="fc" id="L188">		manager.setGameDays(1);</span>
+		
+<span class="pc" id="L190">		assertThrows(InsufficientFundsException.class, () -&gt; manager.sail(testRoute));</span>
+<span class="fc" id="L191">	}</span>
+	
+	@Test
+	/**
+	 *  Tests whether or not InsufficientRepairsException gets thrown properly
+	 */
+	void sailRepairsTest() {
+<span class="fc" id="L198">		Ship testShip = new Ship(&quot;Test Ship&quot;, 30, 40, 50);</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">		for (int i=0; i &lt; 5; i++) {</span>
+<span class="fc" id="L200">			testShip.initialiseCargo(new Item(&quot;&quot;, 0, 0));</span>
+		}
+<span class="fc" id="L202">		Island testIsland = new Island(&quot;Test Island&quot;, new HashMap&lt;Item, Double&gt;());</span>
+<span class="fc" id="L203">		Island testIsland2 = new Island(&quot;Test Island 2&quot;, new HashMap&lt;Item, Double&gt;());</span>
+<span class="fc" id="L204">		Route testRoute = new Route(0, 0, testIsland2);</span>
+<span class="fc" id="L205">		testIsland.addRoute(testRoute);</span>
+<span class="fc" id="L206">		manager.setActiveIsland(testIsland);</span>
+<span class="fc" id="L207">		manager.setActiveShip(testShip);</span>
+<span class="fc" id="L208">		manager.addMoney(2000);</span>
+<span class="fc" id="L209">		manager.setGameDays(0);</span>
+<span class="fc" id="L210">		testShip.takeDamage(1);</span>
+		
+<span class="pc" id="L212">		assertThrows(InsufficientRepairsException.class, () -&gt; manager.sail(testRoute));</span>
+<span class="fc" id="L213">	}</span>
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span>src (27/05/2021 3:56:09 pm)</div></body></html>
