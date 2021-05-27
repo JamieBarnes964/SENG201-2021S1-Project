@@ -11,7 +11,7 @@ import main.Ship;
 
 public class CommandLineUI {
 
-	private static Scanner consoleInput = new Scanner(System.in);
+	private Scanner consoleInput = new Scanner(System.in);
 	private GameEnvironment manager;
 	
 	/**
